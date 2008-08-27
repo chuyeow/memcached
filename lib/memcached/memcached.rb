@@ -21,7 +21,8 @@ class Memcached
     :prefix_key => nil,
     :sort_hosts => false,
     :failover => false,
-    :verify_key => true
+    :verify_key => true,
+    :chunk_split_size => 1048300
   } 
   
 #:stopdoc:
@@ -51,6 +52,7 @@ Valid option parameters are:
 <tt>:show_not_found_backtraces</tt>:: Whether <b>Memcached::NotFound</b> exceptions should include backtraces. Generating backtraces is slow, so this is off by default. Turn it on to ease debugging.
 <tt>:sort_hosts</tt>:: Whether to force the server list to stay sorted. This defeats consistent hashing and is rarely useful.
 <tt>:verify_key</tt>:: Validate keys before accepting them. Never disable this.
+<tt>:chunk_split_size</tt>:: Number of bytes after which items that are bigger than the 1MB memcached bucket max. size are split.
 
 Please note that when non-blocking IO is enabled, setter and deleter methods do not raise on errors. For example, if you try to set an invalid key with <tt>:no_block => true</tt>, it will appear to succeed. The actual setting of the key occurs after libmemcached has returned control to your program, so there is no way to backtrack and raise the exception.
 
@@ -158,6 +160,29 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
     check_return_code(
       Lib.memcached_set(@struct, key, value, timeout, FLAGS)
     )
+  end
+
+  # Sets a key/value pair that is (potentially) bigger than 1MB (i.e. the memcached limit for bucket sizes).
+  #
+  # Accepts optional <tt>timeout</tt> and <tt>marshal</tt> arguments like <tt>set</tt>.
+  #
+  # The value is split into chunks (each smaller than or equal in size to the <tt>chunk_split_size</tt> option)
+  # and inserted into separate buckets. The keys are of the form: #{key}_0, #{key}_1, #{key}_2.
+  def big_set(key, value, timeout=0, marshal=true)
+    value = marshal ? Marshal.dump(value) : value.to_s
+    if (item_size = value.size) > (chunk_size = options[:chunk_split_size])
+
+      # FIXME Invalidate key_XXX items - in case the previous item that was there has more chunks.
+
+      chunks = (item_size/chunk_size.to_f).ceil
+      chunks.times do |chunk_num|
+        chunk = value[chunk_num * chunk_size, chunk_size]
+        set("#{key}_#{chunk_num}", chunk, timeout, false)
+      end
+    else
+      # Fallback to vanilla set.
+      set(key, value, timeout, false)
+    end
   end
 
   # Add a key/value pair. Raises <b>Memcached::NotStored</b> if the key already exists on the server. The parameters are the same as <tt>set</tt>.
