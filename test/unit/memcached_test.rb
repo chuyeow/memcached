@@ -27,7 +27,7 @@ class MemcachedTest < Test::Unit::TestCase
     @value = OpenStruct.new(:a => 1, :b => 2, :c => GenericClass)
     @marshalled_value = Marshal.dump(@value)
   end
-    
+
   # Initialize
 
   def test_initialize
@@ -315,7 +315,25 @@ class MemcachedTest < Test::Unit::TestCase
       @cache.get key
     end
   end
-  
+
+  # big_set
+
+  def test_big_set
+    large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
+
+    assert_nothing_raised do
+      @cache.big_set(key, large_value)
+    end
+  end
+
+  def test_big_set_splits_into_chunks
+    large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
+    @cache.big_set('foo', large_value, 0, false)
+
+    assert_equal('a' * 1048300, @cache.get('foo_0', false)) # chunk_split_size is 1048300 by default
+    assert_equal('a' * (1048576 - 1048300) + 'b' * 10, @cache.get('foo_1', false))
+  end
+
   # Delete
   
   def test_delete

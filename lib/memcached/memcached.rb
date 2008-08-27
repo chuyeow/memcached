@@ -314,7 +314,14 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
       value
     end    
   end    
-  
+
+  # Gets a key's value from the server. Accepts a single String key.
+  #
+  # Accepts optional <tt>marshal</tt> arguments like <tt>get</tt>.
+  def big_get(key, marshal=true)
+    # FIXME
+  end
+
   ### Information methods
   
   # Return a Hash of statistics responses from the set of servers. Each value is an array with one entry for each server, in the same order the servers were defined.
