@@ -383,14 +383,19 @@ class MemcachedTest < Test::Unit::TestCase
 
   def test_big_get_marshalled
     @cache.big_set(key, @large_value, 0, true)
-    result = @cache.big_get(key, true)
+    result = @cache.big_get key, true
     assert_equal @large_value, result
   end
 
-  def test_big_get_raises_not_found
-    # Make sure that we didn't break behavior expected with #get.
+  def test_big_set_and_get_unmarshalled
+    @cache.big_set key, @large_value
+    result = @cache.big_get key, false
+    assert_equal @large_marshalled_value, result
+  end
+
+  def test_big_get_missing
     assert_raise(Memcached::NotFound) do
-      @cache.big_get key
+      result = @cache.big_get key
     end
   end
 
