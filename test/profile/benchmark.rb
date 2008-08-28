@@ -38,7 +38,11 @@ class Bench
     # which is a constant penalty that both clients have to pay
     @value = []
     @marshalled = Marshal.dump(@value)
-    
+
+    @large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
+    @large_value_chunk_1 = 'a' * 1048300
+    @large_value_chunk_2 = 'a' * (1048576 - 1048300) + 'b' * 10
+
     @opts = [
       ['127.0.0.1:43042', '127.0.0.1:43043'],
       {
@@ -77,11 +81,11 @@ class Bench
     sleep(1)
   end
 
-  def benchmark    
+  def benchmark
     Benchmark.bm(31) do |x|
-    
-      n = 2500
-    
+
+      n = 1000
+
       if defined? Memcached
         @m = Memcached.new(
         @opts[0],
@@ -123,7 +127,50 @@ class Bench
           end
         end
       end
-    
+
+      # big_set
+      if defined? Memcached
+        @m = Memcached.new(*@opts)
+        x.report("set:plain:large_value:memcached") do
+          n.times do
+            @m.set "#{@key1}_0", @large_value_chunk_1, 0, false
+            @m.set "#{@key1}_1", @large_value_chunk_2, 0, false
+            @m.set "#{@key2}_0", @large_value_chunk_1, 0, false
+            @m.set "#{@key2}_1", @large_value_chunk_2, 0, false
+            @m.set "#{@key3}_0", @large_value_chunk_1, 0, false
+            @m.set "#{@key3}_1", @large_value_chunk_2, 0, false
+          end
+        end
+        @m = Memcached.new(*@opts)
+        x.report("big_set:plain:large_value:memcached") do
+          n.times do
+            @m.big_set @key1, @large_value, 0, false
+            @m.big_set @key2, @large_value, 0, false
+            @m.big_set @key3, @large_value, 0, false
+          end
+        end
+      end
+
+      # big_get
+      if defined? Memcached
+        @m = Memcached.new(*@opts)
+        x.report("get:plain:large_value:memcached") do
+          n.times do
+            @m.get ["#{@key1}_0", "#{@key1}_1"], false
+            @m.get ["#{@key2}_0", "#{@key2}_1"], false
+            @m.get ["#{@key3}_0", "#{@key3}_1"], false
+          end
+        end
+        @m = Memcached.new(*@opts)
+        x.report("big_get:plain:large_value:memcached") do
+          n.times do
+            @m.big_get @key1, false
+            @m.big_get @key2, false
+            @m.big_get @key3, false
+          end
+        end
+      end
+
       # restart_servers
     
     

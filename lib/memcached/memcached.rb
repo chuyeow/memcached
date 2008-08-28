@@ -163,6 +163,8 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
     )
   end
 
+  # EXPERIMENTAL
+  #
   # Sets a key/value pair that is (potentially) bigger than 1MB (i.e. the memcached limit for bucket sizes).
   #
   # Accepts optional <tt>timeout</tt> and <tt>marshal</tt> arguments like <tt>set</tt>.
@@ -183,12 +185,10 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
     chunks = (value.size/chunk_size.to_f).ceil
 
     # Set the number of chunks (in a faux "header") in the bucket for the actual key.
-    chunk_header = OpenStruct.new(:chunks => chunks)
-    set(key, chunk_header, timeout, true)
+    set(key, OpenStruct.new(:chunks => chunks), timeout, true)
 
     chunks.times do |chunk_num|
-      chunk = value[chunk_num * chunk_size, chunk_size]
-      set("#{key}_#{chunk_num}", chunk, timeout, false)
+      set("#{key}_#{chunk_num}", value[chunk_num * chunk_size, chunk_size], timeout, false)
     end
   end
 
@@ -322,6 +322,8 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
     end    
   end    
 
+  # EXPERIMENTAL
+  #
   # Gets a key's value from the server. Accepts a single String key.
   #
   # Accepts an optional <tt>marshal</tt> argument, which defaults to <tt>true</tt>, like <tt>get</tt>.
