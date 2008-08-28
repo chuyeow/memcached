@@ -1,3 +1,4 @@
+require 'ostruct'
 
 =begin rdoc
 The Memcached client class.
@@ -168,13 +169,20 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
   #
   # The value is split into chunks (each smaller than or equal in size to the <tt>chunk_split_size</tt> option)
   # and inserted into separate buckets. The keys are of the form: #{key}_0, #{key}_1, #{key}_2.
+  # The bucket referred to by the given <tt>key</tt> contains a Struct header with a #size property that equals
+  # the number of chunks.
+  #
+  # WARNING: This method is non-atomic by nature, since we are really performing multiple sets in serially.
   def big_set(key, value, timeout=0, marshal=true)
     value = marshal ? Marshal.dump(value) : value.to_s
     if (item_size = value.size) > (chunk_size = options[:chunk_split_size])
 
-      # FIXME Invalidate key_XXX items - in case the previous item that was there has more chunks.
-
       chunks = (item_size/chunk_size.to_f).ceil
+
+      # Set the number of chunks (in a faux "header") in the bucket for the actual key.
+      chunk_header = OpenStruct.new(:size => chunks)
+      set(key, chunk_header, timeout, true)
+
       chunks.times do |chunk_num|
         chunk = value[chunk_num * chunk_size, chunk_size]
         set("#{key}_#{chunk_num}", chunk, timeout, false)

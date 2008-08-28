@@ -7,25 +7,29 @@ class MemcachedTest < Test::Unit::TestCase
     @servers = ['localhost:43042', 'localhost:43043']
 
     # Maximum allowed prefix key size
-    @prefix_key = 'prefix_key_' 
-    
-    @options = {      
-      :prefix_key => @prefix_key, 
+    @prefix_key = 'prefix_key_'
+
+    @options = {
+      :chunk_split_size => 1048300,
+      :prefix_key => @prefix_key,
       :hash => :default,
       :distribution => :modula
     }
     @cache = Memcached.new(@servers, @options)
-    
+
     @nb_options = {
-      :prefix_key => @prefix_key, 
-      :no_block => true, 
-      :buffer_requests => true, 
+      :prefix_key => @prefix_key,
+      :no_block => true,
+      :buffer_requests => true,
       :hash => :default
     }
     @nb_cache = Memcached.new(@servers, @nb_options)
 
     @value = OpenStruct.new(:a => 1, :b => 2, :c => GenericClass)
     @marshalled_value = Marshal.dump(@value)
+
+    @large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
+    @large_marshalled_value = Marshal.dump(@large_value)
   end
 
   # Initialize
@@ -319,19 +323,40 @@ class MemcachedTest < Test::Unit::TestCase
   # big_set
 
   def test_big_set
-    large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
-
     assert_nothing_raised do
-      @cache.big_set(key, large_value)
+      @cache.big_set(key, @value)
     end
   end
 
-  def test_big_set_splits_into_chunks
-    large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
-    @cache.big_set('foo', large_value, 0, false)
+  def test_big_set_sets_header_in_key
+    @cache.big_set('foo', @large_value, 0, false)
 
-    assert_equal('a' * 1048300, @cache.get('foo_0', false)) # chunk_split_size is 1048300 by default
-    assert_equal('a' * (1048576 - 1048300) + 'b' * 10, @cache.get('foo_1', false))
+    expected_header = OpenStruct.new(:size => 2) # @large_value splits into 2 chunks.
+
+    assert_equal(expected_header, @cache.get('foo'))
+  end
+
+  def test_big_set_splits_into_chunks
+    @cache.big_set('foo', @large_value, 0, false)
+
+    expected_1st_chunk = 'a' * @options[:chunk_split_size]
+    expected_2nd_chunk = 'a' * (1048576 - @options[:chunk_split_size]) + 'b' * 10
+
+    assert_equal(expected_1st_chunk, @cache.get('foo_0', false))
+    assert_equal(expected_2nd_chunk, @cache.get('foo_1', false))
+  end
+
+  def test_big_set_marshalled
+    @cache.big_set('foo', @large_value, 0, true)
+
+    expected_1st_chunk = @large_marshalled_value[0, @options[:chunk_split_size]]
+    expected_2nd_chunk = @large_marshalled_value[@options[:chunk_split_size], @options[:chunk_split_size]]
+
+    assert_equal(expected_1st_chunk, @cache.get('foo_0', false))
+    assert_equal(expected_2nd_chunk, @cache.get('foo_1', false))
+
+    # Unmarshalling the sum of the chunks should result in the original value.
+    assert_equal(Marshal.load(expected_1st_chunk + expected_2nd_chunk), @large_value)
   end
 
   # Delete
@@ -777,4 +802,3 @@ class MemcachedTest < Test::Unit::TestCase
   end
  
 end
-
