@@ -169,7 +169,7 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
   #
   # The value is split into chunks (each smaller than or equal in size to the <tt>chunk_split_size</tt> option)
   # and inserted into separate buckets. The keys are of the form: #{key}_0, #{key}_1, #{key}_2.
-  # The bucket referred to by the given <tt>key</tt> contains a Struct header with a #size property that equals
+  # The bucket referred to by the given <tt>key</tt> contains a Struct header with a #chunks property that equals
   # the number of chunks.
   #
   # Note that values that fit within a single chunk _are_ still "split" - the chunk header (and the single chunk)
@@ -183,7 +183,7 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
     chunks = (value.size/chunk_size.to_f).ceil
 
     # Set the number of chunks (in a faux "header") in the bucket for the actual key.
-    chunk_header = OpenStruct.new(:size => chunks)
+    chunk_header = OpenStruct.new(:chunks => chunks)
     set(key, chunk_header, timeout, true)
 
     chunks.times do |chunk_num|
@@ -328,7 +328,10 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
   def big_get(key, marshal=true)
     chunk_header = get(key, true)
 
-    chunks = chunk_header.size
+    # A valid chunk header should respond to #chunks.
+    return get(key, marshal) unless chunk_header.respond_to?(:chunks)
+
+    chunks = chunk_header.chunks
     chunk_keys = (0...chunks).map { |i| "#{key}_#{i}" }
 
     # Use multiget #get - this returns a hash of key/value pairs.

@@ -331,7 +331,7 @@ class MemcachedTest < Test::Unit::TestCase
   def test_big_set_sets_header_in_key
     @cache.big_set(key, @large_value, 0, false)
 
-    expected_header = OpenStruct.new(:size => 2) # @large_value splits into 2 chunks.
+    expected_header = OpenStruct.new(:chunks => 2) # @large_value splits into 2 chunks.
 
     assert_equal expected_header, @cache.get(key)
   end
@@ -349,7 +349,7 @@ class MemcachedTest < Test::Unit::TestCase
   def test_big_set_single_chunk_sets_header_and_single_chunk
     @cache.big_set(key, 'bar', 0, false)
 
-    expected_header = OpenStruct.new(:size => 1)
+    expected_header = OpenStruct.new(:chunks => 1)
 
     assert_equal expected_header, @cache.get(key)
 
@@ -402,6 +402,15 @@ class MemcachedTest < Test::Unit::TestCase
     assert_raise(Memcached::NotFound) do
       @cache.big_get key
     end
+  end
+
+  def test_big_get_invalid_chunk_header_fallsback_to_get
+    @cache.big_set key, @large_value
+
+    # Overwrite the chunk header.
+    @cache.set key, 'foo'
+
+    assert_equal 'foo', @cache.big_get(key)
   end
 
   def test_big_get_missing
