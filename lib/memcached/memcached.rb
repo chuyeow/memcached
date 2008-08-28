@@ -326,7 +326,21 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
   #
   # Accepts an optional <tt>marshal</tt> argument, which defaults to <tt>true</tt>, like <tt>get</tt>.
   def big_get(key, marshal=true)
-    get(key, false)
+    chunk_header = get(key, true)
+
+    chunks = chunk_header.size
+    chunk_keys = (0...chunks).map { |i| "#{key}_#{i}" }
+
+    # Use multiget #get - this returns a hash of key/value pairs.
+    chunky_hash_browns = get(chunk_keys, false)
+
+    # If any of the chunks are missing, the entire item is considered missing.
+    raise Memcached::NotFound if chunky_hash_browns.size != chunks
+
+    # Concat all the chunked values.
+    value = chunky_hash_browns.sort.map { |k, v| v }.join
+    value = Marshal.load(value) if marshal
+    value
   end
 
   ### Information methods

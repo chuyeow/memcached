@@ -324,7 +324,7 @@ class MemcachedTest < Test::Unit::TestCase
 
   def test_big_set
     assert_nothing_raised do
-      @cache.big_set(key, @value)
+      @cache.big_set key, @value
     end
   end
 
@@ -333,7 +333,7 @@ class MemcachedTest < Test::Unit::TestCase
 
     expected_header = OpenStruct.new(:size => 2) # @large_value splits into 2 chunks.
 
-    assert_equal(expected_header, @cache.get(key))
+    assert_equal expected_header, @cache.get(key)
   end
 
   def test_big_set_splits_into_chunks
@@ -342,8 +342,8 @@ class MemcachedTest < Test::Unit::TestCase
     expected_1st_chunk = 'a' * @options[:chunk_split_size]
     expected_2nd_chunk = 'a' * (1048576 - @options[:chunk_split_size]) + 'b' * 10
 
-    assert_equal(expected_1st_chunk, @cache.get("#{key}_0", false))
-    assert_equal(expected_2nd_chunk, @cache.get("#{key}_1", false))
+    assert_equal expected_1st_chunk, @cache.get("#{key}_0", false)
+    assert_equal expected_2nd_chunk, @cache.get("#{key}_1", false)
   end
 
   def test_big_set_single_chunk_sets_header_and_single_chunk
@@ -351,9 +351,9 @@ class MemcachedTest < Test::Unit::TestCase
 
     expected_header = OpenStruct.new(:size => 1)
 
-    assert_equal(expected_header, @cache.get(key))
+    assert_equal expected_header, @cache.get(key)
 
-    assert_equal('bar', @cache.get("#{key}_0", false))
+    assert_equal 'bar', @cache.get("#{key}_0", false)
 
     assert_raise(Memcached::NotFound) do
       puts @cache.get("#{key}_1", false)
@@ -366,11 +366,32 @@ class MemcachedTest < Test::Unit::TestCase
     expected_1st_chunk = @large_marshalled_value[0, @options[:chunk_split_size]]
     expected_2nd_chunk = @large_marshalled_value[@options[:chunk_split_size], @options[:chunk_split_size]]
 
-    assert_equal(expected_1st_chunk, @cache.get("#{key}_0", false))
-    assert_equal(expected_2nd_chunk, @cache.get("#{key}_1", false))
+    assert_equal expected_1st_chunk, @cache.get("#{key}_0", false)
+    assert_equal expected_2nd_chunk, @cache.get("#{key}_1", false)
 
     # Unmarshalling the sum of the chunks should result in the original value.
-    assert_equal(Marshal.load(expected_1st_chunk + expected_2nd_chunk), @large_value)
+    assert_equal Marshal.load(expected_1st_chunk + expected_2nd_chunk), @large_value
+  end
+
+  # big_get
+
+  def test_big_get
+    @cache.big_set key, @large_value
+    result = @cache.big_get key
+    assert_equal @large_value, result
+  end
+
+  def test_big_get_marshalled
+    @cache.big_set(key, @large_value, 0, true)
+    result = @cache.big_get(key, true)
+    assert_equal @large_value, result
+  end
+
+  def test_big_get_raises_not_found
+    # Make sure that we didn't break behavior expected with #get.
+    assert_raise(Memcached::NotFound) do
+      @cache.big_get key
+    end
   end
 
   # Delete
