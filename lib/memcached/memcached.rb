@@ -171,13 +171,13 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
   #
   # The value is split into chunks (each smaller than or equal in size to the <tt>chunk_split_size</tt> option)
   # and inserted into separate buckets. The keys are of the form: #{key}_0, #{key}_1, #{key}_2.
-  # The bucket referred to by the given <tt>key</tt> contains a Struct header with a #chunks property that equals
+  # The bucket referred to by the given <tt>key</tt> contains a chunk "header" with a #chunks property that equals
   # the number of chunks.
   #
   # Note that values that fit within a single chunk _are_ still "split" - the chunk header (and the single chunk)
   # is still set.
   #
-  # WARNING: This method is non-atomic by nature, since we are really performing multiple sets in serially.
+  # WARNING: This method is non-atomic by nature, since we are really performing multiple <tt>set</tt>s serially.
   def big_set(key, value, timeout=0, marshal=true)
     value = marshal ? Marshal.dump(value) : value.to_s
 
