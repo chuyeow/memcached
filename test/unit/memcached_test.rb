@@ -393,9 +393,20 @@ class MemcachedTest < Test::Unit::TestCase
     assert_equal @large_marshalled_value, result
   end
 
+  def test_big_get_missing_chunk_raises_not_found
+    @cache.big_set key, @large_value
+
+    # Remove the 2nd chunk.
+    @cache.delete "#{key}_1"
+
+    assert_raise(Memcached::NotFound) do
+      @cache.big_get key
+    end
+  end
+
   def test_big_get_missing
     assert_raise(Memcached::NotFound) do
-      result = @cache.big_get key
+      @cache.big_get key
     end
   end
 
