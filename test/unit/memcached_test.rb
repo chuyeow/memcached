@@ -346,6 +346,20 @@ class MemcachedTest < Test::Unit::TestCase
     assert_equal(expected_2nd_chunk, @cache.get('foo_1', false))
   end
 
+  def test_big_set_single_chunk_sets_header_and_single_chunk
+    @cache.big_set(key, 'bar', 0, false)
+
+    expected_header = OpenStruct.new(:size => 1)
+
+    assert_equal(expected_header, @cache.get(key))
+
+    assert_equal('bar', @cache.get("#{key}_0", false))
+
+    assert_raise(Memcached::NotFound) do
+      puts @cache.get("#{key}_1", false)
+    end
+  end
+
   def test_big_set_marshalled
     @cache.big_set('foo', @large_value, 0, true)
 

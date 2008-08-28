@@ -172,24 +172,23 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
   # The bucket referred to by the given <tt>key</tt> contains a Struct header with a #size property that equals
   # the number of chunks.
   #
+  # Note that values that fit within a single chunk _are_ still "split" - the chunk header (and the single chunk)
+  # is still set.
+  #
   # WARNING: This method is non-atomic by nature, since we are really performing multiple sets in serially.
   def big_set(key, value, timeout=0, marshal=true)
     value = marshal ? Marshal.dump(value) : value.to_s
-    if (item_size = value.size) > (chunk_size = options[:chunk_split_size])
 
-      chunks = (item_size/chunk_size.to_f).ceil
+    chunk_size = options[:chunk_split_size]
+    chunks = (value.size/chunk_size.to_f).ceil
 
-      # Set the number of chunks (in a faux "header") in the bucket for the actual key.
-      chunk_header = OpenStruct.new(:size => chunks)
-      set(key, chunk_header, timeout, true)
+    # Set the number of chunks (in a faux "header") in the bucket for the actual key.
+    chunk_header = OpenStruct.new(:size => chunks)
+    set(key, chunk_header, timeout, true)
 
-      chunks.times do |chunk_num|
-        chunk = value[chunk_num * chunk_size, chunk_size]
-        set("#{key}_#{chunk_num}", chunk, timeout, false)
-      end
-    else
-      # Fallback to vanilla set.
-      set(key, value, timeout, false)
+    chunks.times do |chunk_num|
+      chunk = value[chunk_num * chunk_size, chunk_size]
+      set("#{key}_#{chunk_num}", chunk, timeout, false)
     end
   end
 
@@ -325,9 +324,9 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
 
   # Gets a key's value from the server. Accepts a single String key.
   #
-  # Accepts optional <tt>marshal</tt> arguments like <tt>get</tt>.
+  # Accepts an optional <tt>marshal</tt> argument, which defaults to <tt>true</tt>, like <tt>get</tt>.
   def big_get(key, marshal=true)
-    # FIXME
+    get(key, false)
   end
 
   ### Information methods
