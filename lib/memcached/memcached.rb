@@ -330,7 +330,7 @@ Please note that when non-blocking IO is enabled, setter and deleter methods do 
     chunk_header = get(key, true)
 
     # A valid chunk header should respond to #chunks.
-    return get(key, marshal) unless chunk_header.respond_to?(:chunks)
+    return marshal ? chunk_header : get(key, marshal) unless chunk_header.respond_to?(:chunks)
 
     chunks = chunk_header.chunks
     chunk_keys = (0...chunks).map { |i| "#{key}_#{i}" }
