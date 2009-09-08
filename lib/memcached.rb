@@ -22,9 +22,8 @@ class Memcached
   Lib = Rlibmemcached
   REQUIRED_VERSION = File.read("#{File.dirname(__FILE__)}/../COMPATIBILITY")[/:: ([\d\.]+)/, 1]
   RECEIVED_VERSION = Lib.memcached_lib_version
-  raise LoadError, "Requires libmemcached #{REQUIRED_VERSION}; you have #{RECEIVED_VERSION}" unless REQUIRED_VERSION == RECEIVED_VERSION
-end  
-
+  raise "libmemcached #{REQUIRED_VERSION} required; you somehow linked to #{RECEIVED_VERSION}." unless REQUIRED_VERSION == RECEIVED_VERSION
+end
 
 require 'memcached/integer'
 require 'memcached/exceptions'

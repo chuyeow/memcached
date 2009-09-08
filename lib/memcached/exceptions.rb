@@ -21,9 +21,11 @@ Subclasses correspond one-to-one with server response strings or libmemcached er
 * Memcached::ConnectionFailure
 * Memcached::ConnectionSocketCreateFailure
 * Memcached::CouldNotOpenUnixSocket
+* Memcached::EncounteredAnUnknownStatKey
 * Memcached::Failure
 * Memcached::FetchWasNotCompleted
 * Memcached::HostnameLookupFailure
+* Memcached::ItemValue
 * Memcached::MemoryAllocationFailure
 * Memcached::NoServersDefined
 * Memcached::NotFound
@@ -34,15 +36,26 @@ Subclasses correspond one-to-one with server response strings or libmemcached er
 * Memcached::ServerDelete
 * Memcached::ServerEnd
 * Memcached::ServerError
+* Memcached::ServerIsMarkedDead
 * Memcached::ServerValue
 * Memcached::SomeErrorsWereReported
 * Memcached::StatValue
 * Memcached::SystemError
+* Memcached::TheHostTransportProtocolDoesNotMatchThatOfTheClient
 * Memcached::UnknownReadFailure
 * Memcached::WriteFailure
 
 =end
   class Error < RuntimeError
+    attr_accessor :no_backtrace
+    
+    def set_backtrace(*args)
+      @no_backtrace ? [] : super
+    end
+    
+    def backtrace(*args)
+      @no_backtrace ? [] : super
+    end
   end 
 
 #:stopdoc:
@@ -54,38 +67,18 @@ Subclasses correspond one-to-one with server response strings or libmemcached er
     end           
   end
   
+  ERRNO_HASH = Hash[*Errno.constants.map{ |c| [Errno.const_get(c)::Errno, Errno.const_get(c).new.message] }.flatten]
+  
   EXCEPTIONS = []
   EMPTY_STRUCT = Rlibmemcached::MemcachedSt.new
   Rlibmemcached.memcached_create(EMPTY_STRUCT)
   
   # Generate exception classes
   Rlibmemcached::MEMCACHED_MAXIMUM_RETURN.times do |index|
-    description = Rlibmemcached.memcached_strerror(EMPTY_STRUCT, index)
+    description = Rlibmemcached.memcached_strerror(EMPTY_STRUCT, index).gsub("!", "")
     exception_class = eval("class #{camelize(description)} < Error; self; end")
     EXCEPTIONS << exception_class
   end
-  
-  class NotFound
-    def self.remove_backtraces
-      class_eval do
-        def set_backtrace(*args); []; end
-        alias :backtrace :set_backtrace
-      end
-    end
-    
-    def self.restore_backtraces
-      class_eval do
-        begin
-          remove_method :set_backtrace
-          remove_method :backtrace
-        rescue NameError
-        end
-      end
-    end
-  end
-  
-  # Verify library version
-  # XXX Waiting on libmemcached 0.18
   
 #:startdoc:
 end

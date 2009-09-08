@@ -1,27 +1,27 @@
 
 HERE = File.dirname(__FILE__)
 $LOAD_PATH << "#{HERE}/../../lib/"
+UNIX_SOCKET_NAME = File.join(ENV['TMPDIR']||'/tmp','memcached') 
 
 require 'memcached'
-
 require 'benchmark'
 require 'rubygems'
+require 'ruby-debug' if ENV['DEBUG']
+begin; require 'memory'; rescue LoadError; end
 
-begin
-  require 'memory'
-rescue LoadError
-end
+ARGV << "--with-memcached" << "--with-memcache-client" if ARGV.join !~ /--with/
 
-if ARGV.join !~ /--with/
-  ARGV << "--with-memcached" << "--with-memcache-client" << "--with-caffeine"
-end
+puts `uname -a`
+puts "Ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}"
 
-ARGV.grep(/--with-(\w+)/) do
+ARGV.each do |flag|
+  require_name = flag[/--with-(\w+)/, 1]
+  gem_name = flag[/--with-(.*)$/, 1]
   begin
-    puts "Loading #{$1}"
-    require $1
+    require require_name
+    gem gem_name
+    puts "Loaded #{$1} #{Gem.loaded_specs[gem_name].version.to_s rescue nil}"
   rescue LoadError
-    puts "Failed"
   end
 end
 
@@ -38,18 +38,14 @@ class Bench
     # which is a constant penalty that both clients have to pay
     @value = []
     @marshalled = Marshal.dump(@value)
-
-    @large_value = 'a' * 1048576 + 'b' * 10 # 1MB of 'a' + 10 bytes of 'b'
-    @large_value_chunk_1 = 'a' * 1048300
-    @large_value_chunk_2 = 'a' * (1048576 - 1048300) + 'b' * 10
-
-    @opts = [
+    
+    @opts_networked = [
       ['127.0.0.1:43042', '127.0.0.1:43043'],
-      {
-        :buffer_requests => false,
-        :no_block => false,
-        :namespace => "namespace"
-      }
+      {:buffer_requests => false, :no_block => false, :namespace => "namespace"}
+    ]
+    @opt_unix = [
+      ["#{UNIX_SOCKET_NAME}0","#{UNIX_SOCKET_NAME}1"],
+      {:buffer_requests => false, :no_block => false, :namespace => "namespace"}
     ]
     @key1 = "Short"
     @key2 = "Sym1-2-3::45"*8
@@ -59,39 +55,27 @@ class Bench
     @key5 = "Medium2"*8 
     @key6 = "Long3"*40 
     
-    restart_servers
-  end
-
-  def run(level = @recursion)
-    if level > 0
-      run_inner(level - 1)
-    else
-      benchmark
-    end  
-  end
-  
-  def run_inner(level)
-    run(level)
-  end
-  
-  private
-  
-  def restart_servers
     system("ruby #{HERE}/../setup.rb")
     sleep(1)
   end
 
-  def benchmark
-    Benchmark.bm(31) do |x|
-
-      n = 1000
-
+  def run(level = @recursion)
+    level > 0 ? run(level - 1) : benchmark
+  end
+  
+  private
+  
+  def benchmark    
+    Benchmark.bm(35) do |x|
+    
+      n = (ENV["LOOPS"] || 10000).to_i
+    
       if defined? Memcached
         @m = Memcached.new(
-        @opts[0],
-        @opts[1].merge(:no_block => true, :buffer_requests => true)
+        @opts_networked[0],
+        @opts_networked[1].merge(:no_block => true, :buffer_requests => true)
         )
-        x.report("set:plain:noblock:memcached") do
+        x.report("set:plain:noblock:memcached:net") do
           n.times do
             @m.set @key1, @marshalled, 0, false
             @m.set @key2, @marshalled, 0, false
@@ -101,8 +85,22 @@ class Bench
             @m.set @key3, @marshalled, 0, false
           end
         end
-        @m = Memcached.new(*@opts)
-        x.report("set:plain:memcached") do
+        @m = Memcached.new(
+        @opt_unix[0],
+        @opt_unix[1].merge(:no_block => true, :buffer_requests => true)
+        )
+        x.report("set:plain:noblock:memcached:uds") do
+          n.times do
+            @m.set @key1, @marshalled, 0, false
+            @m.set @key2, @marshalled, 0, false
+            @m.set @key3, @marshalled, 0, false
+            @m.set @key1, @marshalled, 0, false
+            @m.set @key2, @marshalled, 0, false
+            @m.set @key3, @marshalled, 0, false
+          end
+        end
+        @m = Memcached.new(*@opts_networked)
+        x.report("set:plain:memcached:net") do
           n.times do
             @m.set @key1, @marshalled, 0, false
             @m.set @key2, @marshalled, 0, false
@@ -112,10 +110,20 @@ class Bench
             @m.set @key3, @marshalled, 0, false
           end
         end # if false
+        @m = Memcached.new(*@opt_unix)
+        x.report("set:plain:memcached:uds") do
+          n.times do
+            @m.set @key1, @marshalled, 0, false
+            @m.set @key2, @marshalled, 0, false
+            @m.set @key3, @marshalled, 0, false
+            @m.set @key1, @marshalled, 0, false
+            @m.set @key2, @marshalled, 0, false
+            @m.set @key3, @marshalled, 0, false
+          end
+        end
       end
-      #  Not supported by Caffeine
       if defined? MemCache
-        @m = MemCache.new(*@opts)
+        @m = MemCache.new(*@opts_networked)
         x.report("set:plain:memcache-client") do
           n.times do
             @m.set @key1, @marshalled, 0, true
@@ -170,16 +178,13 @@ class Bench
           end
         end
       end
-
-      # restart_servers
-    
     
       if defined? Memcached
         @m = Memcached.new(
-        @opts[0],
-        @opts[1].merge(:no_block => true, :buffer_requests => true)
+        @opts_networked[0],
+        @opts_networked[1].merge(:no_block => true, :buffer_requests => true)
         )
-        x.report("set:ruby:noblock:memcached") do
+        x.report("set:ruby:noblock:memcached:net") do
           n.times do
             @m.set @key1, @value
             @m.set @key2, @value
@@ -189,8 +194,22 @@ class Bench
             @m.set @key3, @value
           end
         end
-        @m = Memcached.new(*@opts)
-        x.report("set:ruby:memcached") do
+        @m = Memcached.new(
+        @opt_unix[0],
+        @opt_unix[1].merge(:no_block => true, :buffer_requests => true)
+        )
+        x.report("set:ruby:noblock:memcached:uds") do
+          n.times do
+            @m.set @key1, @value
+            @m.set @key2, @value
+            @m.set @key3, @value
+            @m.set @key1, @value
+            @m.set @key2, @value
+            @m.set @key3, @value
+          end
+        end
+        @m = Memcached.new(*@opts_networked)
+        x.report("set:ruby:memcached:net") do
           n.times do
             @m.set @key1, @value
             @m.set @key2, @value
@@ -200,10 +219,8 @@ class Bench
             @m.set @key3, @value
           end
         end # if false
-      end
-      if defined? Caffeine
-        @m = Caffeine::MemCache.new(@opts[1]); @m.servers = @opts[0]
-        x.report("set:ruby:caffeine") do
+        @m = Memcached.new(*@opt_unix)
+        x.report("set:ruby:memcached:uds") do
           n.times do
             @m.set @key1, @value
             @m.set @key2, @value
@@ -215,7 +232,7 @@ class Bench
         end
       end
       if defined? MemCache
-        @m = MemCache.new(*@opts)
+        @m = MemCache.new(*@opts_networked)
         x.report("set:ruby:memcache-client") do
           n.times do
             @m.set @key1, @value
@@ -229,8 +246,19 @@ class Bench
       end
     
       if defined? Memcached
-        @m = Memcached.new(*@opts)
-        x.report("get:plain:memcached") do
+        @m = Memcached.new(*@opts_networked)
+        x.report("get:plain:memcached:net") do
+          n.times do
+            @m.get @key1, false
+            @m.get @key2, false
+            @m.get @key3, false
+            @m.get @key1, false
+            @m.get @key2, false
+            @m.get @key3, false
+          end
+        end
+        @m = Memcached.new(*@opt_unix)
+        x.report("get:plain:memcached:uds") do
           n.times do
             @m.get @key1, false
             @m.get @key2, false
@@ -241,9 +269,8 @@ class Bench
           end
         end
       end
-      #  Not supported by Caffeine
       if defined? MemCache
-        @m = MemCache.new(*@opts)
+        @m = MemCache.new(*@opts_networked)
         x.report("get:plain:memcache-client") do
           n.times do
             @m.get @key1, true
@@ -257,8 +284,8 @@ class Bench
       end
     
       if defined? Memcached
-        @m = Memcached.new(*@opts)
-        x.report("get:ruby:memcached") do
+        @m = Memcached.new(*@opts_networked)
+        x.report("get:ruby:memcached:net") do
           n.times do
             @m.get @key1
             @m.get @key2
@@ -268,10 +295,8 @@ class Bench
             @m.get @key3
           end
         end
-      end
-      if defined? Caffeine
-        @m = Caffeine::MemCache.new(@opts[1]); @m.servers = @opts[0]
-        x.report("get:ruby:caffeine") do
+        @m = Memcached.new(*@opt_unix)
+        x.report("get:ruby:memcached:uds") do
           n.times do
             @m.get @key1
             @m.get @key2
@@ -283,7 +308,7 @@ class Bench
         end
       end
       if defined? MemCache
-        @m = MemCache.new(*@opts)
+        @m = MemCache.new(*@opts_networked)
         x.report("get:ruby:memcache-client") do
           n.times do
             @m.get @key1
@@ -297,28 +322,29 @@ class Bench
       end
 
       if defined? Memcached
-        @m = Memcached.new(*@opts)
+        @m = Memcached.new(*@opts_networked)
 
         # Avoid rebuilding the array every request
         keys = [@key1, @key2, @key3, @key4, @key5, @key6]
 
-        x.report("multiget:ruby:memcached") do
+        x.report("multiget:ruby:memcached:net") do
+          n.times do
+            @m.get keys
+          end
+        end
+        @m = Memcached.new(*@opt_unix)
+
+        # Avoid rebuilding the array every request
+        keys = [@key1, @key2, @key3, @key4, @key5, @key6]
+
+        x.report("multiget:ruby:memcached:uds") do
           n.times do
             @m.get keys
           end
         end
       end
-      if defined? Caffeine
-        @m = Caffeine::MemCache.new(@opts[1]); @m.servers = @opts[0]
-        x.report("multiget:ruby:caffeine") do
-          n.times do
-            # We don't use the keys array because splat is slow
-            @m.get @key1, @key2, @key3, @key4, @key5, @key6
-          end
-        end
-      end
       if defined? MemCache
-        @m = MemCache.new(*@opts)
+        @m = MemCache.new(*@opts_networked)
         x.report("multiget:ruby:memcache-client") do
           n.times do
             # We don't use the keys array because splat is slow
@@ -327,69 +353,89 @@ class Bench
         end
       end
     
-      # restart_servers
-    
       if defined? Memcached
-        @m = Memcached.new(*@opts)
-        x.report("missing:ruby:memcached") do
+        @m = Memcached.new(*@opts_networked)
+        x.report("get-miss:ruby:memcached:net") do
           n.times do
             begin @m.delete @key1; rescue Memcached::NotFound; end
-            begin @m.get @key1; rescue Memcached::NotFound; end
             begin @m.delete @key2; rescue Memcached::NotFound; end
-            begin @m.get @key2; rescue Memcached::NotFound; end
             begin @m.delete @key3; rescue Memcached::NotFound; end
+            begin @m.get @key1; rescue Memcached::NotFound; end
+            begin @m.get @key2; rescue Memcached::NotFound; end
             begin @m.get @key3; rescue Memcached::NotFound; end
           end
         end
-      end
-      if defined? Memcached
-        @m = Memcached.new(*@opts)
-        x.report("missing:ruby:memcached:inline") do
+        @m = Memcached.new(*@opt_unix)
+        x.report("get-miss:ruby:memcached:uds") do
           n.times do
-            @m.delete @key1 rescue nil
-            @m.get @key1 rescue nil
-            @m.delete @key2 rescue nil
-            @m.get @key2 rescue nil
-            @m.delete @key3 rescue nil
-            @m.get @key3 rescue nil
+            begin @m.delete @key1; rescue Memcached::NotFound; end
+            begin @m.delete @key2; rescue Memcached::NotFound; end
+            begin @m.delete @key3; rescue Memcached::NotFound; end
+            begin @m.get @key1; rescue Memcached::NotFound; end
+            begin @m.get @key2; rescue Memcached::NotFound; end
+            begin @m.get @key3; rescue Memcached::NotFound; end
+          end
+        end
+      end      
+
+      if defined? MemCache
+        @m = MemCache.new(*@opts_networked)
+        x.report("get-miss:ruby:memcache-client") do
+          n.times do
+            begin @m.delete @key1; rescue; end
+            begin @m.delete @key2; rescue; end
+            begin @m.delete @key3; rescue; end
+            begin @m.get @key1; rescue; end
+            begin @m.get @key2; rescue; end
+            begin @m.get @key3; rescue; end
           end
         end
       end
-      if defined? Caffeine
-        @m = Caffeine::MemCache.new(@opts[1]); @m.servers = @opts[0]
-        x.report("missing:ruby:caffeine") do
+      
+      if defined? Memcached
+        @m = Memcached.new(*@opts_networked)
+        x.report("append-miss:ruby:memcached:net") do
           n.times do
-            begin @m.delete @key1; rescue; end
-            begin @m.get @key1; rescue; end
-            begin @m.delete @key2; rescue; end
-            begin @m.get @key2; rescue; end
-            begin @m.delete @key3; rescue; end
-            begin @m.get @key3; rescue; end
+            begin @m.delete @key1; rescue Memcached::NotFound; end
+            begin @m.delete @key2; rescue Memcached::NotFound; end
+            begin @m.delete @key3; rescue Memcached::NotFound; end
+            begin @m.append @key1, @value; rescue Memcached::NotStored; end
+            begin @m.append @key2, @value; rescue Memcached::NotStored; end
+            begin @m.append @key3, @value; rescue Memcached::NotStored; end
+          end
+        end
+        @m = Memcached.new(*@opt_unix)
+        x.report("append-miss:ruby:memcached:uds") do
+          n.times do
+            begin @m.delete @key1; rescue Memcached::NotFound; end
+            begin @m.delete @key2; rescue Memcached::NotFound; end
+            begin @m.delete @key3; rescue Memcached::NotFound; end
+            begin @m.append @key1, @value; rescue Memcached::NotStored; end
+            begin @m.append @key2, @value; rescue Memcached::NotStored; end
+            begin @m.append @key3, @value; rescue Memcached::NotStored; end
           end
         end
       end
       if defined? MemCache
-        @m = MemCache.new(*@opts)
-        x.report("missing:ruby:memcache-client") do
+        @m = MemCache.new(*@opts_networked)
+        x.report("append-miss:ruby:memcache-client") do
           n.times do
             begin @m.delete @key1; rescue; end
-            begin @m.get @key1; rescue; end
             begin @m.delete @key2; rescue; end
-            begin @m.get @key2; rescue; end
             begin @m.delete @key3; rescue; end
-            begin @m.get @key3; rescue; end
+            begin @m.append @key1, @value; rescue; end
+            begin @m.append @key2, @value; rescue; end
+            begin @m.append @key3, @value; rescue; end
           end
         end
       end
-          
-      # restart_servers
-    
+                      
       if defined? Memcached
         @m = Memcached.new(
-        @opts[0],
-        @opts[1].merge(:no_block => true, :buffer_requests => true)
+        @opts_networked[0],
+        @opts_networked[1].merge(:no_block => true, :buffer_requests => true)
         )
-        x.report("mixed:ruby:noblock:memcached") do
+        x.report("mixed:ruby:noblock:memcached:net") do
           n.times do
             @m.set @key1, @value
             @m.set @key2, @value
@@ -405,8 +451,45 @@ class Bench
             @m.get @key3
           end
         end
-        @m = Memcached.new(*@opts)
-        x.report("mixed:ruby:memcached") do
+        @m = Memcached.new(
+        @opt_unix[0],
+        @opt_unix[1].merge(:no_block => true, :buffer_requests => true)
+        )
+        x.report("mixed:ruby:noblock:memcached:uds") do
+          n.times do
+            @m.set @key1, @value
+            @m.set @key2, @value
+            @m.set @key3, @value
+            @m.get @key1
+            @m.get @key2
+            @m.get @key3
+            @m.set @key1, @value
+            @m.get @key1
+            @m.set @key2, @value
+            @m.get @key2
+            @m.set @key3, @value
+            @m.get @key3
+          end
+        end
+        @m = Memcached.new(*@opts_networked)
+        x.report("mixed:ruby:memcached:net") do
+          n.times do
+            @m.set @key1, @value
+            @m.set @key2, @value
+            @m.set @key3, @value
+            @m.get @key1
+            @m.get @key2
+            @m.get @key3
+            @m.set @key1, @value
+            @m.get @key1
+            @m.set @key2, @value
+            @m.get @key2
+            @m.set @key3, @value
+            @m.get @key3
+          end
+        end # if false
+        @m = Memcached.new(*@opt_unix)
+        x.report("mixed:ruby:memcached:uds") do
           n.times do
             @m.set @key1, @value
             @m.set @key2, @value
@@ -423,27 +506,8 @@ class Bench
           end
         end # if false
       end
-      if defined? Caffeine
-        @m = Caffeine::MemCache.new(@opts[1]); @m.servers = @opts[0]
-        x.report("mixed:ruby:caffeine") do
-          n.times do
-            @m.set @key1, @value
-            @m.set @key2, @value
-            @m.set @key3, @value
-            @m.get @key1
-            @m.get @key2
-            @m.get @key3
-            @m.set @key1, @value
-            @m.get @key1
-            @m.set @key2, @value
-            @m.get @key2
-            @m.set @key3, @value
-            @m.get @key3
-          end
-        end
-      end
       if defined? MemCache
-        @m = MemCache.new(*@opts)
+        @m = MemCache.new(*@opts_networked)
         x.report("mixed:ruby:memcache-client") do
           n.times do
             @m.set @key1, @value
@@ -462,29 +526,25 @@ class Bench
         end
       end
     
-      # restart_servers
-    
       if defined? Memcached
         unless ARGV.include? "--no-hash"
-          n = 10000
-          Memcached::HASH_VALUES.each do |mode,|
-            @m = Memcached.new(@opts[0], @opts[1].merge(:hash => mode))
-            x.report("hash:#{mode}:memcached") do
+          Memcached::HASH_VALUES.each do |mode, int|
+            @m = Memcached.new(@opt_unix[0], @opt_unix[1].merge(:hash => mode))
+            x.report("hash:#{mode}") do
               n.times do
-                @m.set @key1, @marshalled, 0, false
-                @m.get @key1, false
-                @m.set @key2, @marshalled, 0, false
-                @m.get @key2, false
-                @m.set @key3, @marshalled, 0, false
-                @m.get @key3, false
+                Rlibmemcached.memcached_generate_hash_rvalue(@key1, int)
+                Rlibmemcached.memcached_generate_hash_rvalue(@key2, int)
+                Rlibmemcached.memcached_generate_hash_rvalue(@key3, int)
+                Rlibmemcached.memcached_generate_hash_rvalue(@key4, int)
+                Rlibmemcached.memcached_generate_hash_rvalue(@key5, int)
+                Rlibmemcached.memcached_generate_hash_rvalue(@key6, int)
               end
             end
           end
         end
-    
       end
-    end
-    
+
+    end    
   end
 end
 

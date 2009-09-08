@@ -1,35 +1,102 @@
-
 require 'mkmf'
 
-if ENV['SWIG']
-  puts "running SWIG"
-  $stdout.write `swig -I/opt/local/include -ruby -autorename rlibmemcached.i`
+HERE = File.expand_path(File.dirname(__FILE__))
+BUNDLE = Dir.glob("libmemcached-*.tar.gz").first
+BUNDLE_PATH = BUNDLE.sub(".tar.gz", "")
+
+DARWIN = `uname -sp` == "Darwin i386\n"
+
+# is there a better way to do this?
+archflags = if ENV['ARCHFLAGS']
+  ENV['ARCHFLAGS']
+elsif Config::CONFIG['host_os'] == 'darwin10.0'
+  "-arch i386 -arch x86_64"
+elsif Config::CONFIG['host_os'] =~ /darwin/
+  "-arch i386 -arch ppc"
+else
+  archflags = ''
+end
+
+if !ENV["EXTERNAL_LIB"]
+  $includes = " -I#{HERE}/include"
+  $libraries = " -L#{HERE}/lib"
+
+  $CFLAGS = "#{$includes} #{$libraries} #{$CFLAGS}"
+  $LDFLAGS = "#{$libraries} #{$LDFLAGS}"
+  $CPPFLAGS = $ARCH_FLAG = $DLDFLAGS = ""
+
+  $LIBPATH = ["#{HERE}/lib"]
+  $DEFLIBPATH = []
+
+  Dir.chdir(HERE) do
+    if File.exist?("lib")
+      puts "Libmemcached already built; run 'rake clean' first if you need to rebuild."
+    else
+      puts "Building libmemcached."
+      puts(cmd = "tar xzf #{BUNDLE} 2>&1")
+      raise "'#{cmd}' failed" unless system(cmd)
+
+      Dir.chdir(BUNDLE_PATH) do
+        
+        cxxflags = cflags = ldflags = "-fPIC"
+        extraconf = ''
+        
+        # again... is there a better way to do this?
+        if DARWIN
+          cflags = "#{cflags} #{archflags}"
+          cxxflags = "-std=gnu++98 #{cflags}"
+          ldflags = "#{ldflags} #{archflags}"
+          extraconf = '--enable-dtrace --disable-dependency-tracking'
+        end
+                
+        if ENV['DEBUG']
+          puts "Setting debug flags for libmemcached."
+          cflags << " -O0 -ggdb -DHAVE_DEBUG"
+          extraconf << " --enable-debug"
+        end
+        
+        puts(cmd = "env CFLAGS='#{cflags}' LDFLAGS='#{ldflags}' ./configure --prefix=#{HERE} --without-memcached --disable-shared --disable-utils #{extraconf} 2>&1")
+        raise "'#{cmd}' failed" unless system(cmd)
+        puts(cmd = "make CXXFLAGS='#{cxxflags}' || true 2>&1")
+        raise "'#{cmd}' failed" unless system(cmd)
+        puts(cmd = "make install || true 2>&1")
+        raise "'#{cmd}' failed" unless system(cmd)
+      end
+
+      unless ENV['DEBUG'] or ENV['DEV']
+        system("rm -rf #{BUNDLE_PATH}")
+      end
+    end
+  end
+  
+  # Absolutely prevent the linker from picking up any other libmemcached
+  Dir.chdir("#{HERE}/lib") do
+    system("cp -f libmemcached.a libmemcached_gem.a") 
+    system("cp -f libmemcached.la libmemcached_gem.la") 
+  end
+  $LIBS << " -lmemcached_gem"
 end
 
 $CFLAGS.gsub! /-O\d/, ''
 
 if ENV['DEBUG']
-  puts "setting debug flags"
-  $CFLAGS << " -O0 -ggdb -DHAVE_DEBUG" 
+  puts "Setting debug flags for gem."
+  $CFLAGS << " -O0 -ggdb -DHAVE_DEBUG"
 else
   $CFLAGS << " -O3"
 end
 
-dir_config 'rlibmemcached'
+if DARWIN
+  $CFLAGS.gsub! /-arch \S+/, ''
+  $CFLAGS << " #{archflags}"
+  $LDFLAGS.gsub! /-arch \S+/, ''
+  $LDFLAGS << " #{archflags}"
+end
 
-# XXX There's probably a better way to do this
-raise "shared library 'libmemcached' not found" unless 
-  find_library('memcached', 'memcached_server_add', *ENV['LD_LIBRARY_PATH'].to_s.split(":"))
-
-[ 
-  'libmemcached/memcached.h',
-  'libmemcached/memcached_constants.h', 
-  'libmemcached/memcached_storage.h',
-  'libmemcached/memcached_result.h',
-  'libmemcached/memcached_server.h'
-].each do |header|
-  raise "header file '#{header}' not  found" unless 
-    find_header(header, *ENV['INCLUDE_PATH'].to_s.split(":"))
+if ENV['SWIG']
+  puts "Running SWIG."
+  puts(cmd = "swig #{$includes} -ruby -autorename rlibmemcached.i")
+  raise "'#{cmd}' failed" unless system(cmd)
 end
 
 create_makefile 'rlibmemcached'

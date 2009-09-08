@@ -1,0 +1,5 @@
+pkg/*
+ext/libmemcached-*
+*.bundle
+*.o
+ext/Makefile

@@ -5,7 +5,7 @@ An interface to the libmemcached C client.
 
 == License
 
-Copyright 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file. Portions copyright 2008 TangentOrg, Brian Aker, licensed under the BSD license, and used with permission.
+Copyright 2009 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file. Portions copyright 2007-2009 TangentOrg, Brian Aker, licensed under the BSD license, and used with permission.
 
 The public certificate for this gem is here[http://rubyforge.org/frs/download.php/25331/evan_weaver-original-public_cert.pem]. 
 
@@ -22,24 +22,14 @@ The <b>memcached</b> library wraps the pure-C libmemcached client via SWIG.
 
 == Installation
 
-You need Ruby 1.8.6, and {libmemcached 0.21}[http://tangent.org/552/libmemcached.html]. Other versions are not supported. You also need {memcached itself}[http://www.danga.com/memcached/] if you want to test against a local server.
+You need Ruby 1.8.6. Other versions are not guaranteed to work. You also need {memcached itself}[http://www.danga.com/memcached/] if you want to test against a local server.
 
-For Linux, download and extract the {libmemcached tarball}[http://download.tangent.org/libmemcached-0.21.tar.gz]. Then run:
-  ./configure
-  make && sudo make install
-  
-For OS X, you may be able to install it from MacPorts:
-  sudo port install libmemcached @0.21
-  
-Now install the gem:
+Install the gem:
   sudo gem install memcached --no-rdoc --no-ri
-  
-Note that on OS X 10.5 you may need to set the architecture explicitly: 
-  sudo env ARCHFLAGS="-arch i386" gem install memcached --no-rdoc --no-ri
   
 == Usage
 
-Start a local memcached server:
+Start a local networked memcached server:
   $ memcached -p 11211 &
 
 Now, in Ruby, require the library and instantiate a Memcached object at a global level:
@@ -91,8 +81,6 @@ Note that the API is not the same as that of <b>Ruby-MemCache</b> or <b>memcache
 
 There is a compatibility wrapper for legacy applications called Memcached::Rails. 
 
-The easiest way to use it in your app is by installing Interlock[http://blog.evanweaver.com/files/doc/fauna/interlock] and setting <tt>client: memcached</tt> in <tt>config/memcached.yml</tt>. This gives you memcached fragments by default. You do not have to use the other Interlock features unless you want to.
-  
 == Threading
 
 <b>memcached</b> is threadsafe, but each thread requires its own Memcached instance. Create a global Memcached, and then call Memcached#clone each time you spawn a thread.
@@ -109,11 +97,9 @@ The easiest way to use it in your app is by installing Interlock[http://blog.eva
   # Join the thread so that exceptions don't get lost
   thread.join
   
-Make sure to call Memcached#destroy before your thread exits or you will leak memory.
-
 == Benchmarks
 
-<b>memcached</b> is up to 150x faster than <b>memcache-client</b>, and up to 15x faster than <b>caffeine</b>. See BENCHMARKS[link:files/BENCHMARKS.html] for details.
+<b>memcached</b> is up to 10x faster than <b>memcache-client</b>. See BENCHMARKS[link:files/BENCHMARKS.html] for details.
 
 == Reporting problems
 

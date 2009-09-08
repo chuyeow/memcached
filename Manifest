@@ -2,6 +2,7 @@ BENCHMARKS
 CHANGELOG
 COMPATIBILITY
 ext/extconf.rb
+ext/libmemcached-0.31.tar.gz
 ext/rlibmemcached.i
 ext/rlibmemcached_wrap.c
 lib/memcached/behaviors.rb

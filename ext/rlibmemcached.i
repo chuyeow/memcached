@@ -1,5 +1,6 @@
 %module rlibmemcached
 %{
+#include <libmemcached/visibility.h>
 #include <libmemcached/memcached.h>
 %}
 
@@ -10,18 +11,33 @@
 %warnfilter(SWIGWARN_RUBY_WRONG_NAME) memcached_result_st;
 
 %include "typemaps.i"
+%include "libmemcached/visibility.h"
 
 // Register libmemcached's struct free function to prevent memory leaks
 %freefunc memcached_st "memcached_free";
+%freefunc memcached_server_st "memcached_server_free";
+
+// %trackobjects; // Doesn't fix any interesting leaks
 
 //// Input maps
 
 %apply unsigned short { uint8_t };
 %apply unsigned int { uint16_t };
-%apply unsigned long { uint32_t flags, uint32_t offset };
-%apply unsigned long long {uint64_t data, uint64_t cas };
+%apply unsigned long { uint32_t flags, uint32_t offset, uint32_t weight };
+%apply unsigned long long { uint64_t data, uint64_t cas };
 
 // Array of strings map for multiget
+%typemap(in) (const char **keys, size_t *key_length, size_t number_of_keys) {
+  int i;
+  Check_Type($input, T_ARRAY);
+  $3 = (unsigned int) RARRAY_LEN($input);
+  $2 = (size_t *) malloc(($3+1)*sizeof(size_t));
+  $1 = (char **) malloc(($3+1)*sizeof(char *)); 
+  for(i = 0; i < $3; i ++) {
+    $2[i] = RSTRING_LEN(RARRAY_PTR($input)[i]);
+    $1[i] = StringValuePtr(RARRAY_PTR($input)[i]);
+  }
+}
 %typemap(in) (char **keys, size_t *key_length, unsigned int number_of_keys) {
   int i;
   Check_Type($input, T_ARRAY);
@@ -29,11 +45,11 @@
   $2 = (size_t *) malloc(($3+1)*sizeof(size_t));
   $1 = (char **) malloc(($3+1)*sizeof(char *)); 
   for(i = 0; i < $3; i ++) {
-    $2[i] = RSTRING(RARRAY_PTR($input)[i])->len;
+    $2[i] = RSTRING_LEN(RARRAY_PTR($input)[i]);
     $1[i] = StringValuePtr(RARRAY_PTR($input)[i]);
   }
 }
-%typemap(freearg) (char **keys, size_t *key_length, unsigned int number_of_keys) {
+%typemap(freearg) (char **keys, size_t *key_length, size_t number_of_keys) {
    free($1);
    free($2);
 }
@@ -41,7 +57,7 @@
 // Generic strings
 %typemap(in) (const char *str, size_t len) {
  $1 = STR2CSTR($input);
- $2 = (size_t) RSTRING($input)->len;
+ $2 = (size_t) RSTRING_LEN($input);
 };
 
 // Void type strings without lengths for prefix_key callback
@@ -59,7 +75,7 @@
 // This will have to go if people actually want to set the master key separately
 %typemap(in) (const char *master_key, size_t master_key_length, const char *key, size_t key_length) {
  $3 = $1 = STR2CSTR($input);
- $4 = $2 = (size_t) RSTRING($input)->len;
+ $4 = $2 = (size_t) RSTRING_LEN($input);
 };
 
 
@@ -72,7 +88,12 @@
 
 // Uint64
 %typemap(out) (uint64_t) {
-  $result = INT2FIX($1);
+  $result = ULL2NUM($1);
+};
+
+// Uint32
+%typemap(out) (uint32_t) {
+ $result = UINT2NUM($1);
 };
 
 // String for memcached_fetch
@@ -93,7 +114,7 @@
   int i;  
   VALUE ary = rb_ary_new();
   $result = rb_ary_new();
-  
+
   for(i=0; $1[i] != NULL; i++) {
     rb_ary_store(ary, i, rb_str_new2($1[i]));
   }
@@ -103,12 +124,13 @@
 
 //// SWIG includes, for functions, constants, and structs
 
-%include "/opt/local/include/libmemcached/memcached.h"
-%include "/opt/local/include/libmemcached/memcached_constants.h"
-%include "/opt/local/include/libmemcached/memcached_get.h"
-%include "/opt/local/include/libmemcached/memcached_storage.h"
-%include "/opt/local/include/libmemcached/memcached_result.h"
-%include "/opt/local/include/libmemcached/memcached_server.h"
+%include "libmemcached/visibility.h"
+%include "libmemcached/memcached.h"
+%include "libmemcached/memcached_constants.h"
+%include "libmemcached/memcached_get.h"
+%include "libmemcached/memcached_storage.h"
+%include "libmemcached/memcached_result.h"
+%include "libmemcached/memcached_server.h"
 
 //// Custom C functions
 
@@ -176,3 +198,13 @@ memcached_stat_st *memcached_select_stat_at(memcached_st *in_ptr, memcached_stat
   return &(stat_ptr[index]);
 };
 %}
+
+// Wrap only hash function
+// Uint32
+VALUE memcached_generate_hash_rvalue(const char *key, size_t key_length, memcached_hash hash_algorithm);
+%{
+VALUE memcached_generate_hash_rvalue(const char *key, size_t key_length,memcached_hash hash_algorithm) {  
+  return UINT2NUM(memcached_generate_hash_value(key, key_length, hash_algorithm));
+};
+%}
+

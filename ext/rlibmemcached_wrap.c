@@ -1765,37 +1765,38 @@ int SWIG_Ruby_arity( VALUE proc, int minimal )
 #define SWIGTYPE_p_addrinfo swig_types[0]
 #define SWIGTYPE_p_char swig_types[1]
 #define SWIGTYPE_p_int32_t swig_types[2]
-#define SWIGTYPE_p_memcached_allocated swig_types[3]
+#define SWIGTYPE_p_memcached_analysis_st swig_types[3]
 #define SWIGTYPE_p_memcached_behavior swig_types[4]
 #define SWIGTYPE_p_memcached_callback swig_types[5]
-#define SWIGTYPE_p_memcached_cleanup_func swig_types[6]
-#define SWIGTYPE_p_memcached_clone_func swig_types[7]
-#define SWIGTYPE_p_memcached_connection swig_types[8]
-#define SWIGTYPE_p_memcached_continuum_item_st swig_types[9]
-#define SWIGTYPE_p_memcached_execute_function swig_types[10]
-#define SWIGTYPE_p_memcached_free_function swig_types[11]
-#define SWIGTYPE_p_memcached_hash swig_types[12]
-#define SWIGTYPE_p_memcached_malloc_function swig_types[13]
-#define SWIGTYPE_p_memcached_realloc_function swig_types[14]
-#define SWIGTYPE_p_memcached_result_st swig_types[15]
-#define SWIGTYPE_p_memcached_return swig_types[16]
-#define SWIGTYPE_p_memcached_server_distribution swig_types[17]
-#define SWIGTYPE_p_memcached_server_function swig_types[18]
-#define SWIGTYPE_p_memcached_server_st swig_types[19]
-#define SWIGTYPE_p_memcached_st swig_types[20]
-#define SWIGTYPE_p_memcached_stat_st swig_types[21]
-#define SWIGTYPE_p_memcached_string_st swig_types[22]
-#define SWIGTYPE_p_memcached_trigger_delete_key swig_types[23]
-#define SWIGTYPE_p_memcached_trigger_key swig_types[24]
-#define SWIGTYPE_p_p_char swig_types[25]
-#define SWIGTYPE_p_size_t swig_types[26]
-#define SWIGTYPE_p_time_t swig_types[27]
-#define SWIGTYPE_p_uint32_t swig_types[28]
-#define SWIGTYPE_p_uint64_t swig_types[29]
-#define SWIGTYPE_p_unsigned_int swig_types[30]
-#define SWIGTYPE_p_void swig_types[31]
-static swig_type_info *swig_types[33];
-static swig_module_info swig_module = {swig_types, 32, 0, 0, 0, 0};
+#define SWIGTYPE_p_memcached_calloc_function swig_types[6]
+#define SWIGTYPE_p_memcached_cleanup_func swig_types[7]
+#define SWIGTYPE_p_memcached_clone_func swig_types[8]
+#define SWIGTYPE_p_memcached_connection swig_types[9]
+#define SWIGTYPE_p_memcached_continuum_item_st swig_types[10]
+#define SWIGTYPE_p_memcached_dump_func swig_types[11]
+#define SWIGTYPE_p_memcached_execute_function swig_types[12]
+#define SWIGTYPE_p_memcached_free_function swig_types[13]
+#define SWIGTYPE_p_memcached_hash swig_types[14]
+#define SWIGTYPE_p_memcached_malloc_function swig_types[15]
+#define SWIGTYPE_p_memcached_realloc_function swig_types[16]
+#define SWIGTYPE_p_memcached_result_st swig_types[17]
+#define SWIGTYPE_p_memcached_return swig_types[18]
+#define SWIGTYPE_p_memcached_server_distribution swig_types[19]
+#define SWIGTYPE_p_memcached_server_function swig_types[20]
+#define SWIGTYPE_p_memcached_server_st swig_types[21]
+#define SWIGTYPE_p_memcached_st swig_types[22]
+#define SWIGTYPE_p_memcached_stat_st swig_types[23]
+#define SWIGTYPE_p_memcached_string_st swig_types[24]
+#define SWIGTYPE_p_memcached_trigger_delete_key swig_types[25]
+#define SWIGTYPE_p_memcached_trigger_key swig_types[26]
+#define SWIGTYPE_p_p_char swig_types[27]
+#define SWIGTYPE_p_size_t swig_types[28]
+#define SWIGTYPE_p_time_t swig_types[29]
+#define SWIGTYPE_p_uint32_t swig_types[30]
+#define SWIGTYPE_p_uint64_t swig_types[31]
+#define SWIGTYPE_p_void swig_types[32]
+static swig_type_info *swig_types[34];
+static swig_module_info swig_module = {swig_types, 33, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1818,6 +1819,7 @@ static VALUE mRlibmemcached;
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
 
+#include <libmemcached/visibility.h>
 #include <libmemcached/memcached.h>
 
 
@@ -1899,6 +1901,45 @@ SWIG_FromCharPtr(const char *cptr)
 }
 
 
+SWIGINTERN VALUE
+SWIG_ruby_failed(void)
+{
+  return Qnil;
+} 
+
+
+/*@SWIG:/opt/local/share/swig/1.3.36/ruby/rubyprimtypes.swg,23,%ruby_aux_method@*/
+SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE *args)
+{
+  VALUE obj = args[0];
+  VALUE type = TYPE(obj);
+  double *res = (double *)(args[1]);
+  *res = (type == T_FLOAT ? NUM2DBL(obj) : (type == T_FIXNUM ? (double) FIX2INT(obj) : rb_big2dbl(obj)));
+  return obj;
+}
+/*@SWIG@*/
+
+SWIGINTERN int
+SWIG_AsVal_double (VALUE obj, double *val)
+{
+  VALUE type = TYPE(obj);
+  if ((type == T_FLOAT) || (type == T_FIXNUM) || (type == T_BIGNUM)) {
+    double v;
+    VALUE a[2];
+    a[0] = obj;
+    a[1] = (VALUE)(&v);
+    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2DBL), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
+      if (val) *val = v;
+      return SWIG_OK;
+    }
+  }
+  return SWIG_TypeError;
+}
+
+
+  #define SWIG_From_double   rb_float_new 
+
+
 SWIGINTERN int
 SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
 {
@@ -1961,11 +2002,63 @@ SWIG_AsCharArray(VALUE obj, char *val, size_t size)
 }
 
 
-SWIGINTERN VALUE
-SWIG_ruby_failed(void)
+/*@SWIG:/opt/local/share/swig/1.3.36/ruby/rubyprimtypes.swg,23,%ruby_aux_method@*/
+SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
 {
-  return Qnil;
-} 
+  VALUE obj = args[0];
+  VALUE type = TYPE(obj);
+  unsigned long *res = (unsigned long *)(args[1]);
+  *res = type == T_FIXNUM ? NUM2ULONG(obj) : rb_big2ulong(obj);
+  return obj;
+}
+/*@SWIG@*/
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_long (VALUE obj, unsigned long *val) 
+{
+  VALUE type = TYPE(obj);
+  if ((type == T_FIXNUM) || (type == T_BIGNUM)) {
+    unsigned long v;
+    VALUE a[2];
+    a[0] = obj;
+    a[1] = (VALUE)(&v);
+    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2ULONG), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
+      if (val) *val = v;
+      return SWIG_OK;
+    }
+  }
+  return SWIG_TypeError;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_short (VALUE obj, unsigned short *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > USHRT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = (unsigned short)(v);
+    }
+  }  
+  return res;
+}
+
+
+SWIGINTERNINLINE VALUE
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return ULONG2NUM(value); 
+}
+
+
+SWIGINTERNINLINE VALUE
+SWIG_From_unsigned_SS_short  (unsigned short value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
+}
 
 
 /*@SWIG:/opt/local/share/swig/1.3.36/ruby/rubyprimtypes.swg,23,%ruby_aux_method@*/
@@ -2013,62 +2106,30 @@ SWIG_AsVal_int (VALUE obj, int *val)
 }
 
 
-/*@SWIG:/opt/local/share/swig/1.3.36/ruby/rubyprimtypes.swg,23,%ruby_aux_method@*/
-SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
-{
-  VALUE obj = args[0];
-  VALUE type = TYPE(obj);
-  unsigned long *res = (unsigned long *)(args[1]);
-  *res = type == T_FIXNUM ? NUM2ULONG(obj) : rb_big2ulong(obj);
-  return obj;
-}
-/*@SWIG@*/
-
 SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (VALUE obj, unsigned long *val) 
+SWIG_AsVal_bool (VALUE obj, bool *val)
 {
-  VALUE type = TYPE(obj);
-  if ((type == T_FIXNUM) || (type == T_BIGNUM)) {
-    unsigned long v;
-    VALUE a[2];
-    a[0] = obj;
-    a[1] = (VALUE)(&v);
-    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2ULONG), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
-      if (val) *val = v;
+  if (obj == Qtrue) {
+    if (val) *val = true;
+    return SWIG_OK;
+  } else if (obj == Qfalse) {
+    if (val) *val = false;
+    return SWIG_OK;
+  } else {
+    int res = 0;
+    if (SWIG_AsVal_int (obj, &res) == SWIG_OK) {    
+      if (val) *val = res ? true : false;
       return SWIG_OK;
     }
-  }
+  }  
   return SWIG_TypeError;
 }
 
 
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UINT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = (unsigned int)(v);
-    }
-  }  
-  return res;
-}
-
-
 SWIGINTERNINLINE VALUE
-SWIG_From_unsigned_SS_long  (unsigned long value)
+SWIG_From_bool  (bool value)
 {
-  return ULONG2NUM(value); 
-}
-
-
-SWIGINTERNINLINE VALUE
-SWIG_From_unsigned_SS_int  (unsigned int value)
-{    
-  return SWIG_From_unsigned_SS_long  (value);
+  return value ? Qtrue : Qfalse;
 }
 
 
@@ -2106,10 +2167,19 @@ SWIG_From_unsigned_SS_long_SS_long  (unsigned long long value)
 }
 
 
-SWIGINTERNINLINE VALUE
-SWIG_From_unsigned_SS_short  (unsigned short value)
-{    
-  return SWIG_From_unsigned_SS_long  (value);
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > UINT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = (unsigned int)(v);
+    }
+  }  
+  return res;
 }
 
 
@@ -2142,19 +2212,10 @@ SWIG_AsVal_unsigned_SS_long_SS_long (VALUE obj, unsigned long long *val)
 }
 
 
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_short (VALUE obj, unsigned short *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > USHRT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = (unsigned short)(v);
-    }
-  }  
-  return res;
+SWIGINTERNINLINE VALUE
+SWIG_From_unsigned_SS_int  (unsigned int value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
 }
 
 
@@ -2203,11 +2264,16 @@ memcached_stat_st *memcached_select_stat_at(memcached_st *in_ptr, memcached_stat
   return &(stat_ptr[index]);
 };
 
-swig_class cMemcachedContinuumItemSt;
+
+VALUE memcached_generate_hash_rvalue(const char *key, size_t key_length,memcached_hash hash_algorithm) {  
+  return UINT2NUM(memcached_generate_hash_value(key, key_length, hash_algorithm));
+};
+
+swig_class cMemcachedAnalysisSt;
 
 SWIGINTERN VALUE
-_wrap_MemcachedContinuumItemSt_index_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_continuum_item_st *arg1 = (struct memcached_continuum_item_st *) 0 ;
+_wrap_MemcachedAnalysisSt_average_item_size_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -2217,23 +2283,23 @@ _wrap_MemcachedContinuumItemSt_index_set(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_continuum_item_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_continuum_item_st *","index", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","average_item_size", 1, self )); 
   }
-  arg1 = (struct memcached_continuum_item_st *)(argp1);
+  arg1 = (struct memcached_analysis_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","index", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","average_item_size", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","index", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","average_item_size", 2, argv[0]));
     } else {
       arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->index = arg2;
+  if (arg1) (arg1)->average_item_size = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2241,8 +2307,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedContinuumItemSt_index_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_continuum_item_st *arg1 = (struct memcached_continuum_item_st *) 0 ;
+_wrap_MemcachedAnalysisSt_average_item_size_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   uint32_t result;
@@ -2251,13 +2317,15 @@ _wrap_MemcachedContinuumItemSt_index_get(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_continuum_item_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_continuum_item_st *","index", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","average_item_size", 1, self )); 
   }
-  arg1 = (struct memcached_continuum_item_st *)(argp1);
-  result =  ((arg1)->index);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->average_item_size);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -2265,8 +2333,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedContinuumItemSt_value_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_continuum_item_st *arg1 = (struct memcached_continuum_item_st *) 0 ;
+_wrap_MemcachedAnalysisSt_longest_uptime_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -2276,23 +2344,23 @@ _wrap_MemcachedContinuumItemSt_value_set(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_continuum_item_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_continuum_item_st *","value", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","longest_uptime", 1, self )); 
   }
-  arg1 = (struct memcached_continuum_item_st *)(argp1);
+  arg1 = (struct memcached_analysis_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","value", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","longest_uptime", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","value", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","longest_uptime", 2, argv[0]));
     } else {
       arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->value = arg2;
+  if (arg1) (arg1)->longest_uptime = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2300,8 +2368,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedContinuumItemSt_value_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_continuum_item_st *arg1 = (struct memcached_continuum_item_st *) 0 ;
+_wrap_MemcachedAnalysisSt_longest_uptime_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   uint32_t result;
@@ -2310,61 +2378,24 @@ _wrap_MemcachedContinuumItemSt_value_get(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_continuum_item_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_continuum_item_st *","value", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","longest_uptime", 1, self )); 
   }
-  arg1 = (struct memcached_continuum_item_st *)(argp1);
-  result =  ((arg1)->value);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->longest_uptime);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
 }
 
 
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_MemcachedContinuumItemSt_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_MemcachedContinuumItemSt_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_memcached_continuum_item_st);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_MemcachedContinuumItemSt(int argc, VALUE *argv, VALUE self) {
-  struct memcached_continuum_item_st *result = 0 ;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  result = (struct memcached_continuum_item_st *)calloc(1, sizeof(struct memcached_continuum_item_st));
-  DATA_PTR(self) = result;
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN void
-free_memcached_continuum_item_st(struct memcached_continuum_item_st *arg1) {
-    free((char *) arg1);
-}
-
-swig_class cMemcachedStatSt;
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_pid_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_least_free_server_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -2374,23 +2405,23 @@ _wrap_MemcachedStatSt_pid_set(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pid", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","least_free_server", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
+  arg1 = (struct memcached_analysis_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","pid", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","least_free_server", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","pid", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","least_free_server", 2, argv[0]));
     } else {
       arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->pid = arg2;
+  if (arg1) (arg1)->least_free_server = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2398,8 +2429,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_pid_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_least_free_server_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   uint32_t result;
@@ -2408,13 +2439,15 @@ _wrap_MemcachedStatSt_pid_get(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pid", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","least_free_server", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->pid);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->least_free_server);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -2422,8 +2455,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_uptime_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_most_consumed_server_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -2433,23 +2466,23 @@ _wrap_MemcachedStatSt_uptime_set(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","uptime", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","most_consumed_server", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
+  arg1 = (struct memcached_analysis_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","uptime", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","most_consumed_server", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","uptime", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","most_consumed_server", 2, argv[0]));
     } else {
       arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->uptime = arg2;
+  if (arg1) (arg1)->most_consumed_server = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2457,8 +2490,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_uptime_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_most_consumed_server_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   uint32_t result;
@@ -2467,13 +2500,15 @@ _wrap_MemcachedStatSt_uptime_get(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","uptime", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","most_consumed_server", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->uptime);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->most_consumed_server);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -2481,8 +2516,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_threads_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_oldest_server_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -2492,23 +2527,23 @@ _wrap_MemcachedStatSt_threads_set(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","threads", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","oldest_server", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
+  arg1 = (struct memcached_analysis_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","threads", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","oldest_server", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","threads", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","oldest_server", 2, argv[0]));
     } else {
       arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->threads = arg2;
+  if (arg1) (arg1)->oldest_server = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2516,8 +2551,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_threads_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_oldest_server_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   uint32_t result;
@@ -2526,13 +2561,15 @@ _wrap_MemcachedStatSt_threads_get(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","threads", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","oldest_server", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->threads);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->oldest_server);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -2540,34 +2577,28 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_time_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
+_wrap_MemcachedAnalysisSt_pool_hit_ratio_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
+  double arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","time", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","pool_hit_ratio", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","time", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","time", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->time = arg2;
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","pool_hit_ratio", 2, argv[0] ));
+  } 
+  arg2 = (double)(val2);
+  if (arg1) (arg1)->pool_hit_ratio = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2575,23 +2606,23 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_time_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_pool_hit_ratio_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  uint32_t result;
+  double result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","time", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","pool_hit_ratio", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->time);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result = (double) ((arg1)->pool_hit_ratio);
+  vresult = SWIG_From_double((double)(result));
   return vresult;
 fail:
   return Qnil;
@@ -2599,421 +2630,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_pointer_size_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pointer_size", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","pointer_size", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","pointer_size", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->pointer_size = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_pointer_size_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pointer_size", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->pointer_size);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_user_seconds_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_seconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_user_seconds", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_user_seconds", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->rusage_user_seconds = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_user_seconds_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_seconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->rusage_user_seconds);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_user_microseconds_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_microseconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_user_microseconds", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_user_microseconds", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->rusage_user_microseconds = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_user_microseconds_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_microseconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->rusage_user_microseconds);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_system_seconds_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_seconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_system_seconds", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_system_seconds", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->rusage_system_seconds = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_system_seconds_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_seconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->rusage_system_seconds);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_system_microseconds_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_microseconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_system_microseconds", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_system_microseconds", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->rusage_system_microseconds = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_rusage_system_microseconds_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_microseconds", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->rusage_system_microseconds);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_curr_items_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","curr_items", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","curr_items", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","curr_items", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->curr_items = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_curr_items_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","curr_items", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->curr_items);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_total_items_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","total_items", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","total_items", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","total_items", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->total_items = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_total_items_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","total_items", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->total_items);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_limit_maxbytes_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_most_used_bytes_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   uint64_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3023,23 +2641,23 @@ _wrap_MemcachedStatSt_limit_maxbytes_set(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","limit_maxbytes", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","most_used_bytes", 1, self )); 
   }
-  arg1 = (struct memcached_stat_st *)(argp1);
+  arg1 = (struct memcached_analysis_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","limit_maxbytes", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","most_used_bytes", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","limit_maxbytes", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","most_used_bytes", 2, argv[0]));
     } else {
       arg2 = *((uint64_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->limit_maxbytes = arg2;
+  if (arg1) (arg1)->most_used_bytes = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -3047,8 +2665,8 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_limit_maxbytes_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+_wrap_MemcachedAnalysisSt_most_used_bytes_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   uint64_t result;
@@ -3057,14 +2675,175 @@ _wrap_MemcachedStatSt_limit_maxbytes_get(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","most_used_bytes", 1, self )); 
+  }
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->most_used_bytes);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedAnalysisSt_least_remaining_bytes_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","least_remaining_bytes", 1, self )); 
+  }
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","least_remaining_bytes", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","least_remaining_bytes", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->least_remaining_bytes = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedAnalysisSt_least_remaining_bytes_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *arg1 = (struct memcached_analysis_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_analysis_st *","least_remaining_bytes", 1, self )); 
+  }
+  arg1 = (struct memcached_analysis_st *)(argp1);
+  result =  ((arg1)->least_remaining_bytes);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_MemcachedAnalysisSt_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_MemcachedAnalysisSt_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_memcached_analysis_st);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_MemcachedAnalysisSt(int argc, VALUE *argv, VALUE self) {
+  struct memcached_analysis_st *result = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  result = (struct memcached_analysis_st *)calloc(1, sizeof(struct memcached_analysis_st));
+  DATA_PTR(self) = result;
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void
+free_memcached_analysis_st(struct memcached_analysis_st *arg1) {
+    free((char *) arg1);
+}
+
+swig_class cMemcachedStatSt;
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_connection_structures_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","limit_maxbytes", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","connection_structures", 1, self )); 
   }
   arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->limit_maxbytes);
   {
-    vresult = INT2FIX(result);
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","connection_structures", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","connection_structures", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->connection_structures = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_connection_structures_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","connection_structures", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->connection_structures);
+  {
+    vresult = UINT2NUM(result);
   }
   return vresult;
 fail:
@@ -3124,7 +2903,558 @@ _wrap_MemcachedStatSt_curr_connections_get(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = (struct memcached_stat_st *)(argp1);
   result =  ((arg1)->curr_connections);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_curr_items_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","curr_items", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","curr_items", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","curr_items", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->curr_items = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_curr_items_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","curr_items", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->curr_items);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_pid_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pid", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","pid", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","pid", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->pid = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_pid_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pid", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->pid);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_pointer_size_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pointer_size", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","pointer_size", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","pointer_size", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->pointer_size = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_pointer_size_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","pointer_size", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->pointer_size);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_system_microseconds_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_microseconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_system_microseconds", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_system_microseconds", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->rusage_system_microseconds = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_system_microseconds_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_microseconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->rusage_system_microseconds);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_system_seconds_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_seconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_system_seconds", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_system_seconds", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->rusage_system_seconds = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_system_seconds_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_system_seconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->rusage_system_seconds);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_user_microseconds_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_microseconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_user_microseconds", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_user_microseconds", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->rusage_user_microseconds = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_user_microseconds_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_microseconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->rusage_user_microseconds);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_user_seconds_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_seconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","rusage_user_seconds", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","rusage_user_seconds", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->rusage_user_seconds = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_rusage_user_seconds_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","rusage_user_seconds", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->rusage_user_seconds);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_threads_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","threads", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","threads", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","threads", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->threads = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_threads_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","threads", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->threads);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_time_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","time", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","time", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","time", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->time = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_time_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","time", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->time);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -3183,7 +3513,9 @@ _wrap_MemcachedStatSt_total_connections_get(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = (struct memcached_stat_st *)(argp1);
   result =  ((arg1)->total_connections);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -3191,7 +3523,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_connection_structures_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedStatSt_total_items_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
   uint32_t arg2 ;
   void *argp1 = 0 ;
@@ -3204,21 +3536,21 @@ _wrap_MemcachedStatSt_connection_structures_set(int argc, VALUE *argv, VALUE sel
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","connection_structures", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","total_items", 1, self )); 
   }
   arg1 = (struct memcached_stat_st *)(argp1);
   {
     res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","connection_structures", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","total_items", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","connection_structures", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","total_items", 2, argv[0]));
     } else {
       arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->connection_structures = arg2;
+  if (arg1) (arg1)->total_items = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -3226,7 +3558,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedStatSt_connection_structures_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedStatSt_total_items_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -3238,11 +3570,74 @@ _wrap_MemcachedStatSt_connection_structures_get(int argc, VALUE *argv, VALUE sel
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","connection_structures", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","total_items", 1, self )); 
   }
   arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->connection_structures);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  result =  ((arg1)->total_items);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_uptime_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","uptime", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","uptime", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","uptime", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->uptime = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_uptime_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","uptime", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->uptime);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -3302,312 +3697,7 @@ _wrap_MemcachedStatSt_bytes_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_stat_st *)(argp1);
   result =  ((arg1)->bytes);
   {
-    vresult = INT2FIX(result);
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_cmd_get_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint64_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_get", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","cmd_get", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","cmd_get", 2, argv[0]));
-    } else {
-      arg2 = *((uint64_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->cmd_get = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_cmd_get_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint64_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_get", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->cmd_get);
-  {
-    vresult = INT2FIX(result);
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_cmd_set_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint64_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_set", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","cmd_set", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","cmd_set", 2, argv[0]));
-    } else {
-      arg2 = *((uint64_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->cmd_set = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_cmd_set_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint64_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_set", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->cmd_set);
-  {
-    vresult = INT2FIX(result);
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_get_hits_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint64_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_hits", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","get_hits", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","get_hits", 2, argv[0]));
-    } else {
-      arg2 = *((uint64_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->get_hits = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_get_hits_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint64_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_hits", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->get_hits);
-  {
-    vresult = INT2FIX(result);
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_get_misses_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint64_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_misses", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","get_misses", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","get_misses", 2, argv[0]));
-    } else {
-      arg2 = *((uint64_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->get_misses = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_get_misses_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint64_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_misses", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->get_misses);
-  {
-    vresult = INT2FIX(result);
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_evictions_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  uint64_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","evictions", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","evictions", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","evictions", 2, argv[0]));
-    } else {
-      arg2 = *((uint64_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->evictions = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedStatSt_evictions_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint64_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","evictions", 1, self )); 
-  }
-  arg1 = (struct memcached_stat_st *)(argp1);
-  result =  ((arg1)->evictions);
-  {
-    vresult = INT2FIX(result);
+    vresult = ULL2NUM(result);
   }
   return vresult;
 fail:
@@ -3668,7 +3758,7 @@ _wrap_MemcachedStatSt_bytes_read_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_stat_st *)(argp1);
   result =  ((arg1)->bytes_read);
   {
-    vresult = INT2FIX(result);
+    vresult = ULL2NUM(result);
   }
   return vresult;
 fail:
@@ -3729,7 +3819,373 @@ _wrap_MemcachedStatSt_bytes_written_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_stat_st *)(argp1);
   result =  ((arg1)->bytes_written);
   {
-    vresult = INT2FIX(result);
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_cmd_get_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_get", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","cmd_get", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","cmd_get", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->cmd_get = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_cmd_get_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_get", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->cmd_get);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_cmd_set_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_set", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","cmd_set", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","cmd_set", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->cmd_set = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_cmd_set_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","cmd_set", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->cmd_set);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_evictions_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","evictions", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","evictions", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","evictions", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->evictions = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_evictions_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","evictions", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->evictions);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_get_hits_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_hits", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","get_hits", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","get_hits", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->get_hits = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_get_hits_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_hits", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->get_hits);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_get_misses_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_misses", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","get_misses", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","get_misses", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->get_misses = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_get_misses_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","get_misses", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->get_misses);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_limit_maxbytes_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","limit_maxbytes", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","limit_maxbytes", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","limit_maxbytes", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->limit_maxbytes = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedStatSt_limit_maxbytes_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_stat_st *arg1 = (struct memcached_stat_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","limit_maxbytes", 1, self )); 
+  }
+  arg1 = (struct memcached_stat_st *)(argp1);
+  result =  ((arg1)->limit_maxbytes);
+  {
+    vresult = ULL2NUM(result);
   }
   return vresult;
 fail:
@@ -3743,7 +4199,7 @@ _wrap_MemcachedStatSt_version_set(int argc, VALUE *argv, VALUE self) {
   char *arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char temp2[12] ;
+  char temp2[24] ;
   int res2 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -3754,13 +4210,13 @@ _wrap_MemcachedStatSt_version_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_stat_st *","version", 1, self )); 
   }
   arg1 = (struct memcached_stat_st *)(argp1);
-  res2 = SWIG_AsCharArray(argv[0], temp2, 12);
+  res2 = SWIG_AsCharArray(argv[0], temp2, 24);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [12]","version", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [24]","version", 2, argv[0] ));
   }
   arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->version,arg2,12*sizeof(char));
-  else memset(arg1->version,0,12*sizeof(char));
+  if (arg2) memcpy(arg1->version,arg2,24*sizeof(char));
+  else memset(arg1->version,0,24*sizeof(char));
   return Qnil;
 fail:
   return Qnil;
@@ -3785,7 +4241,7 @@ _wrap_MemcachedStatSt_version_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_stat_st *)(argp1);
   result = (char *)(char *) ((arg1)->version);
   {
-    size_t size = 12;
+    size_t size = 24;
     
     while (size && (result[size - 1] == '\0')) --size;
     
@@ -3837,12 +4293,65 @@ free_memcached_stat_st(struct memcached_stat_st *arg1) {
 swig_class cMemcachedSt;
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_purging_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  memcached_allocated arg2 ;
+  uint8_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned short val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","purging", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","purging", 2, argv[0] ));
+  } 
+  arg2 = (uint8_t)(val2);
+  if (arg1) (arg1)->purging = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_purging_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint8_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","purging", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->purging);
+  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -3853,11 +4362,11 @@ _wrap_MemcachedSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","is_allocated", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_allocated","is_allocated", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "bool","is_allocated", 2, argv[0] ));
   } 
-  arg2 = (memcached_allocated)(val2);
+  arg2 = (bool)(val2);
   if (arg1) (arg1)->is_allocated = arg2;
   return Qnil;
 fail:
@@ -3870,7 +4379,7 @@ _wrap_MemcachedSt_is_allocated_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  memcached_allocated result;
+  bool result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -3881,8 +4390,193 @@ _wrap_MemcachedSt_is_allocated_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","is_allocated", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result = (memcached_allocated) ((arg1)->is_allocated);
-  vresult = SWIG_From_int((int)(result));
+  result = (bool) ((arg1)->is_allocated);
+  vresult = SWIG_From_bool((bool)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_distribution_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint8_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned short val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","distribution", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","distribution", 2, argv[0] ));
+  } 
+  arg2 = (uint8_t)(val2);
+  if (arg1) (arg1)->distribution = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_distribution_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint8_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","distribution", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->distribution);
+  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+
+/*
+  Document-method: Rlibmemcached::MemcachedSt.hash
+
+  call-seq:
+    hash -> uint8_t
+
+Hashing function for class.
+*/
+
+/*
+  Document-method: Rlibmemcached::MemcachedSt.hash=
+
+  call-seq:
+    hash=(x) -> uint8_t
+
+Hashing function for class.
+*/
+SWIGINTERN VALUE
+_wrap_MemcachedSt_hash_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint8_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned short val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","hash", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","hash", 2, argv[0] ));
+  } 
+  arg2 = (uint8_t)(val2);
+  if (arg1) (arg1)->hash = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_hash_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint8_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","hash", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->hash);
+  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_continuum_points_counter_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","continuum_points_counter", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","continuum_points_counter", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","continuum_points_counter", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->continuum_points_counter = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_continuum_points_counter_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","continuum_points_counter", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->continuum_points_counter);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -3943,13 +4637,375 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_number_of_hosts_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_snd_timeout_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  unsigned int arg2 ;
+  int32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","snd_timeout", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_int32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "int32_t","snd_timeout", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "int32_t","snd_timeout", 2, argv[0]));
+    } else {
+      arg2 = *((int32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->snd_timeout = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_snd_timeout_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","snd_timeout", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->snd_timeout);
+  vresult = SWIG_NewPointerObj((int32_t *)memcpy((int32_t *)malloc(sizeof(int32_t)),&result,sizeof(int32_t)), SWIGTYPE_p_int32_t, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_rcv_timeout_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  int32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","rcv_timeout", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_int32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "int32_t","rcv_timeout", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "int32_t","rcv_timeout", 2, argv[0]));
+    } else {
+      arg2 = *((int32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->rcv_timeout = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_rcv_timeout_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","rcv_timeout", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->rcv_timeout);
+  vresult = SWIG_NewPointerObj((int32_t *)memcpy((int32_t *)malloc(sizeof(int32_t)),&result,sizeof(int32_t)), SWIGTYPE_p_int32_t, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_server_failure_limit_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","server_failure_limit", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","server_failure_limit", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","server_failure_limit", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->server_failure_limit = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_server_failure_limit_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","server_failure_limit", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->server_failure_limit);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_io_msg_watermark_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","io_msg_watermark", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","io_msg_watermark", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","io_msg_watermark", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->io_msg_watermark = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_io_msg_watermark_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","io_msg_watermark", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->io_msg_watermark);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_io_bytes_watermark_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","io_bytes_watermark", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","io_bytes_watermark", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","io_bytes_watermark", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->io_bytes_watermark = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_io_bytes_watermark_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","io_bytes_watermark", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->io_bytes_watermark);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_io_key_prefetch_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","io_key_prefetch", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","io_key_prefetch", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","io_key_prefetch", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->io_key_prefetch = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_io_key_prefetch_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","io_key_prefetch", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->io_key_prefetch);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_number_of_hosts_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -3959,11 +5015,17 @@ _wrap_MemcachedSt_number_of_hosts_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","number_of_hosts", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","number_of_hosts", 2, argv[0] ));
-  } 
-  arg2 = (unsigned int)(val2);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","number_of_hosts", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","number_of_hosts", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
   if (arg1) (arg1)->number_of_hosts = arg2;
   return Qnil;
 fail:
@@ -3976,7 +5038,7 @@ _wrap_MemcachedSt_number_of_hosts_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -3987,8 +5049,10 @@ _wrap_MemcachedSt_number_of_hosts_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","number_of_hosts", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result = (unsigned int) ((arg1)->number_of_hosts);
-  vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
+  result =  ((arg1)->number_of_hosts);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -3998,11 +5062,11 @@ fail:
 SWIGINTERN VALUE
 _wrap_MemcachedSt_cursor_server_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  unsigned int arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4012,11 +5076,17 @@ _wrap_MemcachedSt_cursor_server_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","cursor_server", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","cursor_server", 2, argv[0] ));
-  } 
-  arg2 = (unsigned int)(val2);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","cursor_server", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","cursor_server", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
   if (arg1) (arg1)->cursor_server = arg2;
   return Qnil;
 fail:
@@ -4029,7 +5099,7 @@ _wrap_MemcachedSt_cursor_server_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -4040,8 +5110,10 @@ _wrap_MemcachedSt_cursor_server_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","cursor_server", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result = (unsigned int) ((arg1)->cursor_server);
-  vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
+  result =  ((arg1)->cursor_server);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -4148,112 +5220,6 @@ _wrap_MemcachedSt_flags_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_st *)(argp1);
   result =  ((arg1)->flags);
   vresult = SWIG_From_unsigned_SS_long((unsigned long)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedSt_send_size_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","send_size", 1, self )); 
-  }
-  arg1 = (struct memcached_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","send_size", 2, argv[0] ));
-  } 
-  arg2 = (int)(val2);
-  if (arg1) (arg1)->send_size = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedSt_send_size_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","send_size", 1, self )); 
-  }
-  arg1 = (struct memcached_st *)(argp1);
-  result = (int) ((arg1)->send_size);
-  vresult = SWIG_From_int((int)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedSt_recv_size_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","recv_size", 1, self )); 
-  }
-  arg1 = (struct memcached_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","recv_size", 2, argv[0] ));
-  } 
-  arg2 = (int)(val2);
-  if (arg1) (arg1)->recv_size = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedSt_recv_size_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","recv_size", 1, self )); 
-  }
-  arg1 = (struct memcached_st *)(argp1);
-  result = (int) ((arg1)->recv_size);
-  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -4438,9 +5404,9 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_result_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_continuum_count_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  memcached_result_st arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -4451,21 +5417,21 @@ _wrap_MemcachedSt_result_set(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","result", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","continuum_count", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
   {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_memcached_result_st,  0 );
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_result_st","result", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","continuum_count", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_result_st","result", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","continuum_count", 2, argv[0]));
     } else {
-      arg2 = *((memcached_result_st *)(argp2));
+      arg2 = *((uint32_t *)(argp2));
     }
   }
-  if (arg1) (arg1)->result = arg2;
+  if (arg1) (arg1)->continuum_count = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -4473,11 +5439,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_result_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_continuum_count_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  memcached_result_st result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -4485,39 +5451,23 @@ _wrap_MemcachedSt_result_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","result", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","continuum_count", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result =  ((arg1)->result);
-  vresult = SWIG_NewPointerObj((memcached_result_st *)memcpy((memcached_result_st *)malloc(sizeof(memcached_result_st)),&result,sizeof(memcached_result_st)), SWIGTYPE_p_memcached_result_st, SWIG_POINTER_OWN |  0 );
+  result =  ((arg1)->continuum_count);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
 }
 
 
-
-/*
-  Document-method: Rlibmemcached::MemcachedSt.hash
-
-  call-seq:
-    hash -> int
-
-Hashing function for class.
-*/
-
-/*
-  Document-method: Rlibmemcached::MemcachedSt.hash=
-
-  call-seq:
-    hash=(x) -> int
-
-Hashing function for class.
-*/
 SWIGINTERN VALUE
-_wrap_MemcachedSt_hash_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_send_size_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  memcached_hash arg2 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -4528,15 +5478,15 @@ _wrap_MemcachedSt_hash_set(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","hash", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","send_size", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
   ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_hash","hash", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","send_size", 2, argv[0] ));
   } 
-  arg2 = (memcached_hash)(val2);
-  if (arg1) (arg1)->hash = arg2;
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->send_size = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -4544,11 +5494,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_hash_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_send_size_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  memcached_hash result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -4556,10 +5506,10 @@ _wrap_MemcachedSt_hash_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","hash", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","send_size", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result = (memcached_hash) ((arg1)->hash);
+  result = (int) ((arg1)->send_size);
   vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
@@ -4568,9 +5518,9 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_distribution_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_recv_size_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  memcached_server_distribution arg2 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -4581,15 +5531,15 @@ _wrap_MemcachedSt_distribution_set(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","distribution", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","recv_size", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
   ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_server_distribution","distribution", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","recv_size", 2, argv[0] ));
   } 
-  arg2 = (memcached_server_distribution)(val2);
-  if (arg1) (arg1)->distribution = arg2;
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->recv_size = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -4597,11 +5547,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_distribution_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_recv_size_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  memcached_server_distribution result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -4609,10 +5559,10 @@ _wrap_MemcachedSt_distribution_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","distribution", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","recv_size", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result = (memcached_server_distribution) ((arg1)->distribution);
+  result = (int) ((arg1)->recv_size);
   vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
@@ -4672,28 +5622,27 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_wheel_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_next_distribution_rebuild_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  unsigned int *arg2 = (unsigned int *) 0 ;
+  time_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","wheel", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","next_distribution_rebuild", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_unsigned_int, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "unsigned int *","wheel", 2, argv[0] )); 
+  {
+    if (NIL_P(argv[0]))
+    arg2 = (time_t)-1;
+    else
+    arg2 = NUM2LONG(rb_funcall(argv[0], rb_intern("tv_sec"), 0));
   }
-  arg2 = (unsigned int *)(argp2);
-  if (arg1) (arg1)->wheel = arg2;
+  if (arg1) (arg1)->next_distribution_rebuild = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -4701,11 +5650,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_wheel_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_next_distribution_rebuild_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int *result = 0 ;
+  time_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -4713,11 +5662,13 @@ _wrap_MemcachedSt_wheel_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","wheel", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","next_distribution_rebuild", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result = (unsigned int *) ((arg1)->wheel);
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_int, 0 |  0 );
+  result =  ((arg1)->next_distribution_rebuild);
+  {
+    vresult = rb_time_new(result, 0);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -4725,9 +5676,115 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_wheel_count_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_prefix_key_length_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  uint32_t arg2 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","prefix_key_length", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","prefix_key_length", 2, argv[0] ));
+  } 
+  arg2 = (size_t)(val2);
+  if (arg1) (arg1)->prefix_key_length = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_prefix_key_length_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","prefix_key_length", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->prefix_key_length);
+  vresult = SWIG_From_size_t((size_t)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_hash_continuum_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  memcached_hash arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","hash_continuum", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_hash","hash_continuum", 2, argv[0] ));
+  } 
+  arg2 = (memcached_hash)(val2);
+  if (arg1) (arg1)->hash_continuum = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_hash_continuum_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_hash result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","hash_continuum", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result = (memcached_hash) ((arg1)->hash_continuum);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_result_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  memcached_result_st arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 ;
@@ -4738,21 +5795,21 @@ _wrap_MemcachedSt_wheel_count_set(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","wheel_count", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","result", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
   {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_memcached_result_st,  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","wheel_count", 2, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_result_st","result", 2, argv[0] )); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","wheel_count", 2, argv[0]));
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_result_st","result", 2, argv[0]));
     } else {
-      arg2 = *((uint32_t *)(argp2));
+      arg2 = *((memcached_result_st *)(argp2));
     }
   }
-  if (arg1) (arg1)->wheel_count = arg2;
+  if (arg1) (arg1)->result = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -4760,11 +5817,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_wheel_count_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_result_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  uint32_t result;
+  memcached_result_st result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -4772,70 +5829,11 @@ _wrap_MemcachedSt_wheel_count_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","wheel_count", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","result", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result =  ((arg1)->wheel_count);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedSt_continuum_count_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  uint32_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","continuum_count", 1, self )); 
-  }
-  arg1 = (struct memcached_st *)(argp1);
-  {
-    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","continuum_count", 2, argv[0] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","continuum_count", 2, argv[0]));
-    } else {
-      arg2 = *((uint32_t *)(argp2));
-    }
-  }
-  if (arg1) (arg1)->continuum_count = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedSt_continuum_count_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint32_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","continuum_count", 1, self )); 
-  }
-  arg1 = (struct memcached_st *)(argp1);
-  result =  ((arg1)->continuum_count);
-  vresult = SWIG_NewPointerObj((uint32_t *)memcpy((uint32_t *)malloc(sizeof(uint32_t)),&result,sizeof(uint32_t)), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  result =  ((arg1)->result);
+  vresult = SWIG_NewPointerObj((memcached_result_st *)memcpy((memcached_result_st *)malloc(sizeof(memcached_result_st)),&result,sizeof(memcached_result_st)), SWIGTYPE_p_memcached_result_st, SWIG_POINTER_OWN |  0 );
   return vresult;
 fail:
   return Qnil;
@@ -5191,6 +6189,65 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_MemcachedSt_call_calloc_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  memcached_calloc_function arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","call_calloc", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_memcached_calloc_function,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_calloc_function","call_calloc", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_calloc_function","call_calloc", 2, argv[0]));
+    } else {
+      arg2 = *((memcached_calloc_function *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->call_calloc = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_call_calloc_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_calloc_function result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","call_calloc", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->call_calloc);
+  vresult = SWIG_NewPointerObj((memcached_calloc_function *)memcpy((memcached_calloc_function *)malloc(sizeof(memcached_calloc_function)),&result,sizeof(memcached_calloc_function)), SWIGTYPE_p_memcached_calloc_function, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_MemcachedSt_get_key_failure_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   memcached_trigger_key arg2 ;
@@ -5369,28 +6426,34 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_prefix_key_length_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_number_of_replicas_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
-  size_t arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","prefix_key_length", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","number_of_replicas", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","prefix_key_length", 2, argv[0] ));
-  } 
-  arg2 = (size_t)(val2);
-  if (arg1) (arg1)->prefix_key_length = arg2;
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","number_of_replicas", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","number_of_replicas", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->number_of_replicas = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -5398,11 +6461,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedSt_prefix_key_length_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedSt_number_of_replicas_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_st *arg1 = (struct memcached_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5410,11 +6473,188 @@ _wrap_MemcachedSt_prefix_key_length_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","prefix_key_length", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","number_of_replicas", 1, self )); 
   }
   arg1 = (struct memcached_st *)(argp1);
-  result =  ((arg1)->prefix_key_length);
-  vresult = SWIG_From_size_t((size_t)(result));
+  result =  ((arg1)->number_of_replicas);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_number_of_live_hosts_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","number_of_live_hosts", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","number_of_live_hosts", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","number_of_live_hosts", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->number_of_live_hosts = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_number_of_live_hosts_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","number_of_live_hosts", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->number_of_live_hosts);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_live_host_indices_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t *arg2 = (uint32_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","live_host_indices", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_uint32_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t *","live_host_indices", 2, argv[0] )); 
+  }
+  arg2 = (uint32_t *)(argp2);
+  if (arg1) (arg1)->live_host_indices = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_live_host_indices_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","live_host_indices", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result = (uint32_t *) ((arg1)->live_host_indices);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_uint32_t, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_live_host_indices_size_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","live_host_indices_size", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","live_host_indices_size", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","live_host_indices_size", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->live_host_indices_size = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedSt_live_host_indices_size_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_st *arg1 = (struct memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_st *","live_host_indices_size", 1, self )); 
+  }
+  arg1 = (struct memcached_st *)(argp1);
+  result =  ((arg1)->live_host_indices_size);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -5448,6 +6688,30 @@ _wrap_new_MemcachedSt(int argc, VALUE *argv, VALUE self) {
   result = (struct memcached_st *)calloc(1, sizeof(struct memcached_st));
   DATA_PTR(self) = result;
   return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_version(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_version", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  result = (memcached_return)memcached_version(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
 fail:
   return Qnil;
 }
@@ -5567,7 +6831,7 @@ _wrap_memcached_delete(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     if (NIL_P(argv[2]))
@@ -5610,7 +6874,7 @@ _wrap_memcached_increment(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   ecode4 = SWIG_AsVal_unsigned_SS_long(argv[2], &val4);
   if (!SWIG_IsOK(ecode4)) {
@@ -5658,7 +6922,7 @@ _wrap_memcached_decrement(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   ecode4 = SWIG_AsVal_unsigned_SS_long(argv[2], &val4);
   if (!SWIG_IsOK(ecode4)) {
@@ -5672,6 +6936,156 @@ _wrap_memcached_decrement(int argc, VALUE *argv, VALUE self) {
   } else {
     int new_flags = SWIG_IsNewObj(res5) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
     vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg5), SWIGTYPE_p_uint64_t, new_flags));
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_increment_with_initial(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  size_t arg3 ;
+  uint64_t arg4 ;
+  uint64_t arg5 ;
+  time_t arg6 ;
+  uint64_t *arg7 = (uint64_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  void *argp5 ;
+  int res5 = 0 ;
+  uint64_t temp7 ;
+  int res7 = SWIG_TMPOBJ ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  arg7 = &temp7;
+  if ((argc < 5) || (argc > 5)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_increment_with_initial", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  {
+    arg2 = STR2CSTR(argv[1]);
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
+  }
+  {
+    res4 = SWIG_ConvertPtr(argv[2], &argp4, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "uint64_t","memcached_increment_with_initial", 4, argv[2] )); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","memcached_increment_with_initial", 4, argv[2]));
+    } else {
+      arg4 = *((uint64_t *)(argp4));
+    }
+  }
+  {
+    res5 = SWIG_ConvertPtr(argv[3], &argp5, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), Ruby_Format_TypeError( "", "uint64_t","memcached_increment_with_initial", 5, argv[3] )); 
+    }  
+    if (!argp5) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","memcached_increment_with_initial", 5, argv[3]));
+    } else {
+      arg5 = *((uint64_t *)(argp5));
+    }
+  }
+  {
+    if (NIL_P(argv[4]))
+    arg6 = (time_t)-1;
+    else
+    arg6 = NUM2LONG(rb_funcall(argv[4], rb_intern("tv_sec"), 0));
+  }
+  result = (memcached_return)memcached_increment_with_initial(arg1,(char const *)arg2,arg3,arg4,arg5,arg6,arg7);
+  vresult = SWIG_From_int((int)(result));
+  if (SWIG_IsTmpObj(res7)) {
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_long_SS_long((*arg7)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res7) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg7), SWIGTYPE_p_uint64_t, new_flags));
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_decrement_with_initial(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  size_t arg3 ;
+  uint64_t arg4 ;
+  uint64_t arg5 ;
+  time_t arg6 ;
+  uint64_t *arg7 = (uint64_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  void *argp5 ;
+  int res5 = 0 ;
+  uint64_t temp7 ;
+  int res7 = SWIG_TMPOBJ ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  arg7 = &temp7;
+  if ((argc < 5) || (argc > 5)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_decrement_with_initial", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  {
+    arg2 = STR2CSTR(argv[1]);
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
+  }
+  {
+    res4 = SWIG_ConvertPtr(argv[2], &argp4, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "uint64_t","memcached_decrement_with_initial", 4, argv[2] )); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","memcached_decrement_with_initial", 4, argv[2]));
+    } else {
+      arg4 = *((uint64_t *)(argp4));
+    }
+  }
+  {
+    res5 = SWIG_ConvertPtr(argv[3], &argp5, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), Ruby_Format_TypeError( "", "uint64_t","memcached_decrement_with_initial", 5, argv[3] )); 
+    }  
+    if (!argp5) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","memcached_decrement_with_initial", 5, argv[3]));
+    } else {
+      arg5 = *((uint64_t *)(argp5));
+    }
+  }
+  {
+    if (NIL_P(argv[4]))
+    arg6 = (time_t)-1;
+    else
+    arg6 = NUM2LONG(rb_funcall(argv[4], rb_intern("tv_sec"), 0));
+  }
+  result = (memcached_return)memcached_decrement_with_initial(arg1,(char const *)arg2,arg3,arg4,arg5,arg6,arg7);
+  vresult = SWIG_From_int((int)(result));
+  if (SWIG_IsTmpObj(res7)) {
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_long_SS_long((*arg7)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res7) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg7), SWIGTYPE_p_uint64_t, new_flags));
   }
   return vresult;
 fail:
@@ -5989,8 +7403,96 @@ _wrap_memcached_behavior_get(int argc, VALUE *argv, VALUE self) {
   arg2 = (memcached_behavior)(val2);
   result = memcached_behavior_get(arg1,arg2);
   {
-    vresult = INT2FIX(result);
+    vresult = ULL2NUM(result);
   }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_generate_hash_value(int argc, VALUE *argv, VALUE self) {
+  char *arg1 = (char *) 0 ;
+  size_t arg2 ;
+  memcached_hash arg3 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  {
+    arg1 = STR2CSTR(argv[0]);
+    arg2 = (size_t) RSTRING_LEN(argv[0]);
+  }
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "memcached_hash","memcached_generate_hash_value", 3, argv[1] ));
+  } 
+  arg3 = (memcached_hash)(val3);
+  result = memcached_generate_hash_value((char const *)arg1,arg2,arg3);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_generate_hash(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_generate_hash", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  {
+    arg2 = STR2CSTR(argv[1]);
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
+  }
+  result = memcached_generate_hash(arg1,(char const *)arg2,arg3);
+  {
+    vresult = UINT2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_flush_buffers(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_flush_buffers", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  result = (memcached_return)memcached_flush_buffers(arg1);
+  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -6022,7 +7524,7 @@ _wrap_memcached_server_add_udp(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","memcached_server_add_udp", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_add_udp", 2, argv[1] ));
   }
   arg2 = (char *)(buf2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
@@ -6030,7 +7532,7 @@ _wrap_memcached_server_add_udp(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","memcached_server_add_udp", 3, argv[2] ));
   } 
   arg3 = (unsigned int)(val3);
-  result = (memcached_return)memcached_server_add_udp(arg1,arg2,arg3);
+  result = (memcached_return)memcached_server_add_udp(arg1,(char const *)arg2,arg3);
   vresult = SWIG_From_int((int)(result));
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return vresult;
@@ -6062,10 +7564,10 @@ _wrap_memcached_server_add_unix_socket(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","memcached_server_add_unix_socket", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_add_unix_socket", 2, argv[1] ));
   }
   arg2 = (char *)(buf2);
-  result = (memcached_return)memcached_server_add_unix_socket(arg1,arg2);
+  result = (memcached_return)memcached_server_add_unix_socket(arg1,(char const *)arg2);
   vresult = SWIG_From_int((int)(result));
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return vresult;
@@ -6100,7 +7602,7 @@ _wrap_memcached_server_add(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","memcached_server_add", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_add", 2, argv[1] ));
   }
   arg2 = (char *)(buf2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
@@ -6108,7 +7610,152 @@ _wrap_memcached_server_add(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","memcached_server_add", 3, argv[2] ));
   } 
   arg3 = (unsigned int)(val3);
-  result = (memcached_return)memcached_server_add(arg1,arg2,arg3);
+  result = (memcached_return)memcached_server_add(arg1,(char const *)arg2,arg3);
+  vresult = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_add_udp_with_weight(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  uint32_t arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  unsigned long val4 ;
+  int ecode4 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_add_udp_with_weight", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_add_udp_with_weight", 2, argv[1] ));
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","memcached_server_add_udp_with_weight", 3, argv[2] ));
+  } 
+  arg3 = (unsigned int)(val3);
+  ecode4 = SWIG_AsVal_unsigned_SS_long(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "uint32_t","memcached_server_add_udp_with_weight", 4, argv[3] ));
+  } 
+  arg4 = (uint32_t)(val4);
+  result = (memcached_return)memcached_server_add_udp_with_weight(arg1,(char const *)arg2,arg3,arg4);
+  vresult = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_add_unix_socket_with_weight(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  uint32_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  unsigned long val3 ;
+  int ecode3 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_add_unix_socket_with_weight", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_add_unix_socket_with_weight", 2, argv[1] ));
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_unsigned_SS_long(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "uint32_t","memcached_server_add_unix_socket_with_weight", 3, argv[2] ));
+  } 
+  arg3 = (uint32_t)(val3);
+  result = (memcached_return)memcached_server_add_unix_socket_with_weight(arg1,(char const *)arg2,arg3);
+  vresult = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_add_with_weight(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  uint32_t arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  unsigned long val4 ;
+  int ecode4 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_add_with_weight", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_add_with_weight", 2, argv[1] ));
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","memcached_server_add_with_weight", 3, argv[2] ));
+  } 
+  arg3 = (unsigned int)(val3);
+  ecode4 = SWIG_AsVal_unsigned_SS_long(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "uint32_t","memcached_server_add_with_weight", 4, argv[3] ));
+  } 
+  arg4 = (uint32_t)(val4);
+  result = (memcached_return)memcached_server_add_with_weight(arg1,(char const *)arg2,arg3,arg4);
   vresult = SWIG_From_int((int)(result));
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return vresult;
@@ -6200,7 +7847,7 @@ _wrap_memcached_server_list_append(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_server_st *)(argp1);
   res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","memcached_server_list_append", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_list_append", 2, argv[1] ));
   }
   arg2 = (char *)(buf2);
   ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
@@ -6208,13 +7855,74 @@ _wrap_memcached_server_list_append(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","memcached_server_list_append", 3, argv[2] ));
   } 
   arg3 = (unsigned int)(val3);
-  result = (memcached_server_st *)memcached_server_list_append(arg1,arg2,arg3,arg4);
+  result = (memcached_server_st *)memcached_server_list_append(arg1,(char const *)arg2,arg3,arg4);
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (SWIG_IsTmpObj(res4)) {
     vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_short((*arg4)));
   } else {
     int new_flags = SWIG_IsNewObj(res4) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
     vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_memcached_return, new_flags));
+  }
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_list_append_with_weight(int argc, VALUE *argv, VALUE self) {
+  memcached_server_st *arg1 = (memcached_server_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  uint32_t arg4 ;
+  memcached_return *arg5 = (memcached_return *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  unsigned long val4 ;
+  int ecode4 = 0 ;
+  memcached_return temp5 ;
+  int res5 = SWIG_TMPOBJ ;
+  memcached_server_st *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  arg5 = &temp5;
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_list_append_with_weight", 1, argv[0] )); 
+  }
+  arg1 = (memcached_server_st *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_server_list_append_with_weight", 2, argv[1] ));
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","memcached_server_list_append_with_weight", 3, argv[2] ));
+  } 
+  arg3 = (unsigned int)(val3);
+  ecode4 = SWIG_AsVal_unsigned_SS_long(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "uint32_t","memcached_server_list_append_with_weight", 4, argv[3] ));
+  } 
+  arg4 = (uint32_t)(val4);
+  result = (memcached_server_st *)memcached_server_list_append_with_weight(arg1,(char const *)arg2,arg3,arg4,arg5);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (SWIG_IsTmpObj(res5)) {
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_short((*arg5)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res5) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg5), SWIGTYPE_p_memcached_return, new_flags));
   }
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return vresult;
@@ -6262,10 +7970,10 @@ _wrap_memcached_servers_parse(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_AsCharPtrAndSize(argv[0], &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "char *","memcached_servers_parse", 1, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "char const *","memcached_servers_parse", 1, argv[0] ));
   }
   arg1 = (char *)(buf1);
-  result = (memcached_server_st *)memcached_servers_parse(arg1);
+  result = (memcached_server_st *)memcached_servers_parse((char const *)arg1);
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return vresult;
@@ -6309,10 +8017,10 @@ _wrap_memcached_stat_get_value(int argc, VALUE *argv, VALUE self) {
   arg2 = (memcached_stat_st *)(argp2);
   res3 = SWIG_AsCharPtrAndSize(argv[2], &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "char *","memcached_stat_get_value", 3, argv[2] ));
+    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "char const *","memcached_stat_get_value", 3, argv[2] ));
   }
   arg3 = (char *)(buf3);
-  result = (char *)memcached_stat_get_value(arg1,arg2,arg3,arg4);
+  result = (char *)memcached_stat_get_value(arg1,arg2,(char const *)arg3,arg4);
   vresult = SWIG_FromCharPtr((const char *)result);
   if (SWIG_IsTmpObj(res4)) {
     vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_short((*arg4)));
@@ -6403,7 +8111,7 @@ _wrap_memcached_delete_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     if (NIL_P(argv[2]))
@@ -6544,18 +8252,18 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_memcached_server_cursor(int argc, VALUE *argv, VALUE self) {
+_wrap_memcached_dump(int argc, VALUE *argv, VALUE self) {
   memcached_st *arg1 = (memcached_st *) 0 ;
-  memcached_server_function *arg2 = (memcached_server_function *) 0 ;
+  memcached_dump_func *arg2 = (memcached_dump_func *) 0 ;
   void *arg3 = (void *) 0 ;
-  unsigned int arg4 ;
+  uint32_t arg4 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
   int res3 ;
-  unsigned int val4 ;
-  int ecode4 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
   memcached_return result;
   VALUE vresult = Qnil;
   
@@ -6564,24 +8272,239 @@ _wrap_memcached_server_cursor(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_cursor", 1, argv[0] )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_dump", 1, argv[0] )); 
   }
   arg1 = (memcached_st *)(argp1);
-  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_server_function, 0 |  0 );
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_dump_func, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_server_function *","memcached_server_cursor", 2, argv[1] )); 
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_dump_func *","memcached_dump", 2, argv[1] )); 
   }
-  arg2 = (memcached_server_function *)(argp2);
+  arg2 = (memcached_dump_func *)(argp2);
   res3 = SWIG_ConvertPtr(argv[2],SWIG_as_voidptrptr(&arg3), 0, 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "void *","memcached_server_cursor", 3, argv[2] )); 
+    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "void *","memcached_dump", 3, argv[2] )); 
   }
-  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","memcached_server_cursor", 4, argv[3] ));
-  } 
-  arg4 = (unsigned int)(val4);
-  result = (memcached_return)memcached_server_cursor(arg1,arg2,arg3,arg4);
+  {
+    res4 = SWIG_ConvertPtr(argv[3], &argp4, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "uint32_t","memcached_dump", 4, argv[3] )); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","memcached_dump", 4, argv[3]));
+    } else {
+      arg4 = *((uint32_t *)(argp4));
+    }
+  }
+  result = (memcached_return)memcached_dump(arg1,arg2,arg3,arg4);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_set_memory_allocators(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  memcached_malloc_function arg2 ;
+  memcached_free_function arg3 ;
+  memcached_realloc_function arg4 ;
+  memcached_calloc_function arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  void *argp5 ;
+  int res5 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 5) || (argc > 5)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_set_memory_allocators", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[1], &argp2, SWIGTYPE_p_memcached_malloc_function,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_malloc_function","memcached_set_memory_allocators", 2, argv[1] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_malloc_function","memcached_set_memory_allocators", 2, argv[1]));
+    } else {
+      arg2 = *((memcached_malloc_function *)(argp2));
+    }
+  }
+  {
+    res3 = SWIG_ConvertPtr(argv[2], &argp3, SWIGTYPE_p_memcached_free_function,  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "memcached_free_function","memcached_set_memory_allocators", 3, argv[2] )); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_free_function","memcached_set_memory_allocators", 3, argv[2]));
+    } else {
+      arg3 = *((memcached_free_function *)(argp3));
+    }
+  }
+  {
+    res4 = SWIG_ConvertPtr(argv[3], &argp4, SWIGTYPE_p_memcached_realloc_function,  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "memcached_realloc_function","memcached_set_memory_allocators", 4, argv[3] )); 
+    }  
+    if (!argp4) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_realloc_function","memcached_set_memory_allocators", 4, argv[3]));
+    } else {
+      arg4 = *((memcached_realloc_function *)(argp4));
+    }
+  }
+  {
+    res5 = SWIG_ConvertPtr(argv[4], &argp5, SWIGTYPE_p_memcached_calloc_function,  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), Ruby_Format_TypeError( "", "memcached_calloc_function","memcached_set_memory_allocators", 5, argv[4] )); 
+    }  
+    if (!argp5) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "memcached_calloc_function","memcached_set_memory_allocators", 5, argv[4]));
+    } else {
+      arg5 = *((memcached_calloc_function *)(argp5));
+    }
+  }
+  result = (memcached_return)memcached_set_memory_allocators(arg1,arg2,arg3,arg4,arg5);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_get_memory_allocators(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  memcached_malloc_function *arg2 = (memcached_malloc_function *) 0 ;
+  memcached_free_function *arg3 = (memcached_free_function *) 0 ;
+  memcached_realloc_function *arg4 = (memcached_realloc_function *) 0 ;
+  memcached_calloc_function *arg5 = (memcached_calloc_function *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  
+  if ((argc < 5) || (argc > 5)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_get_memory_allocators", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_malloc_function, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_malloc_function *","memcached_get_memory_allocators", 2, argv[1] )); 
+  }
+  arg2 = (memcached_malloc_function *)(argp2);
+  res3 = SWIG_ConvertPtr(argv[2], &argp3,SWIGTYPE_p_memcached_free_function, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "memcached_free_function *","memcached_get_memory_allocators", 3, argv[2] )); 
+  }
+  arg3 = (memcached_free_function *)(argp3);
+  res4 = SWIG_ConvertPtr(argv[3], &argp4,SWIGTYPE_p_memcached_realloc_function, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "memcached_realloc_function *","memcached_get_memory_allocators", 4, argv[3] )); 
+  }
+  arg4 = (memcached_realloc_function *)(argp4);
+  res5 = SWIG_ConvertPtr(argv[4], &argp5,SWIGTYPE_p_memcached_calloc_function, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), Ruby_Format_TypeError( "", "memcached_calloc_function *","memcached_get_memory_allocators", 5, argv[4] )); 
+  }
+  arg5 = (memcached_calloc_function *)(argp5);
+  memcached_get_memory_allocators(arg1,arg2,arg3,arg4,arg5);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_get_user_data(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_get_user_data", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  result = (void *)memcached_get_user_data(arg1);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_set_user_data(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  void *arg2 = (void *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_set_user_data", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  {
+    arg2 = STR2CSTR(argv[1]);
+  }
+  result = (void *)memcached_set_user_data(arg1,arg2);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_void, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_run_distribution(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","run_distribution", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  result = (memcached_return)run_distribution(arg1);
   vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
@@ -6621,7 +8544,7 @@ _wrap_memcached_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   result = (char *)memcached_get(arg1,(char const *)arg2,arg3,arg4,arg5,arg6);
   vresult = SWIG_FromCharPtr((const char *)result);
@@ -6654,7 +8577,7 @@ _wrap_memcached_mget(int argc, VALUE *argv, VALUE self) {
   memcached_st *arg1 = (memcached_st *) 0 ;
   char **arg2 = (char **) 0 ;
   size_t *arg3 = (size_t *) 0 ;
-  unsigned int arg4 ;
+  size_t arg4 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   memcached_return result;
@@ -6675,22 +8598,14 @@ _wrap_memcached_mget(int argc, VALUE *argv, VALUE self) {
     arg3 = (size_t *) malloc((arg4+1)*sizeof(size_t));
     arg2 = (char **) malloc((arg4+1)*sizeof(char *)); 
     for(i = 0; i < arg4; i ++) {
-      arg3[i] = RSTRING(RARRAY_PTR(argv[1])[i])->len;
+      arg3[i] = RSTRING_LEN(RARRAY_PTR(argv[1])[i]);
       arg2[i] = StringValuePtr(RARRAY_PTR(argv[1])[i]);
     }
   }
-  result = (memcached_return)memcached_mget(arg1,arg2,arg3,arg4);
+  result = (memcached_return)memcached_mget(arg1,(char const **)arg2,arg3,arg4);
   vresult = SWIG_From_int((int)(result));
-  {
-    free(arg2);
-    free(arg3);
-  }
   return vresult;
 fail:
-  {
-    free(arg2);
-    free(arg3);
-  }
   return Qnil;
 }
 
@@ -6729,7 +8644,7 @@ _wrap_memcached_get_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   result = (char *)memcached_get_by_key(arg1,(char const *)arg2,arg3,(char const *)arg4,arg5,arg6,arg7,arg8);
   vresult = SWIG_FromCharPtr((const char *)result);
@@ -6764,7 +8679,7 @@ _wrap_memcached_mget_by_key(int argc, VALUE *argv, VALUE self) {
   size_t arg3 ;
   char **arg4 = (char **) 0 ;
   size_t *arg5 = (size_t *) 0 ;
-  unsigned int arg6 ;
+  size_t arg6 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 ;
@@ -6800,24 +8715,16 @@ _wrap_memcached_mget_by_key(int argc, VALUE *argv, VALUE self) {
     arg5 = (size_t *) malloc((arg6+1)*sizeof(size_t));
     arg4 = (char **) malloc((arg6+1)*sizeof(char *)); 
     for(i = 0; i < arg6; i ++) {
-      arg5[i] = RSTRING(RARRAY_PTR(argv[3])[i])->len;
+      arg5[i] = RSTRING_LEN(RARRAY_PTR(argv[3])[i]);
       arg4[i] = StringValuePtr(RARRAY_PTR(argv[3])[i]);
     }
   }
-  result = (memcached_return)memcached_mget_by_key(arg1,(char const *)arg2,arg3,arg4,arg5,arg6);
+  result = (memcached_return)memcached_mget_by_key(arg1,(char const *)arg2,arg3,(char const **)arg4,arg5,arg6);
   vresult = SWIG_From_int((int)(result));
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-  {
-    free(arg4);
-    free(arg5);
-  }
   return vresult;
 fail:
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-  {
-    free(arg4);
-    free(arg5);
-  }
   return Qnil;
 }
 
@@ -6956,11 +8863,11 @@ _wrap_memcached_set(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg4 = STR2CSTR(argv[2]);
-    arg5 = (size_t) RSTRING(argv[2])->len;
+    arg5 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7007,11 +8914,11 @@ _wrap_memcached_add(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg4 = STR2CSTR(argv[2]);
-    arg5 = (size_t) RSTRING(argv[2])->len;
+    arg5 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7058,11 +8965,11 @@ _wrap_memcached_replace(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg4 = STR2CSTR(argv[2]);
-    arg5 = (size_t) RSTRING(argv[2])->len;
+    arg5 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7109,11 +9016,11 @@ _wrap_memcached_append(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg4 = STR2CSTR(argv[2]);
-    arg5 = (size_t) RSTRING(argv[2])->len;
+    arg5 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7160,11 +9067,11 @@ _wrap_memcached_prepend(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg4 = STR2CSTR(argv[2]);
-    arg5 = (size_t) RSTRING(argv[2])->len;
+    arg5 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7214,11 +9121,11 @@ _wrap_memcached_cas(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg4 = STR2CSTR(argv[2]);
-    arg5 = (size_t) RSTRING(argv[2])->len;
+    arg5 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7272,11 +9179,11 @@ _wrap_memcached_set_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg6 = STR2CSTR(argv[2]);
-    arg7 = (size_t) RSTRING(argv[2])->len;
+    arg7 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7325,11 +9232,11 @@ _wrap_memcached_add_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg6 = STR2CSTR(argv[2]);
-    arg7 = (size_t) RSTRING(argv[2])->len;
+    arg7 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7378,11 +9285,11 @@ _wrap_memcached_replace_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg6 = STR2CSTR(argv[2]);
-    arg7 = (size_t) RSTRING(argv[2])->len;
+    arg7 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7431,11 +9338,11 @@ _wrap_memcached_prepend_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg6 = STR2CSTR(argv[2]);
-    arg7 = (size_t) RSTRING(argv[2])->len;
+    arg7 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7484,11 +9391,11 @@ _wrap_memcached_append_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg6 = STR2CSTR(argv[2]);
-    arg7 = (size_t) RSTRING(argv[2])->len;
+    arg7 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7540,11 +9447,11 @@ _wrap_memcached_cas_by_key(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg4 = arg2 = STR2CSTR(argv[1]);
-    arg5 = arg3 = (size_t) RSTRING(argv[1])->len;
+    arg5 = arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   {
     arg6 = STR2CSTR(argv[2]);
-    arg7 = (size_t) RSTRING(argv[2])->len;
+    arg7 = (size_t) RSTRING_LEN(argv[2]);
   }
   {
     if (NIL_P(argv[3]))
@@ -7573,12 +9480,65 @@ fail:
 swig_class cMemcachedResultSt;
 
 SWIGINTERN VALUE
-_wrap_MemcachedResultSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedResultSt_flags_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  memcached_allocated arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned long val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","flags", 1, self )); 
+  }
+  arg1 = (struct memcached_result_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint32_t","flags", 2, argv[0] ));
+  } 
+  arg2 = (uint32_t)(val2);
+  if (arg1) (arg1)->flags = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedResultSt_flags_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","flags", 1, self )); 
+  }
+  arg1 = (struct memcached_result_st *)(argp1);
+  result =  ((arg1)->flags);
+  vresult = SWIG_From_unsigned_SS_long((unsigned long)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedResultSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -7589,11 +9549,11 @@ _wrap_MemcachedResultSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","is_allocated", 1, self )); 
   }
   arg1 = (struct memcached_result_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_allocated","is_allocated", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "bool","is_allocated", 2, argv[0] ));
   } 
-  arg2 = (memcached_allocated)(val2);
+  arg2 = (bool)(val2);
   if (arg1) (arg1)->is_allocated = arg2;
   return Qnil;
 fail:
@@ -7606,7 +9566,7 @@ _wrap_MemcachedResultSt_is_allocated_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  memcached_allocated result;
+  bool result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -7617,8 +9577,62 @@ _wrap_MemcachedResultSt_is_allocated_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","is_allocated", 1, self )); 
   }
   arg1 = (struct memcached_result_st *)(argp1);
-  result = (memcached_allocated) ((arg1)->is_allocated);
-  vresult = SWIG_From_int((int)(result));
+  result = (bool) ((arg1)->is_allocated);
+  vresult = SWIG_From_bool((bool)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedResultSt_expiration_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
+  time_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","expiration", 1, self )); 
+  }
+  arg1 = (struct memcached_result_st *)(argp1);
+  {
+    if (NIL_P(argv[0]))
+    arg2 = (time_t)-1;
+    else
+    arg2 = NUM2LONG(rb_funcall(argv[0], rb_intern("tv_sec"), 0));
+  }
+  if (arg1) (arg1)->expiration = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedResultSt_expiration_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  time_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","expiration", 1, self )); 
+  }
+  arg1 = (struct memcached_result_st *)(argp1);
+  result =  ((arg1)->expiration);
+  {
+    vresult = rb_time_new(result, 0);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -7679,66 +9693,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedResultSt_key_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  char *arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  char temp2[251] ;
-  int res2 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","key", 1, self )); 
-  }
-  arg1 = (struct memcached_result_st *)(argp1);
-  res2 = SWIG_AsCharArray(argv[0], temp2, 251);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [251]","key", 2, argv[0] ));
-  }
-  arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->key,arg2,251*sizeof(char));
-  else memset(arg1->key,0,251*sizeof(char));
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedResultSt_key_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  char *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","key", 1, self )); 
-  }
-  arg1 = (struct memcached_result_st *)(argp1);
-  result = (char *)(char *) ((arg1)->key);
-  {
-    size_t size = 251;
-    
-    while (size && (result[size - 1] == '\0')) --size;
-    
-    vresult = SWIG_FromCharPtrAndSize(result, size);
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_MemcachedResultSt_key_length_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
   size_t arg2 ;
@@ -7785,6 +9739,59 @@ _wrap_MemcachedResultSt_key_length_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_result_st *)(argp1);
   result =  ((arg1)->key_length);
   vresult = SWIG_From_size_t((size_t)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedResultSt_cas_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned long long val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","cas", 1, self )); 
+  }
+  arg1 = (struct memcached_result_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_long_SS_long(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint64_t","cas", 2, argv[0] ));
+  } 
+  arg2 = (uint64_t)(val2);
+  if (arg1) (arg1)->cas = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedResultSt_cas_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","cas", 1, self )); 
+  }
+  arg1 = (struct memcached_result_st *)(argp1);
+  result =  ((arg1)->cas);
+  vresult = SWIG_From_unsigned_SS_long_SS_long((unsigned long long)(result));
   return vresult;
 fail:
   return Qnil;
@@ -7851,28 +9858,29 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedResultSt_flags_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedResultSt_key_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  uint32_t arg2 ;
+  char *arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned long val2 ;
-  int ecode2 = 0 ;
+  char temp2[251] ;
+  int res2 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","flags", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","key", 1, self )); 
   }
   arg1 = (struct memcached_result_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint32_t","flags", 2, argv[0] ));
-  } 
-  arg2 = (uint32_t)(val2);
-  if (arg1) (arg1)->flags = arg2;
+  res2 = SWIG_AsCharArray(argv[0], temp2, 251);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [251]","key", 2, argv[0] ));
+  }
+  arg2 = (char *)(temp2);
+  if (arg2) memcpy(arg1->key,arg2,251*sizeof(char));
+  else memset(arg1->key,0,251*sizeof(char));
   return Qnil;
 fail:
   return Qnil;
@@ -7880,11 +9888,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedResultSt_flags_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedResultSt_key_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  uint32_t result;
+  char *result = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -7892,117 +9900,16 @@ _wrap_MemcachedResultSt_flags_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","flags", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","key", 1, self )); 
   }
   arg1 = (struct memcached_result_st *)(argp1);
-  result =  ((arg1)->flags);
-  vresult = SWIG_From_unsigned_SS_long((unsigned long)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedResultSt_cas_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  uint64_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned long long val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","cas", 1, self )); 
-  }
-  arg1 = (struct memcached_result_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_long_SS_long(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint64_t","cas", 2, argv[0] ));
-  } 
-  arg2 = (uint64_t)(val2);
-  if (arg1) (arg1)->cas = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedResultSt_cas_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint64_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","cas", 1, self )); 
-  }
-  arg1 = (struct memcached_result_st *)(argp1);
-  result =  ((arg1)->cas);
-  vresult = SWIG_From_unsigned_SS_long_SS_long((unsigned long long)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedResultSt_expiration_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  time_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","expiration", 1, self )); 
-  }
-  arg1 = (struct memcached_result_st *)(argp1);
+  result = (char *)(char *) ((arg1)->key);
   {
-    if (NIL_P(argv[0]))
-    arg2 = (time_t)-1;
-    else
-    arg2 = NUM2LONG(rb_funcall(argv[0], rb_intern("tv_sec"), 0));
-  }
-  if (arg1) (arg1)->expiration = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedResultSt_expiration_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_result_st *arg1 = (struct memcached_result_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  time_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_result_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_result_st *","expiration", 1, self )); 
-  }
-  arg1 = (struct memcached_result_st *)(argp1);
-  result =  ((arg1)->expiration);
-  {
-    vresult = rb_time_new(result, 0);
+    size_t size = 251;
+    
+    while (size && (result[size - 1] == '\0')) --size;
+    
+    vresult = SWIG_FromCharPtrAndSize(result, size);
   }
   return vresult;
 fail:
@@ -8194,7 +10101,7 @@ _wrap_memcached_result_set_value(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_result_st *)(argp1);
   res2 = SWIG_AsCharPtrAndSize(argv[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","memcached_result_set_value", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char const *","memcached_result_set_value", 2, argv[1] ));
   }
   arg2 = (char *)(buf2);
   ecode3 = SWIG_AsVal_size_t(argv[2], &val3);
@@ -8202,7 +10109,7 @@ _wrap_memcached_result_set_value(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "size_t","memcached_result_set_value", 3, argv[2] ));
   } 
   arg3 = (size_t)(val3);
-  result = (memcached_return)memcached_result_set_value(arg1,arg2,arg3);
+  result = (memcached_return)memcached_result_set_value(arg1,(char const *)arg2,arg3);
   vresult = SWIG_From_int((int)(result));
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return vresult;
@@ -8215,29 +10122,28 @@ fail:
 swig_class cMemcachedServerSt;
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_hostname_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_is_allocated_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  char *arg2 ;
+  bool arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char temp2[64] ;
-  int res2 ;
+  bool val2 ;
+  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","hostname", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","is_allocated", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  res2 = SWIG_AsCharArray(argv[0], temp2, 64);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [64]","hostname", 2, argv[0] ));
-  }
-  arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->hostname,arg2,64*sizeof(char));
-  else memset(arg1->hostname,0,64*sizeof(char));
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "bool","is_allocated", 2, argv[0] ));
+  } 
+  arg2 = (bool)(val2);
+  if (arg1) (arg1)->is_allocated = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -8245,11 +10151,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_hostname_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_is_allocated_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char *result = 0 ;
+  bool result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8257,17 +10163,11 @@ _wrap_MemcachedServerSt_hostname_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","hostname", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","is_allocated", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result = (char *)(char *) ((arg1)->hostname);
-  {
-    size_t size = 64;
-    
-    while (size && (result[size - 1] == '\0')) --size;
-    
-    vresult = SWIG_FromCharPtrAndSize(result, size);
-  }
+  result = (bool) ((arg1)->is_allocated);
+  vresult = SWIG_From_bool((bool)(result));
   return vresult;
 fail:
   return Qnil;
@@ -8275,9 +10175,62 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_port_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_sockaddr_inited_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  unsigned int arg2 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","sockaddr_inited", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "bool","sockaddr_inited", 2, argv[0] ));
+  } 
+  arg2 = (bool)(val2);
+  if (arg1) (arg1)->sockaddr_inited = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_sockaddr_inited_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","sockaddr_inited", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (bool) ((arg1)->sockaddr_inited);
+  vresult = SWIG_From_bool((bool)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_count_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  uint16_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   unsigned int val2 ;
@@ -8288,15 +10241,15 @@ _wrap_MemcachedServerSt_port_set(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","port", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","count", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
   ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","port", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint16_t","count", 2, argv[0] ));
   } 
-  arg2 = (unsigned int)(val2);
-  if (arg1) (arg1)->port = arg2;
+  arg2 = (uint16_t)(val2);
+  if (arg1) (arg1)->count = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -8304,11 +10257,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_port_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_count_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  uint16_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8316,117 +10269,11 @@ _wrap_MemcachedServerSt_port_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","port", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","count", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result = (unsigned int) ((arg1)->port);
+  result =  ((arg1)->count);
   vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_fd_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","fd", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","fd", 2, argv[0] ));
-  } 
-  arg2 = (int)(val2);
-  if (arg1) (arg1)->fd = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_fd_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","fd", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result = (int) ((arg1)->fd);
-  vresult = SWIG_From_int((int)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_cached_errno_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","cached_errno", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","cached_errno", 2, argv[0] ));
-  } 
-  arg2 = (int)(val2);
-  if (arg1) (arg1)->cached_errno = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_cached_errno_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","cached_errno", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result = (int) ((arg1)->cached_errno);
-  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -8487,29 +10334,28 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_write_buffer_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_port_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  char *arg2 ;
+  unsigned int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char temp2[8196] ;
-  int res2 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","port", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  res2 = SWIG_AsCharArray(argv[0], temp2, 8196);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [8196]","write_buffer", 2, argv[0] ));
-  }
-  arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->write_buffer,arg2,8196*sizeof(char));
-  else memset(arg1->write_buffer,0,8196*sizeof(char));
+  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","port", 2, argv[0] ));
+  } 
+  arg2 = (unsigned int)(val2);
+  if (arg1) (arg1)->port = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -8517,11 +10363,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_write_buffer_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_port_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char *result = 0 ;
+  unsigned int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8529,46 +10375,152 @@ _wrap_MemcachedServerSt_write_buffer_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","port", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result = (char *)(char *) ((arg1)->write_buffer);
+  result = (unsigned int) ((arg1)->port);
+  vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_cached_errno_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","cached_errno", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","cached_errno", 2, argv[0] ));
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->cached_errno = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_cached_errno_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","cached_errno", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (int) ((arg1)->cached_errno);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_fd_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","fd", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","fd", 2, argv[0] ));
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->fd = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_fd_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","fd", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (int) ((arg1)->fd);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_io_bytes_sent_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","io_bytes_sent", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
   {
-    size_t size = 8196;
-    
-    while (size && (result[size - 1] == '\0')) --size;
-    
-    vresult = SWIG_FromCharPtrAndSize(result, size);
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","io_bytes_sent", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","io_bytes_sent", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
   }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_write_buffer_offset_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer_offset", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","write_buffer_offset", 2, argv[0] ));
-  } 
-  arg2 = (size_t)(val2);
-  if (arg1) (arg1)->write_buffer_offset = arg2;
+  if (arg1) (arg1)->io_bytes_sent = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -8576,11 +10528,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_write_buffer_offset_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_io_bytes_sent_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8588,70 +10540,12 @@ _wrap_MemcachedServerSt_write_buffer_offset_get(int argc, VALUE *argv, VALUE sel
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer_offset", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","io_bytes_sent", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->write_buffer_offset);
-  vresult = SWIG_From_size_t((size_t)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_read_buffer_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  char *arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  char temp2[8196] ;
-  int res2 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  res2 = SWIG_AsCharArray(argv[0], temp2, 8196);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [8196]","read_buffer", 2, argv[0] ));
-  }
-  arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->read_buffer,arg2,8196*sizeof(char));
-  else memset(arg1->read_buffer,0,8196*sizeof(char));
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_read_buffer_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  char *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result = (char *)(char *) ((arg1)->read_buffer);
+  result =  ((arg1)->io_bytes_sent);
   {
-    size_t size = 8196;
-    
-    while (size && (result[size - 1] == '\0')) --size;
-    
-    vresult = SWIG_FromCharPtrAndSize(result, size);
+    vresult = UINT2NUM(result);
   }
   return vresult;
 fail:
@@ -8660,28 +10554,34 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_read_data_length_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_server_failure_counter_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  size_t arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_data_length", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","server_failure_counter", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","read_data_length", 2, argv[0] ));
-  } 
-  arg2 = (size_t)(val2);
-  if (arg1) (arg1)->read_data_length = arg2;
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint32_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint32_t","server_failure_counter", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint32_t","server_failure_counter", 2, argv[0]));
+    } else {
+      arg2 = *((uint32_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->server_failure_counter = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -8689,11 +10589,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_read_data_length_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_server_failure_counter_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8701,11 +10601,13 @@ _wrap_MemcachedServerSt_read_data_length_get(int argc, VALUE *argv, VALUE self) 
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_data_length", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","server_failure_counter", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->read_data_length);
-  vresult = SWIG_From_size_t((size_t)(result));
+  result =  ((arg1)->server_failure_counter);
+  {
+    vresult = UINT2NUM(result);
+  }
   return vresult;
 fail:
   return Qnil;
@@ -8713,12 +10615,12 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_read_buffer_length_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_weight_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  size_t arg2 ;
+  uint32_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  unsigned long val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -8726,15 +10628,15 @@ _wrap_MemcachedServerSt_read_buffer_length_set(int argc, VALUE *argv, VALUE self
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer_length", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","weight", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_long(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","read_buffer_length", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint32_t","weight", 2, argv[0] ));
   } 
-  arg2 = (size_t)(val2);
-  if (arg1) (arg1)->read_buffer_length = arg2;
+  arg2 = (uint32_t)(val2);
+  if (arg1) (arg1)->weight = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -8742,11 +10644,11 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_read_buffer_length_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_weight_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t result;
+  uint32_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8754,11 +10656,223 @@ _wrap_MemcachedServerSt_read_buffer_length_get(int argc, VALUE *argv, VALUE self
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer_length", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","weight", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->read_buffer_length);
-  vresult = SWIG_From_size_t((size_t)(result));
+  result =  ((arg1)->weight);
+  vresult = SWIG_From_unsigned_SS_long((unsigned long)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_major_version_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  uint8_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned short val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","major_version", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","major_version", 2, argv[0] ));
+  } 
+  arg2 = (uint8_t)(val2);
+  if (arg1) (arg1)->major_version = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_major_version_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint8_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","major_version", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->major_version);
+  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_micro_version_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  uint8_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned short val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","micro_version", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","micro_version", 2, argv[0] ));
+  } 
+  arg2 = (uint8_t)(val2);
+  if (arg1) (arg1)->micro_version = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_micro_version_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint8_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","micro_version", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->micro_version);
+  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_minor_version_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  uint8_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned short val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","minor_version", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","minor_version", 2, argv[0] ));
+  } 
+  arg2 = (uint8_t)(val2);
+  if (arg1) (arg1)->minor_version = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_minor_version_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint8_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","minor_version", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->minor_version);
+  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_type_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  memcached_connection arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","type", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_connection","type", 2, argv[0] ));
+  } 
+  arg2 = (memcached_connection)(val2);
+  if (arg1) (arg1)->type = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_type_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_connection result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","type", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (memcached_connection) ((arg1)->type);
+  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -8828,40 +10942,49 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_sockaddr_inited_set(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_cached_server_error_set(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  memcached_allocated arg2 ;
+  char *arg2 = (char *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","sockaddr_inited", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","cached_server_error", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_allocated","sockaddr_inited", 2, argv[0] ));
-  } 
-  arg2 = (memcached_allocated)(val2);
-  if (arg1) (arg1)->sockaddr_inited = arg2;
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","cached_server_error", 2, argv[0] ));
+  }
+  arg2 = (char *)(buf2);
+  if (arg1->cached_server_error) free((char*)arg1->cached_server_error);
+  if (arg2) {
+    size_t size = strlen((const char *)(arg2)) + 1;
+    arg1->cached_server_error = (char *)(char *)memcpy((char *)malloc((size)*sizeof(char)), (const char *)(arg2), sizeof(char)*(size));
+  } else {
+    arg1->cached_server_error = 0;
+  }
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return Qnil;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return Qnil;
 }
 
 
 SWIGINTERN VALUE
-_wrap_MemcachedServerSt_sockaddr_inited_get(int argc, VALUE *argv, VALUE self) {
+_wrap_MemcachedServerSt_cached_server_error_get(int argc, VALUE *argv, VALUE self) {
   struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  memcached_allocated result;
+  char *result = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8869,11 +10992,170 @@ _wrap_MemcachedServerSt_sockaddr_inited_get(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","sockaddr_inited", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","cached_server_error", 1, self )); 
   }
   arg1 = (struct memcached_server_st *)(argp1);
-  result = (memcached_allocated) ((arg1)->sockaddr_inited);
-  vresult = SWIG_From_int((int)(result));
+  result = (char *) ((arg1)->cached_server_error);
+  vresult = SWIG_FromCharPtr((const char *)result);
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_read_buffer_length_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer_length", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","read_buffer_length", 2, argv[0] ));
+  } 
+  arg2 = (size_t)(val2);
+  if (arg1) (arg1)->read_buffer_length = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_read_buffer_length_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer_length", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->read_buffer_length);
+  vresult = SWIG_From_size_t((size_t)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_read_data_length_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_data_length", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","read_data_length", 2, argv[0] ));
+  } 
+  arg2 = (size_t)(val2);
+  if (arg1) (arg1)->read_data_length = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_read_data_length_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_data_length", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->read_data_length);
+  vresult = SWIG_From_size_t((size_t)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_write_buffer_offset_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer_offset", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  ecode2 = SWIG_AsVal_size_t(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "size_t","write_buffer_offset", 2, argv[0] ));
+  } 
+  arg2 = (size_t)(val2);
+  if (arg1) (arg1)->write_buffer_offset = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_write_buffer_offset_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer_offset", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->write_buffer_offset);
+  vresult = SWIG_From_size_t((size_t)(result));
   return vresult;
 fail:
   return Qnil;
@@ -8927,271 +11209,6 @@ _wrap_MemcachedServerSt_address_info_get(int argc, VALUE *argv, VALUE self) {
   arg1 = (struct memcached_server_st *)(argp1);
   result = (struct addrinfo *) ((arg1)->address_info);
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_addrinfo, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_type_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  memcached_connection arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","type", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "memcached_connection","type", 2, argv[0] ));
-  } 
-  arg2 = (memcached_connection)(val2);
-  if (arg1) (arg1)->type = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_type_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  memcached_connection result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","type", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result = (memcached_connection) ((arg1)->type);
-  vresult = SWIG_From_int((int)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_major_version_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  uint8_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned short val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","major_version", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","major_version", 2, argv[0] ));
-  } 
-  arg2 = (uint8_t)(val2);
-  if (arg1) (arg1)->major_version = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_major_version_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint8_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","major_version", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->major_version);
-  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_minor_version_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  uint8_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned short val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","minor_version", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","minor_version", 2, argv[0] ));
-  } 
-  arg2 = (uint8_t)(val2);
-  if (arg1) (arg1)->minor_version = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_minor_version_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint8_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","minor_version", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->minor_version);
-  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_micro_version_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  uint8_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned short val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","micro_version", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_short(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","micro_version", 2, argv[0] ));
-  } 
-  arg2 = (uint8_t)(val2);
-  if (arg1) (arg1)->micro_version = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_micro_version_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint8_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","micro_version", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->micro_version);
-  vresult = SWIG_From_unsigned_SS_short((unsigned short)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_count_set(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  uint16_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","count", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint16_t","count", 2, argv[0] ));
-  } 
-  arg2 = (uint16_t)(val2);
-  if (arg1) (arg1)->count = arg2;
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_MemcachedServerSt_count_get(int argc, VALUE *argv, VALUE self) {
-  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  uint16_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","count", 1, self )); 
-  }
-  arg1 = (struct memcached_server_st *)(argp1);
-  result =  ((arg1)->count);
-  vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -9305,6 +11322,247 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_limit_maxbytes_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  uint64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","limit_maxbytes", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  {
+    res2 = SWIG_ConvertPtr(argv[0], &argp2, SWIGTYPE_p_uint64_t,  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "uint64_t","limit_maxbytes", 2, argv[0] )); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "uint64_t","limit_maxbytes", 2, argv[0]));
+    } else {
+      arg2 = *((uint64_t *)(argp2));
+    }
+  }
+  if (arg1) (arg1)->limit_maxbytes = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_limit_maxbytes_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint64_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","limit_maxbytes", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result =  ((arg1)->limit_maxbytes);
+  {
+    vresult = ULL2NUM(result);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_read_buffer_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  char *arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char temp2[8196] ;
+  int res2 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  res2 = SWIG_AsCharArray(argv[0], temp2, 8196);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [8196]","read_buffer", 2, argv[0] ));
+  }
+  arg2 = (char *)(temp2);
+  if (arg2) memcpy(arg1->read_buffer,arg2,8196*sizeof(char));
+  else memset(arg1->read_buffer,0,8196*sizeof(char));
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_read_buffer_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","read_buffer", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (char *)(char *) ((arg1)->read_buffer);
+  {
+    size_t size = 8196;
+    
+    while (size && (result[size - 1] == '\0')) --size;
+    
+    vresult = SWIG_FromCharPtrAndSize(result, size);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_write_buffer_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  char *arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char temp2[8196] ;
+  int res2 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  res2 = SWIG_AsCharArray(argv[0], temp2, 8196);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [8196]","write_buffer", 2, argv[0] ));
+  }
+  arg2 = (char *)(temp2);
+  if (arg2) memcpy(arg1->write_buffer,arg2,8196*sizeof(char));
+  else memset(arg1->write_buffer,0,8196*sizeof(char));
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_write_buffer_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","write_buffer", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (char *)(char *) ((arg1)->write_buffer);
+  {
+    size_t size = 8196;
+    
+    while (size && (result[size - 1] == '\0')) --size;
+    
+    vresult = SWIG_FromCharPtrAndSize(result, size);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_hostname_set(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  char *arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char temp2[64] ;
+  int res2 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","hostname", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  res2 = SWIG_AsCharArray(argv[0], temp2, 64);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char [64]","hostname", 2, argv[0] ));
+  }
+  arg2 = (char *)(temp2);
+  if (arg2) memcpy(arg1->hostname,arg2,64*sizeof(char));
+  else memset(arg1->hostname,0,64*sizeof(char));
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_MemcachedServerSt_hostname_get(int argc, VALUE *argv, VALUE self) {
+  struct memcached_server_st *arg1 = (struct memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "struct memcached_server_st *","hostname", 1, self )); 
+  }
+  arg1 = (struct memcached_server_st *)(argp1);
+  result = (char *)(char *) ((arg1)->hostname);
+  {
+    size_t size = 64;
+    
+    while (size && (result[size - 1] == '\0')) --size;
+    
+    vresult = SWIG_FromCharPtrAndSize(result, size);
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
 _wrap_MemcachedServerSt_allocate(VALUE self) {
@@ -9337,10 +11595,354 @@ fail:
 }
 
 
-SWIGINTERN void
-free_memcached_server_st(struct memcached_server_st *arg1) {
-    free((char *) arg1);
+SWIGINTERN VALUE
+_wrap_memcached_server_cursor(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  memcached_server_function *arg2 = (memcached_server_function *) 0 ;
+  void *arg3 = (void *) 0 ;
+  unsigned int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 ;
+  unsigned int val4 ;
+  int ecode4 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_cursor", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_server_function, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_server_function *","memcached_server_cursor", 2, argv[1] )); 
+  }
+  arg2 = (memcached_server_function *)(argp2);
+  res3 = SWIG_ConvertPtr(argv[2],SWIG_as_voidptrptr(&arg3), 0, 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "void *","memcached_server_cursor", 3, argv[2] )); 
+  }
+  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","memcached_server_cursor", 4, argv[3] ));
+  } 
+  arg4 = (unsigned int)(val4);
+  result = (memcached_return)memcached_server_cursor(arg1,arg2,arg3,arg4);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
 }
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_by_key(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  char *arg2 = (char *) 0 ;
+  size_t arg3 ;
+  memcached_return *arg4 = (memcached_return *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_return temp4 ;
+  int res4 = SWIG_TMPOBJ ;
+  memcached_server_st *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  arg4 = &temp4;
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_by_key", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  {
+    arg2 = STR2CSTR(argv[1]);
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
+  }
+  result = (memcached_server_st *)memcached_server_by_key(arg1,(char const *)arg2,arg3,arg4);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (SWIG_IsTmpObj(res4)) {
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_short((*arg4)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res4) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_memcached_return, new_flags));
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_error(int argc, VALUE *argv, VALUE self) {
+  memcached_server_st *arg1 = (memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  char *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_error", 1, argv[0] )); 
+  }
+  arg1 = (memcached_server_st *)(argp1);
+  result = (char *)memcached_server_error(arg1);
+  vresult = SWIG_FromCharPtr((const char *)result);
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_error_reset(int argc, VALUE *argv, VALUE self) {
+  memcached_server_st *arg1 = (memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_error_reset", 1, argv[0] )); 
+  }
+  arg1 = (memcached_server_st *)(argp1);
+  memcached_server_error_reset(arg1);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_create(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  memcached_server_st *arg2 = (memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  memcached_server_st *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_create", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_create", 2, argv[1] )); 
+  }
+  arg2 = (memcached_server_st *)(argp2);
+  result = (memcached_server_st *)memcached_server_create(arg1,arg2);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_create_with(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  memcached_server_st *arg2 = (memcached_server_st *) 0 ;
+  char *arg3 = (char *) 0 ;
+  unsigned int arg4 ;
+  uint32_t arg5 ;
+  memcached_connection arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  unsigned int val4 ;
+  int ecode4 = 0 ;
+  unsigned long val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  memcached_server_st *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 6) || (argc > 6)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 6)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_server_create_with", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_create_with", 2, argv[1] )); 
+  }
+  arg2 = (memcached_server_st *)(argp2);
+  res3 = SWIG_AsCharPtrAndSize(argv[2], &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "char const *","memcached_server_create_with", 3, argv[2] ));
+  }
+  arg3 = (char *)(buf3);
+  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","memcached_server_create_with", 4, argv[3] ));
+  } 
+  arg4 = (unsigned int)(val4);
+  ecode5 = SWIG_AsVal_unsigned_SS_long(argv[4], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "uint32_t","memcached_server_create_with", 5, argv[4] ));
+  } 
+  arg5 = (uint32_t)(val5);
+  ecode6 = SWIG_AsVal_int(argv[5], &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "memcached_connection","memcached_server_create_with", 6, argv[5] ));
+  } 
+  arg6 = (memcached_connection)(val6);
+  result = (memcached_server_st *)memcached_server_create_with(arg1,arg2,(char const *)arg3,arg4,arg5,arg6);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return vresult;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_free(int argc, VALUE *argv, VALUE self) {
+  memcached_server_st *arg1 = (memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_free", 1, argv[0] )); 
+  }
+  arg1 = (memcached_server_st *)(argp1);
+  memcached_server_free(arg1);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_clone(int argc, VALUE *argv, VALUE self) {
+  memcached_server_st *arg1 = (memcached_server_st *) 0 ;
+  memcached_server_st *arg2 = (memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  memcached_server_st *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_clone", 1, argv[0] )); 
+  }
+  arg1 = (memcached_server_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_clone", 2, argv[1] )); 
+  }
+  arg2 = (memcached_server_st *)(argp2);
+  result = (memcached_server_st *)memcached_server_clone(arg1,arg2);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_analyze(int argc, VALUE *argv, VALUE self) {
+  memcached_st *arg1 = (memcached_st *) 0 ;
+  memcached_stat_st *arg2 = (memcached_stat_st *) 0 ;
+  memcached_return *arg3 = (memcached_return *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  memcached_return temp3 ;
+  int res3 = SWIG_TMPOBJ ;
+  memcached_analysis_st *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  arg3 = &temp3;
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_st *","memcached_analyze", 1, argv[0] )); 
+  }
+  arg1 = (memcached_st *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_memcached_stat_st, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "memcached_stat_st *","memcached_analyze", 2, argv[1] )); 
+  }
+  arg2 = (memcached_stat_st *)(argp2);
+  result = (memcached_analysis_st *)memcached_analyze(arg1,arg2,arg3);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_memcached_analysis_st, 0 |  0 );
+  if (SWIG_IsTmpObj(res3)) {
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_From_unsigned_SS_short((*arg3)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    vresult = SWIG_Ruby_AppendOutput(vresult, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_memcached_return, new_flags));
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_memcached_server_remove(int argc, VALUE *argv, VALUE self) {
+  memcached_server_st *arg1 = (memcached_server_st *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  memcached_return result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_memcached_server_st, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "memcached_server_st *","memcached_server_remove", 1, argv[0] )); 
+  }
+  arg1 = (memcached_server_st *)(argp1);
+  result = (memcached_return)memcached_server_remove(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
 
 SWIGINTERN VALUE
 _wrap_memcached_get_rvalue(int argc, VALUE *argv, VALUE self) {
@@ -9370,7 +11972,7 @@ _wrap_memcached_get_rvalue(int argc, VALUE *argv, VALUE self) {
   arg1 = (memcached_st *)(argp1);
   {
     arg2 = STR2CSTR(argv[1]);
-    arg3 = (size_t) RSTRING(argv[1])->len;
+    arg3 = (size_t) RSTRING_LEN(argv[1]);
   }
   result = (VALUE)memcached_get_rvalue(arg1,(char const *)arg2,arg3,arg4,arg5);
   vresult = result;
@@ -9573,19 +12175,51 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_memcached_generate_hash_rvalue(int argc, VALUE *argv, VALUE self) {
+  char *arg1 = (char *) 0 ;
+  size_t arg2 ;
+  memcached_hash arg3 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  VALUE result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  {
+    arg1 = STR2CSTR(argv[0]);
+    arg2 = (size_t) RSTRING_LEN(argv[0]);
+  }
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "memcached_hash","memcached_generate_hash_rvalue", 3, argv[1] ));
+  } 
+  arg3 = (memcached_hash)(val3);
+  result = (VALUE)memcached_generate_hash_rvalue((char const *)arg1,arg2,arg3);
+  vresult = result;
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
 static swig_type_info _swigt__p_addrinfo = {"_p_addrinfo", "struct addrinfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_memcached_allocated = {"_p_memcached_allocated", "enum memcached_allocated *|memcached_allocated *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_memcached_analysis_st = {"_p_memcached_analysis_st", "memcached_analysis_st *|struct memcached_analysis_st *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_behavior = {"_p_memcached_behavior", "enum memcached_behavior *|memcached_behavior *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_callback = {"_p_memcached_callback", "enum memcached_callback *|memcached_callback *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_memcached_calloc_function = {"_p_memcached_calloc_function", "memcached_calloc_function *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_cleanup_func = {"_p_memcached_cleanup_func", "memcached_cleanup_func *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_clone_func = {"_p_memcached_clone_func", "memcached_clone_func *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_connection = {"_p_memcached_connection", "enum memcached_connection *|memcached_connection *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_memcached_continuum_item_st = {"_p_memcached_continuum_item_st", "memcached_continuum_item_st *|struct memcached_continuum_item_st *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_memcached_continuum_item_st = {"_p_memcached_continuum_item_st", "memcached_continuum_item_st *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_memcached_dump_func = {"_p_memcached_dump_func", "memcached_dump_func *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_execute_function = {"_p_memcached_execute_function", "memcached_execute_function *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_free_function = {"_p_memcached_free_function", "memcached_free_function *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_memcached_hash = {"_p_memcached_hash", "enum memcached_hash *|memcached_hash *", 0, 0, (void*)0, 0};
@@ -9606,20 +12240,21 @@ static swig_type_info _swigt__p_size_t = {"_p_size_t", "size_t *", 0, 0, (void*)
 static swig_type_info _swigt__p_time_t = {"_p_time_t", "time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_addrinfo,
   &_swigt__p_char,
   &_swigt__p_int32_t,
-  &_swigt__p_memcached_allocated,
+  &_swigt__p_memcached_analysis_st,
   &_swigt__p_memcached_behavior,
   &_swigt__p_memcached_callback,
+  &_swigt__p_memcached_calloc_function,
   &_swigt__p_memcached_cleanup_func,
   &_swigt__p_memcached_clone_func,
   &_swigt__p_memcached_connection,
   &_swigt__p_memcached_continuum_item_st,
+  &_swigt__p_memcached_dump_func,
   &_swigt__p_memcached_execute_function,
   &_swigt__p_memcached_free_function,
   &_swigt__p_memcached_hash,
@@ -9640,20 +12275,21 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_time_t,
   &_swigt__p_uint32_t,
   &_swigt__p_uint64_t,
-  &_swigt__p_unsigned_int,
   &_swigt__p_void,
 };
 
 static swig_cast_info _swigc__p_addrinfo[] = {  {&_swigt__p_addrinfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_memcached_allocated[] = {  {&_swigt__p_memcached_allocated, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_memcached_analysis_st[] = {  {&_swigt__p_memcached_analysis_st, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_behavior[] = {  {&_swigt__p_memcached_behavior, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_callback[] = {  {&_swigt__p_memcached_callback, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_memcached_calloc_function[] = {  {&_swigt__p_memcached_calloc_function, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_cleanup_func[] = {  {&_swigt__p_memcached_cleanup_func, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_clone_func[] = {  {&_swigt__p_memcached_clone_func, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_connection[] = {  {&_swigt__p_memcached_connection, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_continuum_item_st[] = {  {&_swigt__p_memcached_continuum_item_st, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_memcached_dump_func[] = {  {&_swigt__p_memcached_dump_func, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_execute_function[] = {  {&_swigt__p_memcached_execute_function, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_free_function[] = {  {&_swigt__p_memcached_free_function, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_memcached_hash[] = {  {&_swigt__p_memcached_hash, 0, 0, 0},{0, 0, 0, 0}};
@@ -9674,20 +12310,21 @@ static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_time_t[] = {  {&_swigt__p_time_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint32_t[] = {  {&_swigt__p_uint32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_addrinfo,
   _swigc__p_char,
   _swigc__p_int32_t,
-  _swigc__p_memcached_allocated,
+  _swigc__p_memcached_analysis_st,
   _swigc__p_memcached_behavior,
   _swigc__p_memcached_callback,
+  _swigc__p_memcached_calloc_function,
   _swigc__p_memcached_cleanup_func,
   _swigc__p_memcached_clone_func,
   _swigc__p_memcached_connection,
   _swigc__p_memcached_continuum_item_st,
+  _swigc__p_memcached_dump_func,
   _swigc__p_memcached_execute_function,
   _swigc__p_memcached_free_function,
   _swigc__p_memcached_hash,
@@ -9708,7 +12345,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_time_t,
   _swigc__p_uint32_t,
   _swigc__p_uint64_t,
-  _swigc__p_unsigned_int,
   _swigc__p_void,
 };
 
@@ -9970,71 +12606,83 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   }
   
   SWIG_RubyInitializeTrackings();
-  rb_define_const(mRlibmemcached, "MEMCACHED_VERSION_STRING_LENGTH", SWIG_From_int((int)(12)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_VERSION_STRING_LENGTH", SWIG_From_int((int)(24)));
+  rb_define_const(mRlibmemcached, "LIBMEMCACHED_VERSION_STRING", SWIG_FromCharPtr("0.31"));
   
-  cMemcachedContinuumItemSt.klass = rb_define_class_under(mRlibmemcached, "MemcachedContinuumItemSt", rb_cObject);
-  SWIG_TypeClientData(SWIGTYPE_p_memcached_continuum_item_st, (void *) &cMemcachedContinuumItemSt);
-  rb_define_alloc_func(cMemcachedContinuumItemSt.klass, _wrap_MemcachedContinuumItemSt_allocate);
-  rb_define_method(cMemcachedContinuumItemSt.klass, "initialize", _wrap_new_MemcachedContinuumItemSt, -1);
-  rb_define_method(cMemcachedContinuumItemSt.klass, "index=", _wrap_MemcachedContinuumItemSt_index_set, -1);
-  rb_define_method(cMemcachedContinuumItemSt.klass, "index", _wrap_MemcachedContinuumItemSt_index_get, -1);
-  rb_define_method(cMemcachedContinuumItemSt.klass, "value=", _wrap_MemcachedContinuumItemSt_value_set, -1);
-  rb_define_method(cMemcachedContinuumItemSt.klass, "value", _wrap_MemcachedContinuumItemSt_value_get, -1);
-  cMemcachedContinuumItemSt.mark = 0;
-  cMemcachedContinuumItemSt.destroy = (void (*)(void *)) free_memcached_continuum_item_st;
-  cMemcachedContinuumItemSt.trackObjects = 0;
-  rb_define_const(mRlibmemcached, "LIBMEMCACHED_VERSION_STRING", SWIG_FromCharPtr("0.22"));
+  cMemcachedAnalysisSt.klass = rb_define_class_under(mRlibmemcached, "MemcachedAnalysisSt", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_memcached_analysis_st, (void *) &cMemcachedAnalysisSt);
+  rb_define_alloc_func(cMemcachedAnalysisSt.klass, _wrap_MemcachedAnalysisSt_allocate);
+  rb_define_method(cMemcachedAnalysisSt.klass, "initialize", _wrap_new_MemcachedAnalysisSt, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "average_item_size=", _wrap_MemcachedAnalysisSt_average_item_size_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "average_item_size", _wrap_MemcachedAnalysisSt_average_item_size_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "longest_uptime=", _wrap_MemcachedAnalysisSt_longest_uptime_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "longest_uptime", _wrap_MemcachedAnalysisSt_longest_uptime_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "least_free_server=", _wrap_MemcachedAnalysisSt_least_free_server_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "least_free_server", _wrap_MemcachedAnalysisSt_least_free_server_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "most_consumed_server=", _wrap_MemcachedAnalysisSt_most_consumed_server_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "most_consumed_server", _wrap_MemcachedAnalysisSt_most_consumed_server_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "oldest_server=", _wrap_MemcachedAnalysisSt_oldest_server_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "oldest_server", _wrap_MemcachedAnalysisSt_oldest_server_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "pool_hit_ratio=", _wrap_MemcachedAnalysisSt_pool_hit_ratio_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "pool_hit_ratio", _wrap_MemcachedAnalysisSt_pool_hit_ratio_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "most_used_bytes=", _wrap_MemcachedAnalysisSt_most_used_bytes_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "most_used_bytes", _wrap_MemcachedAnalysisSt_most_used_bytes_get, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "least_remaining_bytes=", _wrap_MemcachedAnalysisSt_least_remaining_bytes_set, -1);
+  rb_define_method(cMemcachedAnalysisSt.klass, "least_remaining_bytes", _wrap_MemcachedAnalysisSt_least_remaining_bytes_get, -1);
+  cMemcachedAnalysisSt.mark = 0;
+  cMemcachedAnalysisSt.destroy = (void (*)(void *)) free_memcached_analysis_st;
+  cMemcachedAnalysisSt.trackObjects = 0;
   
   cMemcachedStatSt.klass = rb_define_class_under(mRlibmemcached, "MemcachedStatSt", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_memcached_stat_st, (void *) &cMemcachedStatSt);
   rb_define_alloc_func(cMemcachedStatSt.klass, _wrap_MemcachedStatSt_allocate);
   rb_define_method(cMemcachedStatSt.klass, "initialize", _wrap_new_MemcachedStatSt, -1);
+  rb_define_method(cMemcachedStatSt.klass, "connection_structures=", _wrap_MemcachedStatSt_connection_structures_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "connection_structures", _wrap_MemcachedStatSt_connection_structures_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "curr_connections=", _wrap_MemcachedStatSt_curr_connections_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "curr_connections", _wrap_MemcachedStatSt_curr_connections_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "curr_items=", _wrap_MemcachedStatSt_curr_items_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "curr_items", _wrap_MemcachedStatSt_curr_items_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "pid=", _wrap_MemcachedStatSt_pid_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "pid", _wrap_MemcachedStatSt_pid_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "uptime=", _wrap_MemcachedStatSt_uptime_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "uptime", _wrap_MemcachedStatSt_uptime_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "pointer_size=", _wrap_MemcachedStatSt_pointer_size_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "pointer_size", _wrap_MemcachedStatSt_pointer_size_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_system_microseconds=", _wrap_MemcachedStatSt_rusage_system_microseconds_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_system_microseconds", _wrap_MemcachedStatSt_rusage_system_microseconds_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_system_seconds=", _wrap_MemcachedStatSt_rusage_system_seconds_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_system_seconds", _wrap_MemcachedStatSt_rusage_system_seconds_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_user_microseconds=", _wrap_MemcachedStatSt_rusage_user_microseconds_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_user_microseconds", _wrap_MemcachedStatSt_rusage_user_microseconds_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_user_seconds=", _wrap_MemcachedStatSt_rusage_user_seconds_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "rusage_user_seconds", _wrap_MemcachedStatSt_rusage_user_seconds_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "threads=", _wrap_MemcachedStatSt_threads_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "threads", _wrap_MemcachedStatSt_threads_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "time=", _wrap_MemcachedStatSt_time_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "time", _wrap_MemcachedStatSt_time_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "pointer_size=", _wrap_MemcachedStatSt_pointer_size_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "pointer_size", _wrap_MemcachedStatSt_pointer_size_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_user_seconds=", _wrap_MemcachedStatSt_rusage_user_seconds_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_user_seconds", _wrap_MemcachedStatSt_rusage_user_seconds_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_user_microseconds=", _wrap_MemcachedStatSt_rusage_user_microseconds_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_user_microseconds", _wrap_MemcachedStatSt_rusage_user_microseconds_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_system_seconds=", _wrap_MemcachedStatSt_rusage_system_seconds_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_system_seconds", _wrap_MemcachedStatSt_rusage_system_seconds_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_system_microseconds=", _wrap_MemcachedStatSt_rusage_system_microseconds_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "rusage_system_microseconds", _wrap_MemcachedStatSt_rusage_system_microseconds_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "curr_items=", _wrap_MemcachedStatSt_curr_items_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "curr_items", _wrap_MemcachedStatSt_curr_items_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "total_items=", _wrap_MemcachedStatSt_total_items_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "total_items", _wrap_MemcachedStatSt_total_items_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "limit_maxbytes=", _wrap_MemcachedStatSt_limit_maxbytes_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "limit_maxbytes", _wrap_MemcachedStatSt_limit_maxbytes_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "curr_connections=", _wrap_MemcachedStatSt_curr_connections_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "curr_connections", _wrap_MemcachedStatSt_curr_connections_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "total_connections=", _wrap_MemcachedStatSt_total_connections_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "total_connections", _wrap_MemcachedStatSt_total_connections_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "connection_structures=", _wrap_MemcachedStatSt_connection_structures_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "connection_structures", _wrap_MemcachedStatSt_connection_structures_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "total_items=", _wrap_MemcachedStatSt_total_items_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "total_items", _wrap_MemcachedStatSt_total_items_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "uptime=", _wrap_MemcachedStatSt_uptime_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "uptime", _wrap_MemcachedStatSt_uptime_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "bytes=", _wrap_MemcachedStatSt_bytes_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "bytes", _wrap_MemcachedStatSt_bytes_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "cmd_get=", _wrap_MemcachedStatSt_cmd_get_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "cmd_get", _wrap_MemcachedStatSt_cmd_get_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "cmd_set=", _wrap_MemcachedStatSt_cmd_set_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "cmd_set", _wrap_MemcachedStatSt_cmd_set_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "get_hits=", _wrap_MemcachedStatSt_get_hits_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "get_hits", _wrap_MemcachedStatSt_get_hits_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "get_misses=", _wrap_MemcachedStatSt_get_misses_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "get_misses", _wrap_MemcachedStatSt_get_misses_get, -1);
-  rb_define_method(cMemcachedStatSt.klass, "evictions=", _wrap_MemcachedStatSt_evictions_set, -1);
-  rb_define_method(cMemcachedStatSt.klass, "evictions", _wrap_MemcachedStatSt_evictions_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "bytes_read=", _wrap_MemcachedStatSt_bytes_read_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "bytes_read", _wrap_MemcachedStatSt_bytes_read_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "bytes_written=", _wrap_MemcachedStatSt_bytes_written_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "bytes_written", _wrap_MemcachedStatSt_bytes_written_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "cmd_get=", _wrap_MemcachedStatSt_cmd_get_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "cmd_get", _wrap_MemcachedStatSt_cmd_get_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "cmd_set=", _wrap_MemcachedStatSt_cmd_set_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "cmd_set", _wrap_MemcachedStatSt_cmd_set_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "evictions=", _wrap_MemcachedStatSt_evictions_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "evictions", _wrap_MemcachedStatSt_evictions_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "get_hits=", _wrap_MemcachedStatSt_get_hits_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "get_hits", _wrap_MemcachedStatSt_get_hits_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "get_misses=", _wrap_MemcachedStatSt_get_misses_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "get_misses", _wrap_MemcachedStatSt_get_misses_get, -1);
+  rb_define_method(cMemcachedStatSt.klass, "limit_maxbytes=", _wrap_MemcachedStatSt_limit_maxbytes_set, -1);
+  rb_define_method(cMemcachedStatSt.klass, "limit_maxbytes", _wrap_MemcachedStatSt_limit_maxbytes_get, -1);
   rb_define_method(cMemcachedStatSt.klass, "version=", _wrap_MemcachedStatSt_version_set, -1);
   rb_define_method(cMemcachedStatSt.klass, "version", _wrap_MemcachedStatSt_version_get, -1);
   cMemcachedStatSt.mark = 0;
@@ -10045,10 +12693,30 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   SWIG_TypeClientData(SWIGTYPE_p_memcached_st, (void *) &cMemcachedSt);
   rb_define_alloc_func(cMemcachedSt.klass, _wrap_MemcachedSt_allocate);
   rb_define_method(cMemcachedSt.klass, "initialize", _wrap_new_MemcachedSt, -1);
+  rb_define_method(cMemcachedSt.klass, "purging=", _wrap_MemcachedSt_purging_set, -1);
+  rb_define_method(cMemcachedSt.klass, "purging", _wrap_MemcachedSt_purging_get, -1);
   rb_define_method(cMemcachedSt.klass, "is_allocated=", _wrap_MemcachedSt_is_allocated_set, -1);
   rb_define_method(cMemcachedSt.klass, "is_allocated", _wrap_MemcachedSt_is_allocated_get, -1);
+  rb_define_method(cMemcachedSt.klass, "distribution=", _wrap_MemcachedSt_distribution_set, -1);
+  rb_define_method(cMemcachedSt.klass, "distribution", _wrap_MemcachedSt_distribution_get, -1);
+  rb_define_method(cMemcachedSt.klass, "hash=", _wrap_MemcachedSt_hash_set, -1);
+  rb_define_method(cMemcachedSt.klass, "hash", _wrap_MemcachedSt_hash_get, -1);
+  rb_define_method(cMemcachedSt.klass, "continuum_points_counter=", _wrap_MemcachedSt_continuum_points_counter_set, -1);
+  rb_define_method(cMemcachedSt.klass, "continuum_points_counter", _wrap_MemcachedSt_continuum_points_counter_get, -1);
   rb_define_method(cMemcachedSt.klass, "hosts=", _wrap_MemcachedSt_hosts_set, -1);
   rb_define_method(cMemcachedSt.klass, "hosts", _wrap_MemcachedSt_hosts_get, -1);
+  rb_define_method(cMemcachedSt.klass, "snd_timeout=", _wrap_MemcachedSt_snd_timeout_set, -1);
+  rb_define_method(cMemcachedSt.klass, "snd_timeout", _wrap_MemcachedSt_snd_timeout_get, -1);
+  rb_define_method(cMemcachedSt.klass, "rcv_timeout=", _wrap_MemcachedSt_rcv_timeout_set, -1);
+  rb_define_method(cMemcachedSt.klass, "rcv_timeout", _wrap_MemcachedSt_rcv_timeout_get, -1);
+  rb_define_method(cMemcachedSt.klass, "server_failure_limit=", _wrap_MemcachedSt_server_failure_limit_set, -1);
+  rb_define_method(cMemcachedSt.klass, "server_failure_limit", _wrap_MemcachedSt_server_failure_limit_get, -1);
+  rb_define_method(cMemcachedSt.klass, "io_msg_watermark=", _wrap_MemcachedSt_io_msg_watermark_set, -1);
+  rb_define_method(cMemcachedSt.klass, "io_msg_watermark", _wrap_MemcachedSt_io_msg_watermark_get, -1);
+  rb_define_method(cMemcachedSt.klass, "io_bytes_watermark=", _wrap_MemcachedSt_io_bytes_watermark_set, -1);
+  rb_define_method(cMemcachedSt.klass, "io_bytes_watermark", _wrap_MemcachedSt_io_bytes_watermark_get, -1);
+  rb_define_method(cMemcachedSt.klass, "io_key_prefetch=", _wrap_MemcachedSt_io_key_prefetch_set, -1);
+  rb_define_method(cMemcachedSt.klass, "io_key_prefetch", _wrap_MemcachedSt_io_key_prefetch_get, -1);
   rb_define_method(cMemcachedSt.klass, "number_of_hosts=", _wrap_MemcachedSt_number_of_hosts_set, -1);
   rb_define_method(cMemcachedSt.klass, "number_of_hosts", _wrap_MemcachedSt_number_of_hosts_get, -1);
   rb_define_method(cMemcachedSt.klass, "cursor_server=", _wrap_MemcachedSt_cursor_server_set, -1);
@@ -10057,30 +12725,28 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_method(cMemcachedSt.klass, "cached_errno", _wrap_MemcachedSt_cached_errno_get, -1);
   rb_define_method(cMemcachedSt.klass, "flags=", _wrap_MemcachedSt_flags_set, -1);
   rb_define_method(cMemcachedSt.klass, "flags", _wrap_MemcachedSt_flags_get, -1);
-  rb_define_method(cMemcachedSt.klass, "send_size=", _wrap_MemcachedSt_send_size_set, -1);
-  rb_define_method(cMemcachedSt.klass, "send_size", _wrap_MemcachedSt_send_size_get, -1);
-  rb_define_method(cMemcachedSt.klass, "recv_size=", _wrap_MemcachedSt_recv_size_set, -1);
-  rb_define_method(cMemcachedSt.klass, "recv_size", _wrap_MemcachedSt_recv_size_get, -1);
   rb_define_method(cMemcachedSt.klass, "poll_timeout=", _wrap_MemcachedSt_poll_timeout_set, -1);
   rb_define_method(cMemcachedSt.klass, "poll_timeout", _wrap_MemcachedSt_poll_timeout_get, -1);
   rb_define_method(cMemcachedSt.klass, "connect_timeout=", _wrap_MemcachedSt_connect_timeout_set, -1);
   rb_define_method(cMemcachedSt.klass, "connect_timeout", _wrap_MemcachedSt_connect_timeout_get, -1);
   rb_define_method(cMemcachedSt.klass, "retry_timeout=", _wrap_MemcachedSt_retry_timeout_set, -1);
   rb_define_method(cMemcachedSt.klass, "retry_timeout", _wrap_MemcachedSt_retry_timeout_get, -1);
-  rb_define_method(cMemcachedSt.klass, "result=", _wrap_MemcachedSt_result_set, -1);
-  rb_define_method(cMemcachedSt.klass, "result", _wrap_MemcachedSt_result_get, -1);
-  rb_define_method(cMemcachedSt.klass, "hash=", _wrap_MemcachedSt_hash_set, -1);
-  rb_define_method(cMemcachedSt.klass, "hash", _wrap_MemcachedSt_hash_get, -1);
-  rb_define_method(cMemcachedSt.klass, "distribution=", _wrap_MemcachedSt_distribution_set, -1);
-  rb_define_method(cMemcachedSt.klass, "distribution", _wrap_MemcachedSt_distribution_get, -1);
-  rb_define_method(cMemcachedSt.klass, "user_data=", _wrap_MemcachedSt_user_data_set, -1);
-  rb_define_method(cMemcachedSt.klass, "user_data", _wrap_MemcachedSt_user_data_get, -1);
-  rb_define_method(cMemcachedSt.klass, "wheel=", _wrap_MemcachedSt_wheel_set, -1);
-  rb_define_method(cMemcachedSt.klass, "wheel", _wrap_MemcachedSt_wheel_get, -1);
-  rb_define_method(cMemcachedSt.klass, "wheel_count=", _wrap_MemcachedSt_wheel_count_set, -1);
-  rb_define_method(cMemcachedSt.klass, "wheel_count", _wrap_MemcachedSt_wheel_count_get, -1);
   rb_define_method(cMemcachedSt.klass, "continuum_count=", _wrap_MemcachedSt_continuum_count_set, -1);
   rb_define_method(cMemcachedSt.klass, "continuum_count", _wrap_MemcachedSt_continuum_count_get, -1);
+  rb_define_method(cMemcachedSt.klass, "send_size=", _wrap_MemcachedSt_send_size_set, -1);
+  rb_define_method(cMemcachedSt.klass, "send_size", _wrap_MemcachedSt_send_size_get, -1);
+  rb_define_method(cMemcachedSt.klass, "recv_size=", _wrap_MemcachedSt_recv_size_set, -1);
+  rb_define_method(cMemcachedSt.klass, "recv_size", _wrap_MemcachedSt_recv_size_get, -1);
+  rb_define_method(cMemcachedSt.klass, "user_data=", _wrap_MemcachedSt_user_data_set, -1);
+  rb_define_method(cMemcachedSt.klass, "user_data", _wrap_MemcachedSt_user_data_get, -1);
+  rb_define_method(cMemcachedSt.klass, "next_distribution_rebuild=", _wrap_MemcachedSt_next_distribution_rebuild_set, -1);
+  rb_define_method(cMemcachedSt.klass, "next_distribution_rebuild", _wrap_MemcachedSt_next_distribution_rebuild_get, -1);
+  rb_define_method(cMemcachedSt.klass, "prefix_key_length=", _wrap_MemcachedSt_prefix_key_length_set, -1);
+  rb_define_method(cMemcachedSt.klass, "prefix_key_length", _wrap_MemcachedSt_prefix_key_length_get, -1);
+  rb_define_method(cMemcachedSt.klass, "hash_continuum=", _wrap_MemcachedSt_hash_continuum_set, -1);
+  rb_define_method(cMemcachedSt.klass, "hash_continuum", _wrap_MemcachedSt_hash_continuum_get, -1);
+  rb_define_method(cMemcachedSt.klass, "result=", _wrap_MemcachedSt_result_set, -1);
+  rb_define_method(cMemcachedSt.klass, "result", _wrap_MemcachedSt_result_get, -1);
   rb_define_method(cMemcachedSt.klass, "continuum=", _wrap_MemcachedSt_continuum_set, -1);
   rb_define_method(cMemcachedSt.klass, "continuum", _wrap_MemcachedSt_continuum_get, -1);
   rb_define_method(cMemcachedSt.klass, "on_clone=", _wrap_MemcachedSt_on_clone_set, -1);
@@ -10093,17 +12759,26 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_method(cMemcachedSt.klass, "call_malloc", _wrap_MemcachedSt_call_malloc_get, -1);
   rb_define_method(cMemcachedSt.klass, "call_realloc=", _wrap_MemcachedSt_call_realloc_set, -1);
   rb_define_method(cMemcachedSt.klass, "call_realloc", _wrap_MemcachedSt_call_realloc_get, -1);
+  rb_define_method(cMemcachedSt.klass, "call_calloc=", _wrap_MemcachedSt_call_calloc_set, -1);
+  rb_define_method(cMemcachedSt.klass, "call_calloc", _wrap_MemcachedSt_call_calloc_get, -1);
   rb_define_method(cMemcachedSt.klass, "get_key_failure=", _wrap_MemcachedSt_get_key_failure_set, -1);
   rb_define_method(cMemcachedSt.klass, "get_key_failure", _wrap_MemcachedSt_get_key_failure_get, -1);
   rb_define_method(cMemcachedSt.klass, "delete_trigger=", _wrap_MemcachedSt_delete_trigger_set, -1);
   rb_define_method(cMemcachedSt.klass, "delete_trigger", _wrap_MemcachedSt_delete_trigger_get, -1);
   rb_define_method(cMemcachedSt.klass, "prefix_key=", _wrap_MemcachedSt_prefix_key_set, -1);
   rb_define_method(cMemcachedSt.klass, "prefix_key", _wrap_MemcachedSt_prefix_key_get, -1);
-  rb_define_method(cMemcachedSt.klass, "prefix_key_length=", _wrap_MemcachedSt_prefix_key_length_set, -1);
-  rb_define_method(cMemcachedSt.klass, "prefix_key_length", _wrap_MemcachedSt_prefix_key_length_get, -1);
+  rb_define_method(cMemcachedSt.klass, "number_of_replicas=", _wrap_MemcachedSt_number_of_replicas_set, -1);
+  rb_define_method(cMemcachedSt.klass, "number_of_replicas", _wrap_MemcachedSt_number_of_replicas_get, -1);
+  rb_define_method(cMemcachedSt.klass, "number_of_live_hosts=", _wrap_MemcachedSt_number_of_live_hosts_set, -1);
+  rb_define_method(cMemcachedSt.klass, "number_of_live_hosts", _wrap_MemcachedSt_number_of_live_hosts_get, -1);
+  rb_define_method(cMemcachedSt.klass, "live_host_indices=", _wrap_MemcachedSt_live_host_indices_set, -1);
+  rb_define_method(cMemcachedSt.klass, "live_host_indices", _wrap_MemcachedSt_live_host_indices_get, -1);
+  rb_define_method(cMemcachedSt.klass, "live_host_indices_size=", _wrap_MemcachedSt_live_host_indices_size_set, -1);
+  rb_define_method(cMemcachedSt.klass, "live_host_indices_size", _wrap_MemcachedSt_live_host_indices_size_get, -1);
   cMemcachedSt.mark = 0;
   cMemcachedSt.destroy = (void (*)(void *)) memcached_free;
   cMemcachedSt.trackObjects = 0;
+  rb_define_module_function(mRlibmemcached, "memcached_version", _wrap_memcached_version, -1);
   rb_define_module_function(mRlibmemcached, "memcached_lib_version", _wrap_memcached_lib_version, -1);
   rb_define_module_function(mRlibmemcached, "memcached_create", _wrap_memcached_create, -1);
   rb_define_module_function(mRlibmemcached, "memcached_free", _wrap_memcached_free, -1);
@@ -10111,6 +12786,8 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_module_function(mRlibmemcached, "memcached_delete", _wrap_memcached_delete, -1);
   rb_define_module_function(mRlibmemcached, "memcached_increment", _wrap_memcached_increment, -1);
   rb_define_module_function(mRlibmemcached, "memcached_decrement", _wrap_memcached_decrement, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_increment_with_initial", _wrap_memcached_increment_with_initial, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_decrement_with_initial", _wrap_memcached_decrement_with_initial, -1);
   rb_define_module_function(mRlibmemcached, "memcached_stat_free", _wrap_memcached_stat_free, -1);
   rb_define_module_function(mRlibmemcached, "memcached_stat", _wrap_memcached_stat, -1);
   rb_define_module_function(mRlibmemcached, "memcached_stat_servername", _wrap_memcached_stat_servername, -1);
@@ -10120,12 +12797,19 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_module_function(mRlibmemcached, "memcached_strerror", _wrap_memcached_strerror, -1);
   rb_define_module_function(mRlibmemcached, "memcached_behavior_set", _wrap_memcached_behavior_set, -1);
   rb_define_module_function(mRlibmemcached, "memcached_behavior_get", _wrap_memcached_behavior_get, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_generate_hash_value", _wrap_memcached_generate_hash_value, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_generate_hash", _wrap_memcached_generate_hash, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_flush_buffers", _wrap_memcached_flush_buffers, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_add_udp", _wrap_memcached_server_add_udp, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_add_unix_socket", _wrap_memcached_server_add_unix_socket, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_add", _wrap_memcached_server_add, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_add_udp_with_weight", _wrap_memcached_server_add_udp_with_weight, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_add_unix_socket_with_weight", _wrap_memcached_server_add_unix_socket_with_weight, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_add_with_weight", _wrap_memcached_server_add_with_weight, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_list_free", _wrap_memcached_server_list_free, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_push", _wrap_memcached_server_push, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_list_append", _wrap_memcached_server_list_append, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_list_append_with_weight", _wrap_memcached_server_list_append_with_weight, -1);
   rb_define_module_function(mRlibmemcached, "memcached_server_list_count", _wrap_memcached_server_list_count, -1);
   rb_define_module_function(mRlibmemcached, "memcached_servers_parse", _wrap_memcached_servers_parse, -1);
   rb_define_module_function(mRlibmemcached, "memcached_stat_get_value", _wrap_memcached_stat_get_value, -1);
@@ -10134,18 +12818,25 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_module_function(mRlibmemcached, "memcached_fetch_execute", _wrap_memcached_fetch_execute, -1);
   rb_define_module_function(mRlibmemcached, "memcached_callback_set", _wrap_memcached_callback_set, -1);
   rb_define_module_function(mRlibmemcached, "memcached_callback_get", _wrap_memcached_callback_get, -1);
-  rb_define_module_function(mRlibmemcached, "memcached_server_cursor", _wrap_memcached_server_cursor, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_dump", _wrap_memcached_dump, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_set_memory_allocators", _wrap_memcached_set_memory_allocators, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_get_memory_allocators", _wrap_memcached_get_memory_allocators, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_get_user_data", _wrap_memcached_get_user_data, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_set_user_data", _wrap_memcached_set_user_data, -1);
+  rb_define_module_function(mRlibmemcached, "run_distribution", _wrap_run_distribution, -1);
   rb_define_const(mRlibmemcached, "MEMCACHED_DEFAULT_PORT", SWIG_From_int((int)(11211)));
   rb_define_const(mRlibmemcached, "MEMCACHED_MAX_KEY", SWIG_From_int((int)(251)));
   rb_define_const(mRlibmemcached, "MEMCACHED_MAX_BUFFER", SWIG_From_int((int)(8196)));
   rb_define_const(mRlibmemcached, "MEMCACHED_MAX_HOST_LENGTH", SWIG_From_int((int)(64)));
   rb_define_const(mRlibmemcached, "MEMCACHED_MAX_HOST_SORT_LENGTH", SWIG_From_int((int)(86)));
   rb_define_const(mRlibmemcached, "MEMCACHED_POINTS_PER_SERVER", SWIG_From_int((int)(100)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_POINTS_PER_SERVER_KETAMA", SWIG_From_int((int)(160)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CONTINUUM_SIZE", SWIG_From_int((int)(100*100)));
   rb_define_const(mRlibmemcached, "MEMCACHED_STRIDE", SWIG_From_int((int)(4)));
   rb_define_const(mRlibmemcached, "MEMCACHED_DEFAULT_TIMEOUT", SWIG_From_int((int)(1000)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CONTINUUM_ADDITION", SWIG_From_int((int)(10)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_PREFIX_KEY_MAX_SIZE", SWIG_From_int((int)(12)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_PREFIX_KEY_MAX_SIZE", SWIG_From_int((int)(128)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_EXPIRATION_NOT_ADD", SWIG_From_unsigned_SS_int((unsigned int)(0xffffffffU)));
   rb_define_const(mRlibmemcached, "MEMCACHED_SUCCESS", SWIG_From_int((int)(MEMCACHED_SUCCESS)));
   rb_define_const(mRlibmemcached, "MEMCACHED_FAILURE", SWIG_From_int((int)(MEMCACHED_FAILURE)));
   rb_define_const(mRlibmemcached, "MEMCACHED_HOST_LOOKUP_FAILURE", SWIG_From_int((int)(MEMCACHED_HOST_LOOKUP_FAILURE)));
@@ -10171,6 +12862,7 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_const(mRlibmemcached, "MEMCACHED_DELETED", SWIG_From_int((int)(MEMCACHED_DELETED)));
   rb_define_const(mRlibmemcached, "MEMCACHED_VALUE", SWIG_From_int((int)(MEMCACHED_VALUE)));
   rb_define_const(mRlibmemcached, "MEMCACHED_STAT", SWIG_From_int((int)(MEMCACHED_STAT)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_ITEM", SWIG_From_int((int)(MEMCACHED_ITEM)));
   rb_define_const(mRlibmemcached, "MEMCACHED_ERRNO", SWIG_From_int((int)(MEMCACHED_ERRNO)));
   rb_define_const(mRlibmemcached, "MEMCACHED_FAIL_UNIX_SOCKET", SWIG_From_int((int)(MEMCACHED_FAIL_UNIX_SOCKET)));
   rb_define_const(mRlibmemcached, "MEMCACHED_NOT_SUPPORTED", SWIG_From_int((int)(MEMCACHED_NOT_SUPPORTED)));
@@ -10179,11 +12871,14 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_const(mRlibmemcached, "MEMCACHED_TIMEOUT", SWIG_From_int((int)(MEMCACHED_TIMEOUT)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BUFFERED", SWIG_From_int((int)(MEMCACHED_BUFFERED)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BAD_KEY_PROVIDED", SWIG_From_int((int)(MEMCACHED_BAD_KEY_PROVIDED)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_INVALID_HOST_PROTOCOL", SWIG_From_int((int)(MEMCACHED_INVALID_HOST_PROTOCOL)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_SERVER_MARKED_DEAD", SWIG_From_int((int)(MEMCACHED_SERVER_MARKED_DEAD)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_UNKNOWN_STAT_KEY", SWIG_From_int((int)(MEMCACHED_UNKNOWN_STAT_KEY)));
   rb_define_const(mRlibmemcached, "MEMCACHED_MAXIMUM_RETURN", SWIG_From_int((int)(MEMCACHED_MAXIMUM_RETURN)));
   rb_define_const(mRlibmemcached, "MEMCACHED_DISTRIBUTION_MODULA", SWIG_From_int((int)(MEMCACHED_DISTRIBUTION_MODULA)));
   rb_define_const(mRlibmemcached, "MEMCACHED_DISTRIBUTION_CONSISTENT", SWIG_From_int((int)(MEMCACHED_DISTRIBUTION_CONSISTENT)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_DISTRIBUTION_CONSISTENT_WHEEL", SWIG_From_int((int)(MEMCACHED_DISTRIBUTION_CONSISTENT_WHEEL)));
   rb_define_const(mRlibmemcached, "MEMCACHED_DISTRIBUTION_CONSISTENT_KETAMA", SWIG_From_int((int)(MEMCACHED_DISTRIBUTION_CONSISTENT_KETAMA)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_DISTRIBUTION_RANDOM", SWIG_From_int((int)(MEMCACHED_DISTRIBUTION_RANDOM)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_NO_BLOCK", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_NO_BLOCK)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_TCP_NODELAY", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_TCP_NODELAY)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_HASH", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_HASH)));
@@ -10200,13 +12895,24 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_VERIFY_KEY", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_VERIFY_KEY)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_CONNECT_TIMEOUT", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_CONNECT_TIMEOUT)));
   rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_RETRY_TIMEOUT", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_RETRY_TIMEOUT)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_KETAMA_WEIGHTED", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_KETAMA_WEIGHTED)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_KETAMA_HASH", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_KETAMA_HASH)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_BINARY_PROTOCOL", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_BINARY_PROTOCOL)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_SND_TIMEOUT", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_SND_TIMEOUT)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_RCV_TIMEOUT", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_RCV_TIMEOUT)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_SERVER_FAILURE_LIMIT", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_SERVER_FAILURE_LIMIT)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_IO_MSG_WATERMARK", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_IO_MSG_WATERMARK)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_IO_BYTES_WATERMARK", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_IO_BYTES_WATERMARK)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_IO_KEY_PREFETCH", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_IO_KEY_PREFETCH)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_HASH_WITH_PREFIX_KEY", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_HASH_WITH_PREFIX_KEY)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_NOREPLY", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_NOREPLY)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_USE_UDP", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_USE_UDP)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_AUTO_EJECT_HOSTS", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_AUTO_EJECT_HOSTS)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_BEHAVIOR_NUMBER_OF_REPLICAS", SWIG_From_int((int)(MEMCACHED_BEHAVIOR_NUMBER_OF_REPLICAS)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_PREFIX_KEY", SWIG_From_int((int)(MEMCACHED_CALLBACK_PREFIX_KEY)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_USER_DATA", SWIG_From_int((int)(MEMCACHED_CALLBACK_USER_DATA)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_CLEANUP_FUNCTION", SWIG_From_int((int)(MEMCACHED_CALLBACK_CLEANUP_FUNCTION)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_CLONE_FUNCTION", SWIG_From_int((int)(MEMCACHED_CALLBACK_CLONE_FUNCTION)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_MALLOC_FUNCTION", SWIG_From_int((int)(MEMCACHED_CALLBACK_MALLOC_FUNCTION)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_REALLOC_FUNCTION", SWIG_From_int((int)(MEMCACHED_CALLBACK_REALLOC_FUNCTION)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_FREE_FUNCTION", SWIG_From_int((int)(MEMCACHED_CALLBACK_FREE_FUNCTION)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_GET_FAILURE", SWIG_From_int((int)(MEMCACHED_CALLBACK_GET_FAILURE)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CALLBACK_DELETE_TRIGGER", SWIG_From_int((int)(MEMCACHED_CALLBACK_DELETE_TRIGGER)));
   rb_define_const(mRlibmemcached, "MEMCACHED_HASH_DEFAULT", SWIG_From_int((int)(MEMCACHED_HASH_DEFAULT)));
@@ -10218,13 +12924,11 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   rb_define_const(mRlibmemcached, "MEMCACHED_HASH_FNV1A_32", SWIG_From_int((int)(MEMCACHED_HASH_FNV1A_32)));
   rb_define_const(mRlibmemcached, "MEMCACHED_HASH_HSIEH", SWIG_From_int((int)(MEMCACHED_HASH_HSIEH)));
   rb_define_const(mRlibmemcached, "MEMCACHED_HASH_MURMUR", SWIG_From_int((int)(MEMCACHED_HASH_MURMUR)));
+  rb_define_const(mRlibmemcached, "MEMCACHED_HASH_JENKINS", SWIG_From_int((int)(MEMCACHED_HASH_JENKINS)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CONNECTION_UNKNOWN", SWIG_From_int((int)(MEMCACHED_CONNECTION_UNKNOWN)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CONNECTION_TCP", SWIG_From_int((int)(MEMCACHED_CONNECTION_TCP)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CONNECTION_UDP", SWIG_From_int((int)(MEMCACHED_CONNECTION_UDP)));
   rb_define_const(mRlibmemcached, "MEMCACHED_CONNECTION_UNIX_SOCKET", SWIG_From_int((int)(MEMCACHED_CONNECTION_UNIX_SOCKET)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_NOT_ALLOCATED", SWIG_From_int((int)(MEMCACHED_NOT_ALLOCATED)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_ALLOCATED", SWIG_From_int((int)(MEMCACHED_ALLOCATED)));
-  rb_define_const(mRlibmemcached, "MEMCACHED_USED", SWIG_From_int((int)(MEMCACHED_USED)));
   rb_define_module_function(mRlibmemcached, "memcached_get", _wrap_memcached_get, -1);
   rb_define_module_function(mRlibmemcached, "memcached_mget", _wrap_memcached_mget, -1);
   rb_define_module_function(mRlibmemcached, "memcached_get_by_key", _wrap_memcached_get_by_key, -1);
@@ -10248,22 +12952,22 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   SWIG_TypeClientData(SWIGTYPE_p_memcached_result_st, (void *) &cMemcachedResultSt);
   rb_define_alloc_func(cMemcachedResultSt.klass, _wrap_MemcachedResultSt_allocate);
   rb_define_method(cMemcachedResultSt.klass, "initialize", _wrap_new_MemcachedResultSt, -1);
-  rb_define_method(cMemcachedResultSt.klass, "is_allocated=", _wrap_MemcachedResultSt_is_allocated_set, -1);
-  rb_define_method(cMemcachedResultSt.klass, "is_allocated", _wrap_MemcachedResultSt_is_allocated_get, -1);
-  rb_define_method(cMemcachedResultSt.klass, "root=", _wrap_MemcachedResultSt_root_set, -1);
-  rb_define_method(cMemcachedResultSt.klass, "root", _wrap_MemcachedResultSt_root_get, -1);
-  rb_define_method(cMemcachedResultSt.klass, "key=", _wrap_MemcachedResultSt_key_set, -1);
-  rb_define_method(cMemcachedResultSt.klass, "key", _wrap_MemcachedResultSt_key_get, -1);
-  rb_define_method(cMemcachedResultSt.klass, "key_length=", _wrap_MemcachedResultSt_key_length_set, -1);
-  rb_define_method(cMemcachedResultSt.klass, "key_length", _wrap_MemcachedResultSt_key_length_get, -1);
-  rb_define_method(cMemcachedResultSt.klass, "value=", _wrap_MemcachedResultSt_value_set, -1);
-  rb_define_method(cMemcachedResultSt.klass, "value", _wrap_MemcachedResultSt_value_get, -1);
   rb_define_method(cMemcachedResultSt.klass, "flags=", _wrap_MemcachedResultSt_flags_set, -1);
   rb_define_method(cMemcachedResultSt.klass, "flags", _wrap_MemcachedResultSt_flags_get, -1);
-  rb_define_method(cMemcachedResultSt.klass, "cas=", _wrap_MemcachedResultSt_cas_set, -1);
-  rb_define_method(cMemcachedResultSt.klass, "cas", _wrap_MemcachedResultSt_cas_get, -1);
+  rb_define_method(cMemcachedResultSt.klass, "is_allocated=", _wrap_MemcachedResultSt_is_allocated_set, -1);
+  rb_define_method(cMemcachedResultSt.klass, "is_allocated", _wrap_MemcachedResultSt_is_allocated_get, -1);
   rb_define_method(cMemcachedResultSt.klass, "expiration=", _wrap_MemcachedResultSt_expiration_set, -1);
   rb_define_method(cMemcachedResultSt.klass, "expiration", _wrap_MemcachedResultSt_expiration_get, -1);
+  rb_define_method(cMemcachedResultSt.klass, "root=", _wrap_MemcachedResultSt_root_set, -1);
+  rb_define_method(cMemcachedResultSt.klass, "root", _wrap_MemcachedResultSt_root_get, -1);
+  rb_define_method(cMemcachedResultSt.klass, "key_length=", _wrap_MemcachedResultSt_key_length_set, -1);
+  rb_define_method(cMemcachedResultSt.klass, "key_length", _wrap_MemcachedResultSt_key_length_get, -1);
+  rb_define_method(cMemcachedResultSt.klass, "cas=", _wrap_MemcachedResultSt_cas_set, -1);
+  rb_define_method(cMemcachedResultSt.klass, "cas", _wrap_MemcachedResultSt_cas_get, -1);
+  rb_define_method(cMemcachedResultSt.klass, "value=", _wrap_MemcachedResultSt_value_set, -1);
+  rb_define_method(cMemcachedResultSt.klass, "value", _wrap_MemcachedResultSt_value_get, -1);
+  rb_define_method(cMemcachedResultSt.klass, "key=", _wrap_MemcachedResultSt_key_set, -1);
+  rb_define_method(cMemcachedResultSt.klass, "key", _wrap_MemcachedResultSt_key_get, -1);
   cMemcachedResultSt.mark = 0;
   cMemcachedResultSt.destroy = (void (*)(void *)) free_memcached_result_st;
   cMemcachedResultSt.trackObjects = 0;
@@ -10278,53 +12982,76 @@ SWIGEXPORT void Init_rlibmemcached(void) {
   SWIG_TypeClientData(SWIGTYPE_p_memcached_server_st, (void *) &cMemcachedServerSt);
   rb_define_alloc_func(cMemcachedServerSt.klass, _wrap_MemcachedServerSt_allocate);
   rb_define_method(cMemcachedServerSt.klass, "initialize", _wrap_new_MemcachedServerSt, -1);
-  rb_define_method(cMemcachedServerSt.klass, "hostname=", _wrap_MemcachedServerSt_hostname_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "hostname", _wrap_MemcachedServerSt_hostname_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "port=", _wrap_MemcachedServerSt_port_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "port", _wrap_MemcachedServerSt_port_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "fd=", _wrap_MemcachedServerSt_fd_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "fd", _wrap_MemcachedServerSt_fd_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "cached_errno=", _wrap_MemcachedServerSt_cached_errno_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "cached_errno", _wrap_MemcachedServerSt_cached_errno_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "cursor_active=", _wrap_MemcachedServerSt_cursor_active_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "cursor_active", _wrap_MemcachedServerSt_cursor_active_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "write_buffer=", _wrap_MemcachedServerSt_write_buffer_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "write_buffer", _wrap_MemcachedServerSt_write_buffer_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "write_buffer_offset=", _wrap_MemcachedServerSt_write_buffer_offset_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "write_buffer_offset", _wrap_MemcachedServerSt_write_buffer_offset_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_buffer=", _wrap_MemcachedServerSt_read_buffer_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_buffer", _wrap_MemcachedServerSt_read_buffer_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_data_length=", _wrap_MemcachedServerSt_read_data_length_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_data_length", _wrap_MemcachedServerSt_read_data_length_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_buffer_length=", _wrap_MemcachedServerSt_read_buffer_length_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_buffer_length", _wrap_MemcachedServerSt_read_buffer_length_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_ptr=", _wrap_MemcachedServerSt_read_ptr_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "read_ptr", _wrap_MemcachedServerSt_read_ptr_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "is_allocated=", _wrap_MemcachedServerSt_is_allocated_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "is_allocated", _wrap_MemcachedServerSt_is_allocated_get, -1);
   rb_define_method(cMemcachedServerSt.klass, "sockaddr_inited=", _wrap_MemcachedServerSt_sockaddr_inited_set, -1);
   rb_define_method(cMemcachedServerSt.klass, "sockaddr_inited", _wrap_MemcachedServerSt_sockaddr_inited_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "address_info=", _wrap_MemcachedServerSt_address_info_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "address_info", _wrap_MemcachedServerSt_address_info_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "type=", _wrap_MemcachedServerSt_type_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "type", _wrap_MemcachedServerSt_type_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "major_version=", _wrap_MemcachedServerSt_major_version_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "major_version", _wrap_MemcachedServerSt_major_version_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "minor_version=", _wrap_MemcachedServerSt_minor_version_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "minor_version", _wrap_MemcachedServerSt_minor_version_get, -1);
-  rb_define_method(cMemcachedServerSt.klass, "micro_version=", _wrap_MemcachedServerSt_micro_version_set, -1);
-  rb_define_method(cMemcachedServerSt.klass, "micro_version", _wrap_MemcachedServerSt_micro_version_get, -1);
   rb_define_method(cMemcachedServerSt.klass, "count=", _wrap_MemcachedServerSt_count_set, -1);
   rb_define_method(cMemcachedServerSt.klass, "count", _wrap_MemcachedServerSt_count_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "cursor_active=", _wrap_MemcachedServerSt_cursor_active_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "cursor_active", _wrap_MemcachedServerSt_cursor_active_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "port=", _wrap_MemcachedServerSt_port_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "port", _wrap_MemcachedServerSt_port_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "cached_errno=", _wrap_MemcachedServerSt_cached_errno_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "cached_errno", _wrap_MemcachedServerSt_cached_errno_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "fd=", _wrap_MemcachedServerSt_fd_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "fd", _wrap_MemcachedServerSt_fd_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "io_bytes_sent=", _wrap_MemcachedServerSt_io_bytes_sent_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "io_bytes_sent", _wrap_MemcachedServerSt_io_bytes_sent_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "server_failure_counter=", _wrap_MemcachedServerSt_server_failure_counter_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "server_failure_counter", _wrap_MemcachedServerSt_server_failure_counter_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "weight=", _wrap_MemcachedServerSt_weight_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "weight", _wrap_MemcachedServerSt_weight_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "major_version=", _wrap_MemcachedServerSt_major_version_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "major_version", _wrap_MemcachedServerSt_major_version_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "micro_version=", _wrap_MemcachedServerSt_micro_version_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "micro_version", _wrap_MemcachedServerSt_micro_version_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "minor_version=", _wrap_MemcachedServerSt_minor_version_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "minor_version", _wrap_MemcachedServerSt_minor_version_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "type=", _wrap_MemcachedServerSt_type_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "type", _wrap_MemcachedServerSt_type_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_ptr=", _wrap_MemcachedServerSt_read_ptr_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_ptr", _wrap_MemcachedServerSt_read_ptr_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "cached_server_error=", _wrap_MemcachedServerSt_cached_server_error_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "cached_server_error", _wrap_MemcachedServerSt_cached_server_error_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_buffer_length=", _wrap_MemcachedServerSt_read_buffer_length_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_buffer_length", _wrap_MemcachedServerSt_read_buffer_length_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_data_length=", _wrap_MemcachedServerSt_read_data_length_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_data_length", _wrap_MemcachedServerSt_read_data_length_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "write_buffer_offset=", _wrap_MemcachedServerSt_write_buffer_offset_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "write_buffer_offset", _wrap_MemcachedServerSt_write_buffer_offset_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "address_info=", _wrap_MemcachedServerSt_address_info_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "address_info", _wrap_MemcachedServerSt_address_info_get, -1);
   rb_define_method(cMemcachedServerSt.klass, "next_retry=", _wrap_MemcachedServerSt_next_retry_set, -1);
   rb_define_method(cMemcachedServerSt.klass, "next_retry", _wrap_MemcachedServerSt_next_retry_get, -1);
   rb_define_method(cMemcachedServerSt.klass, "root=", _wrap_MemcachedServerSt_root_set, -1);
   rb_define_method(cMemcachedServerSt.klass, "root", _wrap_MemcachedServerSt_root_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "limit_maxbytes=", _wrap_MemcachedServerSt_limit_maxbytes_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "limit_maxbytes", _wrap_MemcachedServerSt_limit_maxbytes_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_buffer=", _wrap_MemcachedServerSt_read_buffer_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "read_buffer", _wrap_MemcachedServerSt_read_buffer_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "write_buffer=", _wrap_MemcachedServerSt_write_buffer_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "write_buffer", _wrap_MemcachedServerSt_write_buffer_get, -1);
+  rb_define_method(cMemcachedServerSt.klass, "hostname=", _wrap_MemcachedServerSt_hostname_set, -1);
+  rb_define_method(cMemcachedServerSt.klass, "hostname", _wrap_MemcachedServerSt_hostname_get, -1);
   cMemcachedServerSt.mark = 0;
-  cMemcachedServerSt.destroy = (void (*)(void *)) free_memcached_server_st;
+  cMemcachedServerSt.destroy = (void (*)(void *)) memcached_server_free;
   cMemcachedServerSt.trackObjects = 0;
+  rb_define_module_function(mRlibmemcached, "memcached_server_cursor", _wrap_memcached_server_cursor, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_by_key", _wrap_memcached_server_by_key, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_error", _wrap_memcached_server_error, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_error_reset", _wrap_memcached_server_error_reset, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_create", _wrap_memcached_server_create, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_create_with", _wrap_memcached_server_create_with, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_free", _wrap_memcached_server_free, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_clone", _wrap_memcached_server_clone, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_analyze", _wrap_memcached_analyze, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_server_remove", _wrap_memcached_server_remove, -1);
   rb_define_module_function(mRlibmemcached, "memcached_get_rvalue", _wrap_memcached_get_rvalue, -1);
   rb_define_module_function(mRlibmemcached, "memcached_fetch_rvalue", _wrap_memcached_fetch_rvalue, -1);
   rb_define_module_function(mRlibmemcached, "memcached_stat_get_rvalue", _wrap_memcached_stat_get_rvalue, -1);
   rb_define_module_function(mRlibmemcached, "memcached_select_server_at", _wrap_memcached_select_server_at, -1);
   rb_define_module_function(mRlibmemcached, "memcached_select_stat_at", _wrap_memcached_select_stat_at, -1);
+  rb_define_module_function(mRlibmemcached, "memcached_generate_hash_rvalue", _wrap_memcached_generate_hash_rvalue, -1);
 }
 

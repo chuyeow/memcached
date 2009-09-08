@@ -1,14 +1,16 @@
 
-HERE = File.dirname(__FILE__)
-$LOAD_PATH << "#{HERE}/../../lib/"
+require "#{File.dirname(__FILE__)}/../setup"
 
+$LOAD_PATH << "#{File.dirname(__FILE__)}/../../lib/"
 require 'memcached'
 require 'rubygems'
 
 class Worker  
   def initialize(method_name, iterations)
     @method = method_name || 'mixed'
-    @i = (iterations || 1000).to_i
+    @i = (iterations || 10000).to_i
+    
+    puts "*** Running #{@method.inspect} test for #{@i} loops. ***"
 
     @key1 = "key1-"*8  
     @key2 = "key2-"*8  
@@ -17,15 +19,13 @@ class Worker
     @marshalled = Marshal.dump(@value)
     
     @opts = [
-      ['127.0.0.1:43042', '127.0.0.1:43043'], 
+      ["#{UNIX_SOCKET_NAME}0", "#{UNIX_SOCKET_NAME}1"], 
       {
         :buffer_requests => false,
         :no_block => false,
         :namespace => "namespace"
       }
     ]    
-    system("ruby #{HERE}/../setup.rb")
-    sleep(1)  
     @cache = Memcached.new(*@opts)
 
     @cache.set @key1, @value
@@ -103,23 +103,37 @@ class Worker
       when "clone"
         @i.times do
           cache = @cache.clone
-          cache.destroy(false)
         end
-      when "clone-nodestroy"
+      when "reset"
         @i.times do
-          @cache.clone      
+          @cache.reset
         end
       when "servers"
         @i.times do
           @cache.servers
         end
+      when "server_by_key"
+        @i.times do
+          @cache.server_by_key(@key1)
+        end
       else
         raise "No such method"
     end
     
-    @cache.destroy    
+    puts "*** Garbage collect. ***"
+    10.times do       
+      GC.start
+      sleep 0.1
+    end
+
+    sts, server_sts, clients = 0, 0, 0
+    ObjectSpace.each_object(Memcached) { clients += 1 }
+    ObjectSpace.each_object(Rlibmemcached::MemcachedSt) { sts += 1 }  
+    ObjectSpace.each_object(Rlibmemcached::MemcachedServerSt) { server_sts += 1 }  
+    puts "*** Structs: #{sts} ***"
+    puts "*** Server structs: #{server_sts} ***"
+    puts "*** Clients: #{clients} ***"
   end  
-  
 end
 
 Worker.new(ENV['METHOD'], ENV['LOOPS']).work

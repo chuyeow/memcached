@@ -1,5 +1,33 @@
 
-v0.11. Update to libmemcached 0.22. Support hostname lookups. Register %freefunc for MemcachedSt and remove destroy() method. Use new built-in behavior for namespacing. Raise on version mismatch. Remove private hash function. Fix bug related to socket size behavior reset when struct is initialized with missing servers (Jeffrey Hardy). WARNING! If you use a namespace, this version will effectively invalidate your entire cache.
+v0.16.3. Optimize append/prepend on miss.
+
+v0.16.2. Fix memory leak.
+
+v0.16.1. Use seeded random. Fix realloc bug on Linux.
+
+v0.16. Build properly on OS X Snow Leopard.
+
+v0.15.3. UDP fix. 0-value fix. Enforce server_add response code. Better tests.
+
+v0.15.2. Don't require memcached itself to build. Fix for AUTO_EJECT_HOSTS in random and modulus pools. Support binary protocol.
+
+v0.15.1. Fix build problem.
+
+v0.15. Update to libmemcached 0.31.1. UDP support. Domain socket support (hellvinz). Bugfixes. Bundle libmemcached itself with the gem (antifuchs).
+
+v0.14.4. Re-SWIG.
+
+v0.14.3. Change Rails#get_multi API.
+
+v0.14.2. Update to libmemcached 0.26.2. Return errno description.
+
+v0.14.1. Update to libmemcached 0.26.1. Various bugfixes. Expose memcached_generate_hash_rvalue.
+
+v0.13. Update to libmemcached 0.25. Use new built-in failover. Document fixed timeouts.
+
+v0.12. Update to libmemcached 0.24. Support weights and flags. Default to HASH_WITH_PREFIX behavior. Note, if you use ketama, upgrading will invalidate your entire cache.
+
+v0.11. Update to libmemcached 0.22. Support hostname lookups. Register %freefunc for MemcachedSt and remove destroy() method. Use new built-in behavior for namespacing. Raise on version mismatch. Remove private hash function. Fix bug related to socket size behavior reset when struct is initialized with missing servers (Jeffrey Hardy). Note, if you use a namespace, upgrading will invalidate your entire cache.
 
 v0.10. Update to libmemcached 0.20. Failover support. Close consistent hashing bugs.
 
