@@ -545,6 +545,7 @@ class MemcachedTest < Test::Unit::TestCase
     assert_raise(Memcached::NotFound) do
       cache.get key
     end
+  end
 
   # Delete
 
