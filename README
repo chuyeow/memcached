@@ -1,3 +1,10 @@
+NOTES ON THIS FORK
+==================
+* This fork adds #big_get and #big_set methods that allow for items bigger than the 1MB memcached value limit.
+* Thanks to jf (http://github.com/jf/memcached) for the original idea and contributions
+  (http://github.com/jf/memcached/commit/a206663e06917c11981b4cdad119bff8cdd2d5cb, 
+   http://github.com/jf/memcached/commit/a94ccddc66081d52b85460b76720bbf2800e4435).
+
 
 memcached
 
