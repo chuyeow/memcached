@@ -1,4 +1,4 @@
- 
+
 require "#{File.dirname(__FILE__)}/../test_helper"
 require 'socket'
 require 'mocha'
@@ -17,25 +17,29 @@ class MemcachedTest < Test::Unit::TestCase
       :chunk_split_size => 1048300,
       :prefix_key => @prefix_key,
       :hash => :default,
-      :distribution => :modula
-    }
+      :distribution => :modula}
     @cache = Memcached.new(@servers, @options)
+
+    @binary_protocol_options = {
+      :prefix_key => @prefix_key,
+      :hash => :default,
+      :distribution => :modula,
+      :binary_protocol => true}
+    @binary_protocol_cache = Memcached.new(@servers, @binary_protocol_options)
 
     @udp_options = {
       :prefix_key => @prefix_key,
       :hash => :default,
       :use_udp => true,
-      :distribution => :modula
-    }
+      :distribution => :modula}
     @udp_cache = Memcached.new(@udp_servers, @udp_options)
 
-    @nb_options = {
+    @noblock_options = {
       :prefix_key => @prefix_key,
       :no_block => true,
       :buffer_requests => true,
-      :hash => :default
-    }
-    @nb_cache = Memcached.new(@servers, @nb_options)
+      :hash => :default}
+    @noblock_cache = Memcached.new(@servers, @noblock_options)
 
     @value = OpenStruct.new(:a => 1, :b => 2, :c => GenericClass)
     @marshalled_value = Marshal.dump(@value)
@@ -89,8 +93,8 @@ class MemcachedTest < Test::Unit::TestCase
   end
 
   def test_options_are_set
-    Memcached::DEFAULTS.merge(@nb_options).each do |key, expected|
-      value = @nb_cache.options[key]
+    Memcached::DEFAULTS.merge(@noblock_options).each do |key, expected|
+      value = @noblock_cache.options[key]
       unless key == :rcv_timeout or key == :poll_timeout
         assert(expected == value, "#{key} should be #{expected} but was #{value}")
       end
@@ -98,7 +102,7 @@ class MemcachedTest < Test::Unit::TestCase
   end
 
   def test_options_are_frozen
-    assert_raise(TypeError) do
+    assert_raise(TypeError, RuntimeError) do
       @cache.options[:no_block] = true
     end
   end
@@ -114,15 +118,6 @@ class MemcachedTest < Test::Unit::TestCase
     assert_raise(ArgumentError) { Memcached.new "localhost:memcached" }
     assert_raise(ArgumentError) { Memcached.new "local host:43043:1" }
   end
-
-#  def test_initialize_with_resolvable_hosts
-#    host = `hostname`.chomp
-#    cache = Memcached.new("#{host}:43042")
-#    assert_equal host, cache.send(:server_structs).first.hostname
-#
-#    cache.set(key, @value)
-#    assert_equal @value, cache.get(key)
-#  end
 
   def test_initialize_with_invalid_options
     assert_raise(ArgumentError) do
@@ -163,7 +158,7 @@ class MemcachedTest < Test::Unit::TestCase
       cache.append key, @value
     rescue Memcached::NotStored => e
       assert e.backtrace.empty?
-    end     
+    end
   end
 
   def test_initialize_with_backtraces
@@ -227,15 +222,17 @@ class MemcachedTest < Test::Unit::TestCase
     @cache.set key, @value
     result = @cache.get key
     assert_equal @value, result
-  end
 
-  def test_udp_get
+    @binary_protocol_cache.set key, @value
+    result = @binary_protocol_cache.get key
+    assert_equal @value, result
+
     @udp_cache.set(key, @value)
     assert_raises(Memcached::ActionNotSupported) do
       @udp_cache.get(key)
     end
   end
-  
+
   def test_get_nil
     @cache.set key, nil, 0
     result = @cache.get key
@@ -271,7 +268,7 @@ class MemcachedTest < Test::Unit::TestCase
         result = cache.get key
       end
     end).real
-    
+
     socket.close
   end
 
@@ -365,6 +362,12 @@ class MemcachedTest < Test::Unit::TestCase
      )
   end
 
+  def test_get_multi_checks_types
+    assert_raises(TypeError, ArgumentError) do
+      @cache.get([nil])
+    end
+  end
+
   def test_set_and_get_unmarshalled
     @cache.set key, @value
     result = @cache.get key, false
@@ -390,14 +393,14 @@ class MemcachedTest < Test::Unit::TestCase
       @cache.get(["#{key}_1", "#{key}_2"])
     end
   end
-  
+
   def test_random_distribution_is_statistically_random
     cache = Memcached.new(@servers, :distribution => :random)
     cache.flush
     20.times { |i| cache.set "#{key}#{i}", @value }
-    
+
     cache, hits = Memcached.new(@servers.first), 0
-    20.times do |i| 
+    20.times do |i|
       begin
         cache.get "#{key}#{i}"
         hits += 1
@@ -414,9 +417,11 @@ class MemcachedTest < Test::Unit::TestCase
     assert_nothing_raised do
       @cache.set(key, @value)
     end
-  end
 
-  def test_udp_set
+    assert_nothing_raised do
+      @binary_protocol_cache.set(key, @value)
+    end
+
     assert_nothing_raised do
       @udp_cache.set(key, @value)
     end
@@ -547,6 +552,16 @@ class MemcachedTest < Test::Unit::TestCase
     end
   end
 
+  def disabled_test_set_retry_on_client_error
+    # FIXME Test passes, but Mocha doesn't restore the original method properly
+    Rlibmemcached.stubs(:memcached_set).raises(Memcached::ClientError)
+    Rlibmemcached.stubs(:memcached_set).returns(0)
+
+    assert_nothing_raised do
+      @cache.set(key, @value)
+    end
+  end
+
   # Delete
 
   def test_delete
@@ -674,6 +689,12 @@ class MemcachedTest < Test::Unit::TestCase
       @cache.append key, "end"
     end
     assert_equal "startend", @cache.get(key, false)
+
+    @binary_protocol_cache.set key, "start", 0, false
+    assert_nothing_raised do
+      @binary_protocol_cache.append key, "end"
+    end
+    assert_equal "startend", @binary_protocol_cache.get(key, false)
   end
 
   def test_missing_append
@@ -683,6 +704,14 @@ class MemcachedTest < Test::Unit::TestCase
     end
     assert_raise(Memcached::NotFound) do
       assert_equal @value, @cache.get(key)
+    end
+
+    @binary_protocol_cache.delete key rescue nil
+    assert_raise(Memcached::NotStored) do
+      @binary_protocol_cache.append key, "end"
+    end
+    assert_raise(Memcached::NotFound) do
+      assert_equal @value, @binary_protocol_cache.get(key)
     end
   end
 
@@ -803,10 +832,10 @@ class MemcachedTest < Test::Unit::TestCase
   rescue Memcached::ServerError => e
     assert_match /^"object too large for cache". Key/, e.message
   end
-  
+
   def test_errno_message
     Rlibmemcached::MemcachedServerSt.any_instance.stubs("cached_errno").returns(1)
-    @cache.send(:check_return_code, Rlibmemcached::MEMCACHED_ERRNO, key)    
+    @cache.send(:check_return_code, Rlibmemcached::MEMCACHED_ERRNO, key)
   rescue Memcached::SystemError => e
     assert_match /^Errno 1: "Operation not permitted". Key/, e.message
   end
@@ -818,6 +847,11 @@ class MemcachedTest < Test::Unit::TestCase
     assert_equal 3, stats[:pid].size
     assert_instance_of Fixnum, stats[:pid].first
     assert_instance_of String, stats[:version].first
+  end
+
+  def test_missing_stats
+    cache = Memcached.new('localhost:43041')
+    assert_raises(Memcached::SomeErrorsWereReported) { cache.stats }
   end
 
   # Clone
@@ -856,10 +890,10 @@ class MemcachedTest < Test::Unit::TestCase
 
   def test_no_block_return_value
     assert_nothing_raised do
-      @nb_cache.set key, @value
+      @noblock_cache.set key, @value
     end
     ret = Rlibmemcached.memcached_set(
-      @nb_cache.instance_variable_get("@struct"),
+      @noblock_cache.instance_variable_get("@struct"),
       key,
       @marshalled_value,
       0,
@@ -867,45 +901,45 @@ class MemcachedTest < Test::Unit::TestCase
     )
     assert_equal Rlibmemcached::MEMCACHED_BUFFERED, ret
   end
-  
+
   def test_no_block_get
-    @nb_cache.set key, @value
-    assert_equal @value, 
-      @nb_cache.get(key)
+    @noblock_cache.set key, @value
+    assert_equal @value,
+      @noblock_cache.get(key)
   end
 
   def test_no_block_missing_delete
-    @nb_cache.delete key rescue nil
+    @noblock_cache.delete key rescue nil
     assert_nothing_raised do
-      @nb_cache.delete key
+      @noblock_cache.delete key
     end
   end
 
   def test_no_block_set_invalid_key
     assert_raises(Memcached::ABadKeyWasProvidedOrCharactersOutOfRange) do
-      @nb_cache.set "I'm so bad", @value
+      @noblock_cache.set "I'm so bad", @value
     end
   end
 
   def test_no_block_set_object_too_large
     assert_nothing_raised do
-      @nb_cache.set key, "I'm big" * 1000000
+      @noblock_cache.set key, "I'm big" * 1000000
     end
   end
 
   def test_no_block_existing_add
     # Should still raise
-    @nb_cache.set key, @value
+    @noblock_cache.set key, @value
     assert_raise(Memcached::NotStored) do
-      @nb_cache.add key, @value
+      @noblock_cache.add key, @value
     end
   end
 
   # Server removal and consistent hashing
 
   def test_unresponsive_server
-    socket = stub_server 43041  
-    
+    socket = stub_server 43041
+
     cache = Memcached.new(
       [@servers.last, 'localhost:43041'],
       :prefix_key => @prefix_key,
@@ -916,7 +950,7 @@ class MemcachedTest < Test::Unit::TestCase
       :hash => :md5
     )
 
-    # Hit second server up to the server_failure_limit 
+    # Hit second server up to the server_failure_limit
     key2 = 'test_missing_server'
     assert_raise(Memcached::ATimeoutOccurred) { cache.set(key2, @value) }
     assert_raise(Memcached::ATimeoutOccurred) { cache.get(key2, @value) }
@@ -935,14 +969,14 @@ class MemcachedTest < Test::Unit::TestCase
       cache.set(key2, @value)
       assert_equal cache.get(key2), @value
     end
-    
+
     sleep(2)
-    
+
     # Hit second server again after restore, expect same failure
     key2 = 'test_missing_server'
     assert_raise(Memcached::ATimeoutOccurred) do
       cache.set(key2, @value)
-    end        
+    end
 
     socket.close
   end
@@ -958,7 +992,7 @@ class MemcachedTest < Test::Unit::TestCase
       :hash => :md5
     )
 
-    # Hit second server up to the server_failure_limit 
+    # Hit second server up to the server_failure_limit
     key2 = 'test_missing_server'
     assert_raise(Memcached::SystemError) { cache.set(key2, @value) }
     assert_raise(Memcached::SystemError) { cache.get(key2, @value) }
@@ -977,16 +1011,16 @@ class MemcachedTest < Test::Unit::TestCase
       cache.set(key2, @value)
       assert_equal cache.get(key2), @value
     end
-    
+
     sleep(2)
-    
+
     # Hit second server again after restore, expect same failure
     key2 = 'test_missing_server'
     assert_raise(Memcached::SystemError) do
       cache.set(key2, @value)
-    end        
+    end
   end
-  
+
   def test_unresponsive_with_random_distribution
     socket = stub_server 43041
     failures = [Memcached::ATimeoutOccurred, Memcached::ServerIsMarkedDead]
@@ -1003,15 +1037,15 @@ class MemcachedTest < Test::Unit::TestCase
     exceptions = []
     100.times { begin; cache.set key, @value; rescue => e; exceptions << e; end }
     assert_equal failures, exceptions.map { |x| x.class }
-    
+
     # Hit first server on retry
-    assert_nothing_raised { cache.set(key, @value) }    
-    
+    assert_nothing_raised { cache.set(key, @value) }
+
     # Hit second server again after restore, expect same failures
     sleep(2)
     exceptions = []
     100.times { begin; cache.set key, @value; rescue => e; exceptions << e; end }
-    assert_equal failures, exceptions.map { |x| x.class }    
+    assert_equal failures, exceptions.map { |x| x.class }
 
     socket.close
   end
@@ -1063,13 +1097,13 @@ class MemcachedTest < Test::Unit::TestCase
     end
     threads.each {|thread| thread.join}
   end
-  
-  # Hash  
-  
+
+  # Hash
+
   def test_hash
-    assert_equal 3157003241, 
+    assert_equal 3157003241,
       Rlibmemcached.memcached_generate_hash_rvalue("test", Rlibmemcached::MEMCACHED_HASH_FNV1_32)
-  end  
+  end
 
   # Memory cleanup
 
@@ -1085,7 +1119,7 @@ class MemcachedTest < Test::Unit::TestCase
   private
 
   def key
-    caller.first[/`(.*)'/, 1] # '
+    caller.first[/.*[` ](.*)'/, 1] # '
   end
 
   def stub_server(port)

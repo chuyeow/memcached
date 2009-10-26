@@ -6,15 +6,13 @@ BUNDLE_PATH = BUNDLE.sub(".tar.gz", "")
 
 DARWIN = `uname -sp` == "Darwin i386\n"
 
-# is there a better way to do this?
+# Is there a better way to do this?
 archflags = if ENV['ARCHFLAGS']
   ENV['ARCHFLAGS']
-elsif Config::CONFIG['host_os'] == 'darwin10.0'
+elsif Config::CONFIG['host_os'][0,8] == "darwin10"
   "-arch i386 -arch x86_64"
-elsif Config::CONFIG['host_os'] =~ /darwin/
+elsif Config::CONFIG['host_os'][0,6] == "darwin"
   "-arch i386 -arch ppc"
-else
-  archflags = ''
 end
 
 if !ENV["EXTERNAL_LIB"]
@@ -35,6 +33,10 @@ if !ENV["EXTERNAL_LIB"]
       puts "Building libmemcached."
       puts(cmd = "tar xzf #{BUNDLE} 2>&1")
       raise "'#{cmd}' failed" unless system(cmd)
+      
+      puts "Patching libmemcached."
+      puts(cmd = "patch -p1 < libmemcached.patch")
+      raise "'#{cmd}' failed" unless system(cmd)
 
       Dir.chdir(BUNDLE_PATH) do
         
@@ -53,6 +55,8 @@ if !ENV["EXTERNAL_LIB"]
           puts "Setting debug flags for libmemcached."
           cflags << " -O0 -ggdb -DHAVE_DEBUG"
           extraconf << " --enable-debug"
+        else
+          cflags << " -Os"
         end
         
         puts(cmd = "env CFLAGS='#{cflags}' LDFLAGS='#{ldflags}' ./configure --prefix=#{HERE} --without-memcached --disable-shared --disable-utils #{extraconf} 2>&1")
@@ -83,7 +87,7 @@ if ENV['DEBUG']
   puts "Setting debug flags for gem."
   $CFLAGS << " -O0 -ggdb -DHAVE_DEBUG"
 else
-  $CFLAGS << " -O3"
+  $CFLAGS << " -Os"
 end
 
 if DARWIN

@@ -81,7 +81,7 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
 
 =end
 
-  def initialize(servers, opts = {})
+  def initialize(servers = "localhost:11211", opts = {})
     @struct = Lib::MemcachedSt.new
     Lib.memcached_create(@struct)
 
@@ -107,8 +107,8 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
     end
 
     # Read timeouts
-    options[:rcv_timeout] ||= options[:timeout]
-    options[:poll_timeout] ||= options[:timeout]
+    options[:rcv_timeout] ||= options[:timeout] || 0
+    options[:poll_timeout] ||= options[:timeout] || 0
 
     # Set the behaviors on the struct
     set_behaviors
@@ -127,6 +127,31 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
       @not_stored = NotStored.new
       @not_stored.no_backtrace = true      
     end
+  end
+
+  # Set the server list.
+  # FIXME Does not necessarily free any existing server structs.
+  def set_servers(servers)
+    Array(servers).each_with_index do |server, index|
+      # Socket
+      if server.is_a?(String) and File.socket?(server)
+        args = [@struct, server, options[:default_weight].to_i]
+        check_return_code(Lib.memcached_server_add_unix_socket_with_weight(*args))
+      # Network
+      elsif server.is_a?(String) and server =~ /^[\w\d\.-]+(:\d{1,5}){0,2}$/
+        host, port, weight = server.split(":")
+        args = [@struct, host, port.to_i, (weight || options[:default_weight]).to_i]                
+        if options[:use_udp] #
+          check_return_code(Lib.memcached_server_add_udp_with_weight(*args))
+        else
+          check_return_code(Lib.memcached_server_add_with_weight(*args))
+        end
+      else
+        raise ArgumentError, "Servers must be either in the format 'host:port[:weight]' (e.g., 'localhost:11211' or  'localhost:11211:10') for a network server, or a valid path to a Unix domain socket (e.g., /var/run/memcached)."
+      end
+    end
+    # For inspect
+    @servers = send(:servers)
   end
 
   # Return the array of server strings used to configure this instance.
@@ -203,6 +228,10 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
       Lib.memcached_set(@struct, key, value, ttl, flags),
       key
     )
+  rescue ClientError
+    # FIXME Memcached 1.2.8 occasionally rejects valid sets 
+    tried = 1 and retry unless defined?(tried)
+    raise
   end
 
   # EXPERIMENTAL
@@ -427,8 +456,8 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
          check_return_code(ret, key)
 
          value = case value
-           when /^\d+\.\d+$/: value.to_f
-           when /^\d+$/: value.to_i
+           when /^\d+\.\d+$/ then value.to_f
+           when /^\d+$/ then value.to_i
            else value
          end
 
@@ -438,6 +467,10 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
 
     Lib.memcached_stat_free(@struct, stat_struct)
     stats
+  rescue Memcached::SomeErrorsWereReported => _
+    e = _.class.new("Error getting stats")
+    e.set_backtrace(_.backtrace)
+    raise e
   end
 
   ### Operations helpers
@@ -483,30 +516,6 @@ Please note that when pipelining is enabled, setter and deleter methods do not r
       server.next_retry > time
     end
     inspect_server(server) if server
-  end
-
-  # Set the servers on the struct.
-  def set_servers(servers)
-    Array(servers).each_with_index do |server, index|
-      # Socket
-      if server.is_a?(String) and File.socket?(server)
-        args = [@struct, server, options[:default_weight].to_i]
-        check_return_code(Lib.memcached_server_add_unix_socket_with_weight(*args))
-      # Network
-      elsif server.is_a?(String) and server =~ /^[\w\d\.-]+(:\d{1,5}){0,2}$/
-        host, port, weight = server.split(":")
-        args = [@struct, host, port.to_i, (weight || options[:default_weight]).to_i]                
-        if options[:use_udp] #
-          check_return_code(Lib.memcached_server_add_udp_with_weight(*args))
-        else
-          check_return_code(Lib.memcached_server_add_with_weight(*args))
-        end
-      else
-        raise ArgumentError, "Servers must be either in the format 'host:port[:weight]' (e.g., 'localhost:11211' or  'localhost:11211:10') for a network server, or a valid path to a Unix domain socket (e.g., /var/run/memcached)."
-      end
-    end
-    # For inspect
-    @servers = send(:servers)
   end
 
   # Set the behaviors on the struct from the current options.
