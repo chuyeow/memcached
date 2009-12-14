@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "TODO",
      "VERSION",
+     "chuyeow-memcached.gemspec",
      "ext/extconf.rb",
      "ext/libmemcached-0.32.tar.gz",
      "ext/libmemcached.patch",
